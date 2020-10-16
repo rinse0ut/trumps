@@ -1,20 +1,36 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Label, Table, Icon } from 'semantic-ui-react';
 
-type CategoryType = 'Age' | 'Height' | 'Bench' | 'Banter';
+type CategoryType = 'Age' | 'Height' | 'Strength' | 'Skill';
 
 type CardType = {
   name: string;
   values: number[];
 }
 
-const CATEGORIES: CategoryType[] = ['Age', 'Height', 'Bench', 'Banter'];
+const CATEGORIES: CategoryType[] = ['Age', 'Height', 'Strength', 'Skill'];
 
 const DATA: CardType[] = [
-  { name: 'DT', values: [40, 188, 50, 100] },
-  { name: 'Morgan', values: [45, 188, 50, 100] },
-  { name: 'Will', values: [33, 188, 50, 100] },
-  { name: 'Sunny', values: [37, 188, 50, 100] },
+  { name: 'DT', values: [40, 188, 50, 10] },
+  { name: 'Captain Morgan', values: [45, 178, 50, 80] },
+  { name: 'Will', values: [33, 188, 90, 99] },
+  { name: 'Sunny', values: [37, 187, 1, 0] },
+  { name: 'American Ben', values: [32, 185, 90, 8] },
+  { name: 'Ant', values: [38, 187, 120, 6] },
+  { name: 'Dan', values: [33, 170, 130, 7] },
+  { name: 'Didun', values: [26, 171, 120, 8] },
+  { name: 'Mike', values: [34, 172, 120, 1] },
+  { name: 'Nick', values: [43, 188, 1250, 5] },
+  { name: 'Pierce', values: [42, 188, 60, 7] },
+  { name: 'Rob', values: [42, 188, 120, 9] },
+  { name: 'Scouse', values: [34, 188, 70, 8] },
+  { name: 'Vinnie', values: [35, 173, 40, 7] },
+  { name: 'Grant', values: [35, 44, 110, 9] },
+  { name: 'Hitchy', values: [35, 45, 100, 3] },
+  { name: 'Tom Ted', values: [35, 191, 130, 3] },
+  { name: 'La Rocca Andy', values: [51, 178, 70, 8] },
+  { name: 'Donald Trump', values: [73, 190, 20, 2] },
+  { name: 'Adolf Hitler', values: [56, 160, 30, 5] },
 ];
 
 function delay(ms: number) {
