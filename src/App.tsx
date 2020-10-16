@@ -1,26 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Card, Table, Icon } from 'semantic-ui-react';
 
+type CategoryType = 'Age' | 'Height' | 'Bench' | 'Banter';
+
 type CardType = {
   name: string;
-  description: string;
-  age: number;
-  height: number;
-  bench: number;
-  banter: number;
+  values: number[];
 }
 
-type StatsType = 'age' | 'height' | 'bench' | 'banter';
+const CATEGORIES: CategoryType[] = ['Age', 'Height', 'Bench', 'Banter'];
 
 const DATA: CardType[] = [
-  { name: 'DT', description: 'Intro...', age: 40, height: 188, bench: 60, banter: 100 },
-  { name: 'Sunny', description: 'Intro...', age: 37, height: 188, bench: 60, banter: 100 },
-  { name: 'Morgan', description: 'Intro...', age: 45, height: 177, bench: 70, banter: 100 },
-  { name: 'Grant', description: 'Intro...', age: 36, height: 150, bench: 60, banter: 100 },
-  { name: 'Rob', description: 'Intro...', age: 36, height: 180, bench: 60, banter: 100 },
-  { name: 'Will', description: 'Intro...', age: 33, height: 150, bench: 60, banter: 100 },
-  { name: 'Stevooo', description: 'Intro...', age: 41, height: 180, bench: 60, banter: 100 },
-  { name: 'Scouse', description: 'Intro...', age: 35, height: 150, bench: 60, banter: 100 },
+  { name: 'DT', values: [40, 188, 50, 100] },
+  { name: 'Morgan', values: [45, 188, 50, 100] },
+  { name: 'Will', values: [33, 188, 50, 100] },
+  { name: 'Sunny', values: [37, 188, 50, 100] },
 ];
 
 function useGame() {
@@ -41,26 +35,26 @@ function useGame() {
     setPlayer2Stack(DATA);
   }, [])
 
-  const handleTurn = useCallback((stat: StatsType) => {
-
+  const handleTurn = useCallback((categoryIndex: number) => {
     const player1Card = player1Stack[0];
     const player2Card = player2Stack[0];
-    const player1Value = player1Card[stat];
-    const player2Value = player2Card[stat];
+    const player1Value = player1Card['values'][categoryIndex];
+    const player2Value = player2Card['values'][categoryIndex];
+    console.log('PLAYER1VALUE', player1Value);
     const _player1Stack = player1Stack.slice(1);
     const _player2Stack = player2Stack.slice(1);
 
     if (player1Value > player2Value) {
-      console.log('1UP WINS', _player1Stack)
       setPlayer1Stack([..._player1Stack, player2Card, player1Card, ...drawnStack]);
       setPlayer2Stack([..._player2Stack]);
       setDrawnStack([]);
+      setCurrentPlayer(1);
     } else if (player1Value < player2Value) {
       setPlayer1Stack([..._player1Stack]);
       setPlayer2Stack([..._player2Stack, player2Card, player1Card, ...drawnStack]);
       setDrawnStack([]);
+      setCurrentPlayer(2);
     } else {
-      console.log('DRAW!')
       setPlayer1Stack([..._player1Stack]);
       setPlayer2Stack([..._player2Stack]);
       setDrawnStack([...drawnStack, player2Card, player1Card]);
@@ -73,7 +67,7 @@ function useGame() {
 
 function App() {
 
-  const { player1Stack, player2Stack, drawnStack, handleTurn } = useGame();
+  const { currentPlayer, player1Stack, player2Stack, drawnStack, handleTurn } = useGame();
   console.log('1UP STACK', player1Stack);
   console.log('2UP STACK', player2Stack);
   console.log('DRAWN STACK', drawnStack);
@@ -89,48 +83,34 @@ function App() {
   return (
     <Container>
       <h1>1up Stack ({player1Stack.length} Cards)</h1>
-      <CardComponent {...player1Stack[0]} onTurn={handleTurn} />
-      {/* {player1Stack.map((props: CardType) => <CardComponent {...props} onTurn={handleTurn} />)} */}
+      {currentPlayer === 1 ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[0]} /> : null}
       <h1>2up Stack ({player2Stack.length} Cards)</h1>
-      <CardComponent {...player2Stack[0]} onTurn={handleTurn} />
-      {/* {player2Stack.map((props: CardType) => <CardComponent {...props} onTurn={handleTurn} />)} */}
+      {currentPlayer === 2 ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[0]} /> : null}
     </Container>
   );
 }
 
 type CardPropsType = CardType & {
-  onTurn: (stat: StatsType) => void;
+  categories: CategoryType[];
+  onTurn: (categoryIndex: number) => void;
 }
 
 function CardComponent(props: CardPropsType) {
-  const { name, description, age, height, bench, banter, onTurn } = props;
+  const { name, values, onTurn } = props;
   return (
     <Card>
       <Card.Content>
         <Card.Header>{name}</Card.Header>
-        {/* <Card.Description>
-          {description}
-        </Card.Description> */}
       </Card.Content>
       <Card.Content extra>
         <Table celled selectable size="small">
           <Table.Body>
-            <Table.Row onClick={() => onTurn('age')}>
-              <Table.Cell>Age</Table.Cell>
-              <Table.Cell>{age}</Table.Cell>
-            </Table.Row>
-            <Table.Row onClick={() => onTurn('height')}>
-              <Table.Cell>Height</Table.Cell>
-              <Table.Cell>{height}</Table.Cell>
-            </Table.Row>
-            <Table.Row onClick={() => onTurn('bench')}>
-              <Table.Cell>Bench Press</Table.Cell>
-              <Table.Cell>{bench}</Table.Cell>
-            </Table.Row>
-            <Table.Row onClick={() => onTurn('banter')}>
-              <Table.Cell>Banter</Table.Cell>
-              <Table.Cell>{banter}</Table.Cell>
-            </Table.Row>
+            {CATEGORIES.map((category, i) => (
+              <Table.Row onClick={() => onTurn(i)}>
+                <Table.Cell>{category}</Table.Cell>
+                <Table.Cell>{values[i]}</Table.Cell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table>
       </Card.Content>
