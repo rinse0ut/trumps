@@ -1,36 +1,40 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Label, Table, Icon } from 'semantic-ui-react';
 
-type CategoryType = 'Age' | 'Height' | 'Strength' | 'Skill';
+type CategoryType = 'banter' | 'Height' | 'Strength' | 'Skill';
 
 type CardType = {
   name: string;
   values: number[];
 }
 
-const CATEGORIES: CategoryType[] = ['Age', 'Height', 'Strength', 'Skill'];
+const CATEGORIES: CategoryType[] = ['banter', 'Height', 'Strength', 'Skill'];
+
+const META_DATA = [
+  { 
+    category: 'banter', 
+    title: 'Banter Level',
+    subCategories: ['GNVQ', 'GCSE', 'A Level', 'Archbishop'],
+  },  
+]
 
 const DATA: CardType[] = [
-  { name: 'DT', values: [40, 188, 50, 10] },
-  { name: 'Captain Morgan', values: [45, 178, 60, 8] },
-  { name: 'Will', values: [33, 188, 95, 9] },
-  { name: 'Sunny', values: [37, 187, 0, -1] },
-  { name: 'American Ben', values: [32, 185, 90, 8] },
-  { name: 'Ant', values: [38, 187, 85, 6] },
-  { name: 'Dan', values: [33, 170, 96, 7] },
-  { name: 'Didun', values: [26, 171, 70, 8] },
-  { name: 'Mike', values: [34, 172, 87, 1] },
-  { name: 'Nick', values: [43, 188, 89, 5] },
-  { name: 'Pierce', values: [42, 188, 55, 7] },
-  { name: 'Rob', values: [42, 188, 52, 9] },
-  { name: 'Scouse', values: [34, 188, 61, 8] },
-  { name: 'Vinnie', values: [35, 173, 42, 7] },
-  { name: 'Grant', values: [35, 44, 79, 9] },
-  { name: 'Hitchy', values: [35, 45, 75, 3] },
-  { name: 'Tom Ted', values: [35, 191, 91, 2] },
-  { name: 'La Rocca Andy', values: [51, 178, 35, 8] },
-  { name: 'Donald Trump', values: [73, 190, 20, 2] },
-  { name: 'Adolf Hitler', values: [56, 160, 30, 5] },
+  { 
+    name: 'DT', 
+    values: [2, 5, 5, 5, 5]
+  },
+  { 
+    name: 'Captain Morgan', 
+    values: [1, 2, 3, 4, 5]
+  },
+  { 
+    name: 'Grant', 
+    values: [0, 2, 3, 4, 5]
+  },
+  { 
+    name: 'Willl', 
+    values: [1, 2, 3, 4, 5]
+  },      
 ];
 
 function delay(ms: number) {
@@ -58,8 +62,7 @@ function useGame() {
 
   const handleTurn = useCallback((categoryIndex: number) => {
     setShowCard(true);
-    delay(3000).then(() => { 
-      alert('Next turn?')
+    delay(1).then(() => { 
       setShowCard(false);
       handleCards(categoryIndex)
     });
@@ -111,9 +114,11 @@ function App() {
   return (
     <Container>
       <h1>Player 1 ({player1Stack.length} Cards)</h1>
-      {currentPlayer === 1 || showCard ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[0]} /> : null}
+      {currentPlayer === 1 || showCard 
+        ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[0]} /> : null}
       <h1>Player 2 ({player2Stack.length} Cards)</h1>
-      {currentPlayer === 2 || showCard ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[0]} /> : null}
+      {currentPlayer === 2 || showCard 
+        ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[0]} /> : null}
     </Container>
   );
 }
@@ -133,16 +138,42 @@ function CardComponent(props: CardPropsType) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {CATEGORIES.map((category, i) => (
+        {CATEGORIES.map((category, i) => {
+          const metaData = META_DATA.find(x => x.category === category);
+          if (!metaData) return;
+          const {title, subCategories} = metaData;
+          const value = values[i];
+          const stat = subCategories ? subCategories[value] : value;
+          return (
           <Table.Row onClick={() => onTurn(i)}>
-            <Table.Cell>{category}</Table.Cell>
-            <Table.Cell>{values[i]}</Table.Cell>
+            <Table.Cell>{title}</Table.Cell>
+            <Table.Cell>{stat}</Table.Cell>
             <Table.Cell></Table.Cell>
           </Table.Row>
-        ))}
+        )})}
       </Table.Body>
     </Table>
   );
 }
 
 export default App;
+
+//   { name: 'Captain Morgan', values: [45, 178, 60, 8] },
+//   { name: 'Will', values: [33, 188, 95, 9] },
+//   { name: 'Sunny', values: [37, 187, 0, -1] },
+//   { name: 'American Ben', values: [32, 185, 90, 8] },
+//   { name: 'Ant', values: [38, 187, 85, 6] },
+//   { name: 'Dan', values: [33, 170, 96, 7] },
+//   { name: 'Didun', values: [26, 171, 70, 8] },
+//   { name: 'Mike', values: [34, 172, 87, 1] },
+//   { name: 'Nick', values: [43, 188, 89, 5] },
+//   { name: 'Pierce', values: [42, 188, 55, 7] },
+//   { name: 'Rob', values: [42, 188, 52, 9] },
+//   { name: 'Scouse', values: [34, 188, 61, 8] },
+//   { name: 'Vinnie', values: [35, 173, 42, 7] },
+//   { name: 'Grant', values: [35, 44, 79, 9] },
+//   { name: 'Hitchy', values: [35, 45, 75, 3] },
+//   { name: 'Tom Ted', values: [35, 191, 91, 2] },
+//   { name: 'La Rocca Andy', values: [51, 178, 35, 8] },
+//   { name: 'Donald Trump', values: [73, 190, 20, 2] },
+//   { name: 'Adolf Hitler', values: [56, 160, 30, 5] },
