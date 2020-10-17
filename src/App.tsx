@@ -1,45 +1,73 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Label, Table, Icon } from 'semantic-ui-react';
+import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Icon } from 'semantic-ui-react';
 
-type CategoryType = 'banter' | 'Height' | 'Strength' | 'Skill';
+type CategoryType = 'status' | 'banter' | 'weight' | 'chess' | 'rounds';
 
 type CardType = {
   name: string;
+  countryCode: FlagNameValues;
   values: number[];
 }
 
-const CATEGORIES: CategoryType[] = ['banter', 'Height', 'Strength', 'Skill'];
+const CATEGORIES: CategoryType[] = ['status', 'banter', 'weight', 'chess', 'rounds'];
 
 const META_DATA = [
-  { 
-    category: 'banter', 
+  {
+    category: 'status',
+    title: 'Status',
+    subCategories: ['🐌', '🛎', '🛋', '🐿', '🌎 🚀'],
+  },
+  {
+    category: 'banter',
     title: 'Banter Level',
     subCategories: ['GNVQ', 'GCSE', 'A Level', 'Archbishop'],
-  },  
+  },
+  {
+    category: 'weight',
+    title: 'Weight (kg)',
+  },
+  {
+    category: 'chess',
+    title: 'Chess Rating',
+  },
+  {
+    category: 'rounds',
+    title: 'Drink Rounds',
+  },
 ]
 
 const DATA: CardType[] = [
-  { 
-    name: 'DT', 
-    values: [2, 5, 5, 5, 5]
+  {
+    name: 'Dan',
+    countryCode: 'uk',
+    values: [2, 1, 125, 640, 5, 5]
   },
-  { 
-    name: 'Captain Morgan', 
-    values: [1, 2, 3, 4, 5]
+  {
+    name: 'Mike',
+    countryCode: 'uk',
+    values: [0, 2, 3, 400, 5]
   },
-  { 
-    name: 'Grant', 
-    values: [0, 2, 3, 4, 5]
+  {
+    name: 'Grant',
+    countryCode: 'gb wls',
+    values: [3, 2, 3, 0, 5]
   },
-  { 
-    name: 'Willl', 
-    values: [1, 2, 3, 4, 5]
-  },      
+  {
+    name: 'Will',
+    countryCode: 'gb sct',
+    values: [1, 2, 3, 700, 5]
+  },
 ];
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+type PlayerType = 1 | 2;
+type ResultType = null | 0 | 1 | 2;
+
+const PLAYER1_RESULT = ['DRAWS!', 'WINS!', 'LOSES!']
+const PLAYER2_RESULT = ['DRAWS!', 'LOSES!', 'WINS!']
 
 function useGame() {
   const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
@@ -47,6 +75,8 @@ function useGame() {
   const [player2Stack, setPlayer2Stack] = useState<CardType[]>([]);
   const [drawnStack, setDrawnStack] = useState<CardType[]>([]);
   const [showCard, setShowCard] = useState<boolean>(false);
+  const [categoryIndex, setCategoryIndex] = useState<number | null>(null);
+  const [result, setResult] = useState<ResultType>(null);
 
   // Shuffle and setup each player decks
   useEffect(() => {
@@ -60,15 +90,15 @@ function useGame() {
     setPlayer2Stack(DATA);
   }, [])
 
+  // const handleTurn = useCallback((categoryIndex: number) => {
+  //   setShowCard(true);
+  //   delay(1).then(() => {
+  //     // setShowCard(false);
+  //     setCategoryIndex(categoryIndex)
+  //   });
+  // }, [player1Stack, player2Stack, drawnStack]);
+
   const handleTurn = useCallback((categoryIndex: number) => {
-    setShowCard(true);
-    delay(1).then(() => { 
-      setShowCard(false);
-      handleCards(categoryIndex)
-    });
-  }, [player1Stack, player2Stack, drawnStack]);  
-    
-  const handleCards = useCallback((categoryIndex: number) => {
     const player1Card = player1Stack[0];
     const player2Card = player2Stack[0];
     const player1Value = player1Card['values'][categoryIndex];
@@ -76,32 +106,48 @@ function useGame() {
     const _player1Stack = player1Stack.slice(1);
     const _player2Stack = player2Stack.slice(1);
 
+    setResult(null);
+    setCategoryIndex(categoryIndex);
+
     if (player1Value > player2Value) {
       setPlayer1Stack([..._player1Stack, player2Card, player1Card, ...drawnStack]);
       setPlayer2Stack([..._player2Stack]);
       setDrawnStack([]);
       setCurrentPlayer(1);
+      setResult(1);
     } else if (player1Value < player2Value) {
       setPlayer1Stack([..._player1Stack]);
       setPlayer2Stack([..._player2Stack, player2Card, player1Card, ...drawnStack]);
       setDrawnStack([]);
       setCurrentPlayer(2);
+      setResult(2);
     } else {
       setPlayer1Stack([..._player1Stack]);
       setPlayer2Stack([..._player2Stack]);
       setDrawnStack([...drawnStack, player2Card, player1Card]);
+      setResult(0);
     }
-  }, [player1Stack, player2Stack, drawnStack])
+  }, [player1Stack, player2Stack, drawnStack, categoryIndex, result])
 
-  return { currentPlayer, showCard, player1Stack, player2Stack, drawnStack, handleTurn }
+  return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleTurn }
 }
 
 function App() {
 
-  const { currentPlayer, showCard, player1Stack, player2Stack, drawnStack, handleTurn } = useGame();
+  const {
+    currentPlayer,
+    player1Stack,
+    player2Stack,
+    drawnStack,
+    categoryIndex,
+    result,
+    handleTurn
+  } = useGame();
+
   console.log('1UP STACK', player1Stack);
   console.log('2UP STACK', player2Stack);
   console.log('DRAWN STACK', drawnStack);
+  console.log('RESULT', result);
   if (player1Stack.length === 0 && player2Stack.length === 0) {
     return (<h1>ITS A DRAW!</h1>);
   }
@@ -111,46 +157,119 @@ function App() {
   if (player2Stack.length === 0) {
     return (<h1>1UP WINS!</h1>);
   }
+  // return (
+  //   <Container>
+  //     {/* <Segment inverted color='red'>Player {currentPlayer}</Segment> */}
+  //     <Segment color='red'><Header as='h1'>Player {currentPlayer} Go!</Header></Segment>
+  //     <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[0]} />
+  //     {/* <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[1]} />
+  //     <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[0]} />
+  //     <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[1]} /> */}
+  //   </Container>
+  // );  
   return (
     <Container>
-      <h1>Player 1 ({player1Stack.length} Cards)</h1>
-      {currentPlayer === 1 || showCard 
-        ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[0]} /> : null}
-      <h1>Player 2 ({player2Stack.length} Cards)</h1>
-      {currentPlayer === 2 || showCard 
-        ? <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[0]} /> : null}
+      {/* <h1>Player 1 ({player1Stack.length} Cards)</h1> */}
+      <Segment inverted color='red'><Header as='h2'>Player 1 {result && PLAYER1_RESULT[result]}</Header></Segment>
+      {currentPlayer === 1 || result
+        ? <CardComponent
+          categories={CATEGORIES}
+          categoryIndex={categoryIndex}
+          player={1}
+          result={result}
+          onTurn={handleTurn}
+          {...player1Stack[0]} /> : null}
+      <Segment inverted color='blue'><Header as='h2'>Player 2 {result && PLAYER2_RESULT[result]}</Header></Segment>
+      {currentPlayer === 2 || result
+        ? <CardComponent
+          categories={CATEGORIES}
+          categoryIndex={categoryIndex}
+          player={2}
+          result={result}
+          onTurn={handleTurn}
+          {...player2Stack[0]} /> : null}
     </Container>
   );
 }
 
+function player1Result(result: ResultType) {
+  if (result === 1) {
+    return 'WINS!';
+  } else if (result === 2) {
+    return 'LOSES!'
+  } else {
+    return 'DRAWS!'
+  }
+}
+
 type CardPropsType = CardType & {
   categories: CategoryType[];
+  categoryIndex: number | null;
+  player: PlayerType;
+  result: number | null;
   onTurn: (categoryIndex: number) => void;
 }
 
 function CardComponent(props: CardPropsType) {
-  const { name, values, onTurn } = props;
+  console.log('CARD PROPS', props);
+  const { name, countryCode, values, player, categoryIndex, result, onTurn } = props;
   return (
     <Table celled selectable unstackable size="small">
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell colSpan='3'>{name.toUpperCase()}</Table.HeaderCell>
+          <Table.HeaderCell colSpan='2'>{name.toUpperCase()}</Table.HeaderCell>
+          <Table.HeaderCell textAlign='center'>
+            <Flag name={countryCode} />
+          </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        <Table.Row>
+          <Table.Cell>
+            <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' size='small' />
+          </Table.Cell>
+        </Table.Row>
         {CATEGORIES.map((category, i) => {
           const metaData = META_DATA.find(x => x.category === category);
+          console.log('META', metaData);
           if (!metaData) return;
-          const {title, subCategories} = metaData;
+          const { title, subCategories } = metaData;
           const value = values[i];
           const stat = subCategories ? subCategories[value] : value;
+          let status;
+          if (categoryIndex === i && result === 0) {
+            return (
+              <Table.Row warning key={category} onClick={() => onTurn(i)}>
+                <Table.Cell>{title}</Table.Cell>
+                <Table.Cell>{stat}</Table.Cell>
+                <Table.Cell><Icon name='checkmark' /></Table.Cell>
+              </Table.Row>
+            )
+          } else if (categoryIndex === i && result === player) {
+            return (
+              <Table.Row positive key={category} onClick={() => onTurn(i)}>
+                <Table.Cell>{title}</Table.Cell>
+                <Table.Cell>{stat}</Table.Cell>
+                <Table.Cell><Icon name='checkmark' /></Table.Cell>
+              </Table.Row>
+            )
+          } else if (categoryIndex === i && result !== player) {
+            return (
+              <Table.Row negative key={category} onClick={() => onTurn(i)}>
+                <Table.Cell>{title}</Table.Cell>
+                <Table.Cell>{stat}</Table.Cell>
+                <Table.Cell><Icon name='close' /></Table.Cell>
+              </Table.Row>
+            )
+          }
           return (
-          <Table.Row onClick={() => onTurn(i)}>
-            <Table.Cell>{title}</Table.Cell>
-            <Table.Cell>{stat}</Table.Cell>
-            <Table.Cell></Table.Cell>
-          </Table.Row>
-        )})}
+            <Table.Row key={category} onClick={() => onTurn(i)}>
+              <Table.Cell>{title}</Table.Cell>
+              <Table.Cell>{stat}</Table.Cell>
+              <Table.Cell></Table.Cell>
+            </Table.Row>
+          )
+        })}
       </Table.Body>
     </Table>
   );
