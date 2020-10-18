@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e4a90a91a26e8aa002c78718b4e7f010",
+    "revision": "0c1092d2071eaa164a1260373960a135",
     "url": "/trumps/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/css/2.6a4efc55.chunk.css"
   },
   {
-    "revision": "18e49a0e414337052d2d",
+    "revision": "0259149f4405d70b2c21",
     "url": "/trumps/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/js/2.450d2426.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "18e49a0e414337052d2d",
-    "url": "/trumps/static/js/main.26fa9279.chunk.js"
+    "revision": "0259149f4405d70b2c21",
+    "url": "/trumps/static/js/main.716370d2.chunk.js"
   },
   {
     "revision": "95d82a9caed866a55fc7",
