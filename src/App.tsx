@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Icon } from 'semantic-ui-react';
+import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Button, Icon, Message } from 'semantic-ui-react';
 
 type CategoryType = 'status' | 'banter' | 'weight' | 'chess' | 'rounds';
 
@@ -40,22 +40,22 @@ const DATA: CardType[] = [
   {
     name: 'Dan',
     countryCode: 'uk',
-    values: [2, 1, 125, 640, 5, 5]
+    values: [2, 1, 125, 640, 1]
   },
   {
     name: 'Mike',
     countryCode: 'uk',
-    values: [0, 2, 3, 400, 5]
+    values: [0, 2, 3, 400, 1]
   },
   {
     name: 'Grant',
     countryCode: 'gb wls',
-    values: [3, 2, 3, 0, 5]
+    values: [3, 3, 3, 0, 1]
   },
   {
     name: 'Will',
     countryCode: 'gb sct',
-    values: [1, 2, 3, 700, 5]
+    values: [1, 0, 3, 700, 1]
   },
 ];
 
@@ -90,13 +90,28 @@ function useGame() {
     setPlayer2Stack(DATA);
   }, [])
 
-  // const handleTurn = useCallback((categoryIndex: number) => {
+  // const handleSelectCategory = useCallback((categoryIndex: number) => {
   //   setShowCard(true);
   //   delay(1).then(() => {
   //     // setShowCard(false);
   //     setCategoryIndex(categoryIndex)
   //   });
   // }, [player1Stack, player2Stack, drawnStack]);
+
+  const handleSelectCategory = useCallback((categoryIndex: number) => {
+    setCategoryIndex(categoryIndex);
+    const player1Value = player1Stack[0]['values'][categoryIndex];
+    const player2Value = player2Stack[0]['values'][categoryIndex];
+    if (player1Value > player2Value) {
+      setCurrentPlayer(1);
+      setResult(1);
+    } else if (player1Value < player2Value) {
+      setCurrentPlayer(2);
+      setResult(2);
+    } else {
+      setResult(0);
+    }
+  }, [player1Stack, player2Stack]);
 
   const handleTurn = useCallback((categoryIndex: number) => {
     const player1Card = player1Stack[0];
@@ -129,7 +144,7 @@ function useGame() {
     }
   }, [player1Stack, player2Stack, drawnStack, categoryIndex, result])
 
-  return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleTurn }
+  return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleSelectCategory }
 }
 
 function App() {
@@ -141,12 +156,13 @@ function App() {
     drawnStack,
     categoryIndex,
     result,
-    handleTurn
+    handleSelectCategory
   } = useGame();
 
   console.log('1UP STACK', player1Stack);
   console.log('2UP STACK', player2Stack);
   console.log('DRAWN STACK', drawnStack);
+  console.log('CAT IDX', categoryIndex);
   console.log('RESULT', result);
   if (player1Stack.length === 0 && player2Stack.length === 0) {
     return (<h1>ITS A DRAW!</h1>);
@@ -161,10 +177,10 @@ function App() {
   //   <Container>
   //     {/* <Segment inverted color='red'>Player {currentPlayer}</Segment> */}
   //     <Segment color='red'><Header as='h1'>Player {currentPlayer} Go!</Header></Segment>
-  //     <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[0]} />
-  //     {/* <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player1Stack[1]} />
-  //     <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[0]} />
-  //     <CardComponent categories={CATEGORIES} onTurn={handleTurn} {...player2Stack[1]} /> */}
+  //     <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player1Stack[0]} />
+  //     {/* <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player1Stack[1]} />
+  //     <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player2Stack[0]} />
+  //     <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player2Stack[1]} /> */}
   //   </Container>
   // );  
   return (
@@ -177,8 +193,32 @@ function App() {
           categoryIndex={categoryIndex}
           player={1}
           result={result}
-          onTurn={handleTurn}
+          onSelectCatgory={handleSelectCategory}
           {...player1Stack[0]} /> : null}
+      <div>
+        <Button
+          color='red'
+          content='Cards'
+          icon='user'
+          label={{ basic: true, color: 'red', pointing: 'left', content: player1Stack.length }}
+        />
+        <Button
+          color='blue'
+          content='Cards'
+          icon='user'
+          label={{
+            as: 'a',
+            basic: true,
+            color: 'blue',
+            pointing: 'left',
+            content: player2Stack.length,
+          }}
+        />
+        <Button circular color='green' icon='arrow right' />
+        <Message info>
+          <Message.Header>Tap a category above</Message.Header>
+        </Message>
+      </div>
       <Segment inverted color='blue'><Header as='h2'>Player 2 {result && PLAYER2_RESULT[result]}</Header></Segment>
       {currentPlayer === 2 || result
         ? <CardComponent
@@ -186,7 +226,7 @@ function App() {
           categoryIndex={categoryIndex}
           player={2}
           result={result}
-          onTurn={handleTurn}
+          onSelectCatgory={handleSelectCategory}
           {...player2Stack[0]} /> : null}
     </Container>
   );
@@ -207,12 +247,12 @@ type CardPropsType = CardType & {
   categoryIndex: number | null;
   player: PlayerType;
   result: number | null;
-  onTurn: (categoryIndex: number) => void;
+  onSelectCatgory: (categoryIndex: number) => void;
 }
 
 function CardComponent(props: CardPropsType) {
   console.log('CARD PROPS', props);
-  const { name, countryCode, values, player, categoryIndex, result, onTurn } = props;
+  const { name, countryCode, values, player, categoryIndex, result, onSelectCatgory } = props;
   return (
     <Table celled selectable unstackable size="small">
       <Table.Header>
@@ -231,7 +271,6 @@ function CardComponent(props: CardPropsType) {
         </Table.Row>
         {CATEGORIES.map((category, i) => {
           const metaData = META_DATA.find(x => x.category === category);
-          console.log('META', metaData);
           if (!metaData) return;
           const { title, subCategories } = metaData;
           const value = values[i];
@@ -239,7 +278,7 @@ function CardComponent(props: CardPropsType) {
           let status;
           if (categoryIndex === i && result === 0) {
             return (
-              <Table.Row warning key={category} onClick={() => onTurn(i)}>
+              <Table.Row warning key={category} onClick={() => onSelectCatgory(i)}>
                 <Table.Cell>{title}</Table.Cell>
                 <Table.Cell>{stat}</Table.Cell>
                 <Table.Cell><Icon name='checkmark' /></Table.Cell>
@@ -247,7 +286,7 @@ function CardComponent(props: CardPropsType) {
             )
           } else if (categoryIndex === i && result === player) {
             return (
-              <Table.Row positive key={category} onClick={() => onTurn(i)}>
+              <Table.Row positive key={category} onClick={() => onSelectCatgory(i)}>
                 <Table.Cell>{title}</Table.Cell>
                 <Table.Cell>{stat}</Table.Cell>
                 <Table.Cell><Icon name='checkmark' /></Table.Cell>
@@ -255,7 +294,7 @@ function CardComponent(props: CardPropsType) {
             )
           } else if (categoryIndex === i && result !== player) {
             return (
-              <Table.Row negative key={category} onClick={() => onTurn(i)}>
+              <Table.Row negative key={category} onClick={() => onSelectCatgory(i)}>
                 <Table.Cell>{title}</Table.Cell>
                 <Table.Cell>{stat}</Table.Cell>
                 <Table.Cell><Icon name='close' /></Table.Cell>
@@ -263,7 +302,7 @@ function CardComponent(props: CardPropsType) {
             )
           }
           return (
-            <Table.Row key={category} onClick={() => onTurn(i)}>
+            <Table.Row key={category} onClick={() => onSelectCatgory(i)}>
               <Table.Cell>{title}</Table.Cell>
               <Table.Cell>{stat}</Table.Cell>
               <Table.Cell></Table.Cell>
