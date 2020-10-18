@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/trumps/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/trumps/static/js/main.904e36c7.chunk.js",
-    "main.js.map": "/trumps/static/js/main.904e36c7.chunk.js.map",
+    "main.js": "/trumps/static/js/main.405fb680.chunk.js",
+    "main.js.map": "/trumps/static/js/main.405fb680.chunk.js.map",
     "runtime-main.js": "/trumps/static/js/runtime-main.115d4ff9.js",
     "runtime-main.js.map": "/trumps/static/js/runtime-main.115d4ff9.js.map",
     "static/css/2.6a4efc55.chunk.css": "/trumps/static/css/2.6a4efc55.chunk.css",
     "static/js/2.4a3c58d4.chunk.js": "/trumps/static/js/2.4a3c58d4.chunk.js",
     "static/js/2.4a3c58d4.chunk.js.map": "/trumps/static/js/2.4a3c58d4.chunk.js.map",
     "index.html": "/trumps/index.html",
-    "precache-manifest.a7d312a7fb3f2269945c15ae9dbe15ee.js": "/trumps/precache-manifest.a7d312a7fb3f2269945c15ae9dbe15ee.js",
+    "precache-manifest.9e603fd1e508dd2e2d0f78c490a9ff56.js": "/trumps/precache-manifest.9e603fd1e508dd2e2d0f78c490a9ff56.js",
     "service-worker.js": "/trumps/service-worker.js",
     "static/css/2.6a4efc55.chunk.css.map": "/trumps/static/css/2.6a4efc55.chunk.css.map",
     "static/css/main.5ecd60fb.chunk.css.map": "/trumps/static/css/main.5ecd60fb.chunk.css.map",
@@ -35,6 +35,6 @@
     "static/css/2.6a4efc55.chunk.css",
     "static/js/2.4a3c58d4.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.904e36c7.chunk.js"
+    "static/js/main.405fb680.chunk.js"
   ]
 }
