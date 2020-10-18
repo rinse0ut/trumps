@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Button, Icon, Message } from 'semantic-ui-react';
+import will from '/public/img/will.jpeg'
 
 type CategoryType = 'status' | 'banter' | 'weight' | 'chess';
 
@@ -34,26 +35,96 @@ const META_DATA = [
 
 const DATA: CardType[] = [
   {
-    name: 'Dan',
+    name: 'DT',
     countryCode: 'uk',
-    values: [2, 1, 125, 640, 1]
-  },
-  {
-    name: 'Mike',
-    countryCode: 'uk',
-    values: [0, 2, 3, 400, 1]
+    values: [3, 3, 88, 935]
   },
   {
     name: 'Grant',
     countryCode: 'gb wls',
-    values: [3, 3, 3, 0, 1]
-  },
+    values: [2, 3, 65, 0]
+  },   
+  {
+    name: 'Captain Morgan',
+    countryCode: 'gb sct',
+    values: [2, 1, 68, 1078]
+  },  
+  {
+    name: 'Sunny',
+    countryCode: 'uk',
+    values: [1, 0, 94, 1261]
+  },    
+  {
+    name: 'American Ben',
+    countryCode: 'us',
+    values: [4, 1, 95, 0]
+  },     
   {
     name: 'Will',
     countryCode: 'gb sct',
-    values: [1, 0, 3, 700, 1]
+    values: [4, 2, 90, 669]
+  },  
+  {
+    name: 'Rob',
+    countryCode: 'uk',
+    values: [3, 2, 70, 600]
   },
+  {
+    name: 'Scouse',
+    countryCode: 'gb sct',
+    values: [2, 1, 85, 1149]
+  },
+  {
+    name: 'Vinnie',
+    countryCode: 'gb wls',
+    values: [4, 2, 80, 0]
+  },
+  {
+    name: 'Didun',
+    countryCode: 'gb wls',
+    values: [4, 1, 80, 600]
+  },  
+  {
+    name: 'Nick',
+    countryCode: 'uk',
+    values: [0, 1, 99, 500]
+  },
+  {
+    name: 'Pierce',
+    countryCode: 'uk',
+    values: [2, 1, 70, 0]
+  },
+  {
+    name: 'Dan',
+    countryCode: 'gb sct',
+    values: [2, 1, 125, 746]
+  },  
+  {
+    name: 'Ant',
+    countryCode: 'uk',
+    values: [2, 1, 90, 0]
+  },  
 ];
+
+//   { name: 'Captain Morgan', values: [45, 178, 60, 8] },
+//   { name: 'Will', values: [33, 188, 95, 9] },
+//   { name: 'Sunny', values: [37, 187, 0, -1] },
+//   { name: 'American Ben', values: [32, 185, 90, 8] },
+//   { name: 'Ant', values: [38, 187, 85, 6] },
+//   { name: 'Dan', values: [33, 170, 96, 7] },
+//   { name: 'Didun', values: [26, 171, 70, 8] },
+//   { name: 'Mike', values: [34, 172, 87, 1] },
+//   { name: 'Nick', values: [43, 188, 89, 5] },
+//   { name: 'Pierce', values: [42, 188, 55, 7] },
+//   { name: 'Rob', values: [42, 188, 52, 9] },
+//   { name: 'Scouse', values: [34, 188, 61, 8] },
+//   { name: 'Vinnie', values: [35, 173, 42, 7] },
+//   { name: 'Grant', values: [35, 44, 79, 9] },
+//   { name: 'Hitchy', values: [35, 45, 75, 3] },
+//   { name: 'Tom Ted', values: [35, 191, 91, 2] },
+//   { name: 'La Rocca Andy', values: [51, 178, 35, 8] },
+//   { name: 'Donald Trump', values: [73, 190, 20, 2] },
+//   { name: 'Adolf Hitler', values: [56, 160, 30, 5] }
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -85,14 +156,6 @@ function useGame() {
     }
     setPlayer2Stack(DATA);
   }, [])
-
-  // const handleSelectCategory = useCallback((categoryIndex: number) => {
-  //   setShowCard(true);
-  //   delay(1).then(() => {
-  //     // setShowCard(false);
-  //     setCategoryIndex(categoryIndex)
-  //   });
-  // }, [player1Stack, player2Stack, drawnStack]);
 
   const handleSelectCategory = useCallback((categoryIndex: number) => {
     if (result) {
@@ -235,6 +298,7 @@ function App() {
           </Message>
         )
       }          
+    <br/>  
     </Container>
   );
 }
@@ -273,7 +337,7 @@ function CardComponent(props: CardPropsType) {
       <Table.Body>
         <Table.Row>
           <Table.Cell>
-            <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' size='small' />
+            <Image src='/img/will.jpeg' size='small' />
           </Table.Cell>
         </Table.Row>
         {CATEGORIES.map((category, i) => {
