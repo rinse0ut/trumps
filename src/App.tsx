@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Button, Icon, Message } from 'semantic-ui-react';
 
-type CategoryType = 'status' | 'banter' | 'weight' | 'chess' | 'rounds';
+type CategoryType = 'status' | 'banter' | 'weight' | 'chess';
 
 type CardType = {
   name: string;
@@ -9,7 +9,7 @@ type CardType = {
   values: number[];
 }
 
-const CATEGORIES: CategoryType[] = ['status', 'banter', 'weight', 'chess', 'rounds'];
+const CATEGORIES: CategoryType[] = ['status', 'banter', 'weight', 'chess'];
 
 const META_DATA = [
   {
@@ -29,11 +29,7 @@ const META_DATA = [
   {
     category: 'chess',
     title: 'Chess Rating',
-  },
-  {
-    category: 'rounds',
-    title: 'Drink Rounds',
-  },
+  }
 ]
 
 const DATA: CardType[] = [
@@ -99,6 +95,9 @@ function useGame() {
   // }, [player1Stack, player2Stack, drawnStack]);
 
   const handleSelectCategory = useCallback((categoryIndex: number) => {
+    if (result) {
+      return;
+    }
     setCategoryIndex(categoryIndex);
     const player1Value = player1Stack[0]['values'][categoryIndex];
     const player2Value = player2Stack[0]['values'][categoryIndex];
@@ -111,40 +110,37 @@ function useGame() {
     } else {
       setResult(0);
     }
-  }, [player1Stack, player2Stack]);
+  }, [player1Stack, player2Stack, result]);
 
-  const handleTurn = useCallback((categoryIndex: number) => {
+  const handleTurn = useCallback(() => {
     const player1Card = player1Stack[0];
     const player2Card = player2Stack[0];
-    const player1Value = player1Card['values'][categoryIndex];
-    const player2Value = player2Card['values'][categoryIndex];
     const _player1Stack = player1Stack.slice(1);
     const _player2Stack = player2Stack.slice(1);
 
-    setResult(null);
-    setCategoryIndex(categoryIndex);
-
-    if (player1Value > player2Value) {
+    if (result === 1) {
       setPlayer1Stack([..._player1Stack, player2Card, player1Card, ...drawnStack]);
       setPlayer2Stack([..._player2Stack]);
       setDrawnStack([]);
       setCurrentPlayer(1);
       setResult(1);
-    } else if (player1Value < player2Value) {
+    } else if (result === 2) {
       setPlayer1Stack([..._player1Stack]);
       setPlayer2Stack([..._player2Stack, player2Card, player1Card, ...drawnStack]);
       setDrawnStack([]);
       setCurrentPlayer(2);
       setResult(2);
-    } else {
+    } else if (result === 0) {
       setPlayer1Stack([..._player1Stack]);
       setPlayer2Stack([..._player2Stack]);
       setDrawnStack([...drawnStack, player2Card, player1Card]);
       setResult(0);
     }
-  }, [player1Stack, player2Stack, drawnStack, categoryIndex, result])
+    setResult(null);
+    setCategoryIndex(null);
+  }, [player1Stack, player2Stack, drawnStack, result])
 
-  return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleSelectCategory }
+  return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleSelectCategory, handleTurn }
 }
 
 function App() {
@@ -156,7 +152,8 @@ function App() {
     drawnStack,
     categoryIndex,
     result,
-    handleSelectCategory
+    handleSelectCategory,
+    handleTurn,
   } = useGame();
 
   console.log('1UP STACK', player1Stack);
@@ -173,28 +170,9 @@ function App() {
   if (player2Stack.length === 0) {
     return (<h1>1UP WINS!</h1>);
   }
-  // return (
-  //   <Container>
-  //     {/* <Segment inverted color='red'>Player {currentPlayer}</Segment> */}
-  //     <Segment color='red'><Header as='h1'>Player {currentPlayer} Go!</Header></Segment>
-  //     <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player1Stack[0]} />
-  //     {/* <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player1Stack[1]} />
-  //     <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player2Stack[0]} />
-  //     <CardComponent categories={CATEGORIES} onSelectCatgory={handleSelectCategory} {...player2Stack[1]} /> */}
-  //   </Container>
-  // );  
   return (
     <Container>
-      {/* <h1>Player 1 ({player1Stack.length} Cards)</h1> */}
-      <Segment inverted color='red'><Header as='h2'>Player 1 {result && PLAYER1_RESULT[result]}</Header></Segment>
-      {currentPlayer === 1 || result
-        ? <CardComponent
-          categories={CATEGORIES}
-          categoryIndex={categoryIndex}
-          player={1}
-          result={result}
-          onSelectCatgory={handleSelectCategory}
-          {...player1Stack[0]} /> : null}
+      <br/>
       <div>
         <Button
           color='red'
@@ -214,20 +192,49 @@ function App() {
             content: player2Stack.length,
           }}
         />
-        <Button circular color='green' icon='arrow right' />
-        <Message info>
-          <Message.Header>Tap a category above</Message.Header>
-        </Message>
+        { result !== null
+          ? <Button circular color='green' icon='arrow right' floated='right' onClick={handleTurn} /> 
+          : <Button circular color='green' icon='arrow right' floated='right' disabled />  }
+
       </div>
-      <Segment inverted color='blue'><Header as='h2'>Player 2 {result && PLAYER2_RESULT[result]}</Header></Segment>
-      {currentPlayer === 2 || result
-        ? <CardComponent
-          categories={CATEGORIES}
-          categoryIndex={categoryIndex}
-          player={2}
-          result={result}
-          onSelectCatgory={handleSelectCategory}
-          {...player2Stack[0]} /> : null}
+      {currentPlayer === 1 || result !== null
+        ? (
+          <>
+            <Segment inverted color='red'><Header as='h2'>Player 1 {result !== null && PLAYER1_RESULT[result]}</Header></Segment>
+            <CardComponent
+              categories={CATEGORIES}
+              categoryIndex={categoryIndex}
+              player={1}
+              result={result}
+              onSelectCatgory={handleSelectCategory}
+              {...player1Stack[0]} /> 
+          </>    
+         ) : null}
+  
+      {currentPlayer === 2 || result !== null
+        ? (
+        <>
+          <Segment inverted color='blue'><Header as='h2'>Player 2 {result !== null && PLAYER2_RESULT[result]}</Header></Segment>
+          <CardComponent
+            categories={CATEGORIES}
+            categoryIndex={categoryIndex}
+            player={2}
+            result={result}
+            onSelectCatgory={handleSelectCategory}
+            {...player2Stack[0]} /> 
+        </>
+        ): null}
+      { 
+        result == null ? ( 
+          <Message warning>
+            <Message.Header>Tap that good stat from the card above</Message.Header>
+          </Message>
+        ) : ( 
+          <Message warning>
+            <Message.Header>Tap that green button for the next hand</Message.Header>
+          </Message>
+        )
+      }          
     </Container>
   );
 }
@@ -335,3 +342,37 @@ export default App;
 //   { name: 'La Rocca Andy', values: [51, 178, 35, 8] },
 //   { name: 'Donald Trump', values: [73, 190, 20, 2] },
 //   { name: 'Adolf Hitler', values: [56, 160, 30, 5] },
+
+// const handleTurn = useCallback((categoryIndex: number) => {
+//   const player1Card = player1Stack[0];
+//   const player2Card = player2Stack[0];
+//   const player1Value = player1Card['values'][categoryIndex];
+//   const player2Value = player2Card['values'][categoryIndex];
+//   const _player1Stack = player1Stack.slice(1);
+//   const _player2Stack = player2Stack.slice(1);
+
+//   setResult(null);
+//   setCategoryIndex(categoryIndex);
+
+//   if (player1Value > player2Value) {
+//     setPlayer1Stack([..._player1Stack, player2Card, player1Card, ...drawnStack]);
+//     setPlayer2Stack([..._player2Stack]);
+//     setDrawnStack([]);
+//     setCurrentPlayer(1);
+//     setResult(1);
+//   } else if (player1Value < player2Value) {
+//     setPlayer1Stack([..._player1Stack]);
+//     setPlayer2Stack([..._player2Stack, player2Card, player1Card, ...drawnStack]);
+//     setDrawnStack([]);
+//     setCurrentPlayer(2);
+//     setResult(2);
+//   } else {
+//     setPlayer1Stack([..._player1Stack]);
+//     setPlayer2Stack([..._player2Stack]);
+//     setDrawnStack([...drawnStack, player2Card, player1Card]);
+//     setResult(0);
+//   }
+// }, [player1Stack, player2Stack, drawnStack, categoryIndex, result])
+
+// return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleSelectCategory, handleTurn }
+// }
