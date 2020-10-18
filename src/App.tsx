@@ -1,12 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Button, Icon, Message } from 'semantic-ui-react';
-import will from '/public/img/will.jpeg'
+import will from './img/will.jpeg';
+import dan from './img/dan.jpeg';
+import ben from './img/ben.jpeg';
+import sunny from './img/sunny.jpeg';
+import morgan from './img/morgan.jpeg';
+import didun from './img/didun.jpeg';
+import mike from './img/mike.jpeg';
+import ant from './img/ant.jpeg';
+import nick from './img/nick.jpeg';
+import pierce from './img/pierce.jpeg';
+import scouse from './img/scouse.jpeg';
+import vinnie from './img/vinnie.jpeg';
+import grant from './img/grant.jpeg';
+import rob from './img/rob.jpeg';
+import dt from './img/dt.jpeg';
 
 type CategoryType = 'status' | 'banter' | 'weight' | 'chess';
 
 type CardType = {
   name: string;
   countryCode: FlagNameValues;
+  img: any;
   values: number[];
 }
 
@@ -37,73 +52,93 @@ const DATA: CardType[] = [
   {
     name: 'DT',
     countryCode: 'uk',
+    img: dt,
     values: [3, 3, 88, 935]
   },
   {
     name: 'Grant',
     countryCode: 'gb wls',
-    values: [2, 3, 65, 0]
+    img: grant, 
+    values: [0, 3, 65, 0]
   },   
   {
     name: 'Captain Morgan',
     countryCode: 'gb sct',
+    img: morgan,
     values: [2, 1, 68, 1078]
   },  
   {
     name: 'Sunny',
     countryCode: 'uk',
+    img: sunny,
     values: [1, 0, 94, 1261]
   },    
   {
     name: 'American Ben',
     countryCode: 'us',
+    img: ben,
     values: [4, 1, 95, 0]
   },     
   {
     name: 'Will',
     countryCode: 'gb sct',
+    img: will,
     values: [4, 2, 90, 669]
   },  
   {
     name: 'Rob',
     countryCode: 'uk',
+    img: rob,
     values: [3, 2, 70, 600]
   },
   {
     name: 'Scouse',
     countryCode: 'gb sct',
+    img: scouse,
     values: [2, 1, 85, 1149]
   },
   {
     name: 'Vinnie',
     countryCode: 'gb wls',
+    img: vinnie,
     values: [4, 2, 80, 0]
   },
   {
     name: 'Didun',
     countryCode: 'gb wls',
+    img: didun,
     values: [4, 1, 80, 600]
   },  
   {
     name: 'Nick',
     countryCode: 'uk',
+    img: nick,
     values: [0, 1, 99, 500]
   },
   {
     name: 'Pierce',
     countryCode: 'uk',
+    img: pierce,
     values: [2, 1, 70, 0]
   },
   {
     name: 'Dan',
     countryCode: 'gb sct',
+    img: dan,
     values: [2, 1, 125, 746]
   },  
   {
     name: 'Ant',
     countryCode: 'uk',
+    img: ant,
     values: [2, 1, 90, 0]
   },  
+  {
+    name: 'Mike',
+    countryCode: 'uk',
+    img: mike,
+    values: [0, 1, 97, 300]
+  }, 
 ];
 
 //   { name: 'Captain Morgan', values: [45, 178, 60, 8] },
@@ -141,7 +176,6 @@ function useGame() {
   const [player1Stack, setPlayer1Stack] = useState<CardType[]>([]);
   const [player2Stack, setPlayer2Stack] = useState<CardType[]>([]);
   const [drawnStack, setDrawnStack] = useState<CardType[]>([]);
-  const [showCard, setShowCard] = useState<boolean>(false);
   const [categoryIndex, setCategoryIndex] = useState<number | null>(null);
   const [result, setResult] = useState<ResultType>(null);
 
@@ -258,8 +292,18 @@ function App() {
         { result !== null
           ? <Button circular color='green' icon='arrow right' floated='right' onClick={handleTurn} /> 
           : <Button circular color='green' icon='arrow right' floated='right' disabled />  }
-
-      </div>
+      </div>            
+      { 
+        result == null ? ( 
+          <Message warning>
+            <Message.Header>Top Trumps. Tap that stat!</Message.Header>
+          </Message>
+        ) : ( 
+          <Message warning>
+            <Message.Header>Tap the green button for the next hand</Message.Header>
+          </Message>
+        )
+      }           
       {currentPlayer === 1 || result !== null
         ? (
           <>
@@ -286,18 +330,7 @@ function App() {
             onSelectCatgory={handleSelectCategory}
             {...player2Stack[0]} /> 
         </>
-        ): null}
-      { 
-        result == null ? ( 
-          <Message warning>
-            <Message.Header>Tap that good stat from the card above</Message.Header>
-          </Message>
-        ) : ( 
-          <Message warning>
-            <Message.Header>Tap that green button for the next hand</Message.Header>
-          </Message>
-        )
-      }          
+        ): null}       
     <br/>  
     </Container>
   );
@@ -323,7 +356,7 @@ type CardPropsType = CardType & {
 
 function CardComponent(props: CardPropsType) {
   console.log('CARD PROPS', props);
-  const { name, countryCode, values, player, categoryIndex, result, onSelectCatgory } = props;
+  const { name, countryCode, img, values, player, categoryIndex, result, onSelectCatgory } = props;
   return (
     <Table celled selectable unstackable size="small">
       <Table.Header>
@@ -337,7 +370,7 @@ function CardComponent(props: CardPropsType) {
       <Table.Body>
         <Table.Row>
           <Table.Cell>
-            <Image src='/img/will.jpeg' size='small' />
+            <Image src={img} size='small'/>
           </Table.Cell>
         </Table.Row>
         {CATEGORIES.map((category, i) => {
