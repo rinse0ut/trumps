@@ -36,7 +36,7 @@ const META_DATA = [
   {
     category: 'banter',
     title: 'Banter Level',
-    subCategories: ['GNVQ', 'GCSE', 'A Level', 'Archbishop'],
+    subCategories: ['GNVQ', 'GCSE', 'A Level', 'Covid20'],
   },
   {
     category: 'weight',
@@ -59,7 +59,7 @@ const DATA: CardType[] = [
     name: 'Grant',
     countryCode: 'gb wls',
     img: grant, 
-    values: [0, 3, 65, 0]
+    values: [3, 0, 65, 0]
   },   
   {
     name: 'Captain Morgan',
