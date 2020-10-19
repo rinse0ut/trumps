@@ -1,152 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Button, Icon, Message } from 'semantic-ui-react';
-import will from './img/will.jpeg';
-import dan from './img/dan.jpeg';
-import ben from './img/ben.jpeg';
-import sunny from './img/sunny.jpeg';
-import morgan from './img/morgan.jpeg';
-import didun from './img/didun.jpeg';
-import mike from './img/mike.jpeg';
-import ant from './img/ant.jpeg';
-import nick from './img/nick.jpeg';
-import pierce from './img/pierce.jpeg';
-import scouse from './img/scouse.jpeg';
-import vinnie from './img/vinnie.jpeg';
-import grant from './img/grant.jpeg';
-import rob from './img/rob.jpeg';
-import dt from './img/dt.jpeg';
-import stevooo from './img/stevooo.jpeg';
+import {CardType, CategoryType} from './types';
+import {categories, cards} from './variants/pilot';
 
-type CategoryType = 'status' | 'banter' | 'weight' | 'chess';
-
-type CardType = {
-  name: string;
-  countryCode: FlagNameValues;
-  img: any;
-  values: (string | number)[];
-}
-
-const CATEGORIES: CategoryType[] = ['status', 'banter', 'weight', 'chess'];
-
-const META_DATA = [
-  {
-    category: 'status',
-    title: 'Status',
-    ranking: ['🐌', '🛎', '🛋', '🐿', '🌎 🚀'],
-  },
-  {
-    category: 'banter',
-    title: 'Banter Level',
-    ranking: ['GNVQ', 'GCSE', 'A Level', 'Covid20'],
-  },
-  {
-    category: 'weight',
-    title: 'Weight (kg)',
-  },
-  {
-    category: 'chess',
-    title: 'Chess Rating',
-  }
-]
-
-const DATA: CardType[] = [
-  {
-    name: 'DT',
-    countryCode: 'uk',
-    img: dt,
-    values: ['🛋', 'Covid20', 88, 935]
-  },
-  {
-    name: 'Grant',
-    countryCode: 'gb wls',
-    img: grant,
-    values: ['🐿', 'GNVQ', 65, 0]
-  },
-  // {
-  //   name: 'Captain Morgan',
-  //   countryCode: 'gb sct',
-  //   img: morgan,
-  //   values: [2, 1, 68, 1078]
-  // },  
-  // {
-  //   name: 'Sunny',
-  //   countryCode: 'uk',
-  //   img: sunny,
-  //   values: [1, 0, 94, 1261]
-  // },    
-  // {
-  //   name: 'American Ben',
-  //   countryCode: 'us',
-  //   img: ben,
-  //   values: [4, 1, 95, 0]
-  // },     
-  // {
-  //   name: 'Will',
-  //   countryCode: 'gb sct',
-  //   img: will,
-  //   values: [4, 2, 90, 669]
-  // },  
-  // {
-  //   name: 'Rob',
-  //   countryCode: 'uk',
-  //   img: rob,
-  //   values: [3, 2, 70, 600]
-  // },
-  // {
-  //   name: 'Scouse',
-  //   countryCode: 'gb sct',
-  //   img: scouse,
-  //   values: [2, 1, 85, 1149]
-  // },
-  // {
-  //   name: 'Vinnie',
-  //   countryCode: 'gb wls',
-  //   img: vinnie,
-  //   values: [4, 2, 80, 0]
-  // },
-  // {
-  //   name: 'Didun',
-  //   countryCode: 'gb wls',
-  //   img: didun,
-  //   values: [4, 1, 80, 600]
-  // },  
-  // {
-  //   name: 'Nick',
-  //   countryCode: 'uk',
-  //   img: nick,
-  //   values: [0, 1, 99, 500]
-  // },
-  // {
-  //   name: 'Pierce',
-  //   countryCode: 'uk',
-  //   img: pierce,
-  //   values: [2, 1, 70, 0]
-  // },
-  // {
-  //   name: 'Dan',
-  //   countryCode: 'gb sct',
-  //   img: dan,
-  //   values: [2, 1, 125, 746]
-  // },  
-  // {
-  //   name: 'Ant',
-  //   countryCode: 'uk',
-  //   img: ant,
-  //   values: [2, 1, 90, 0]
-  // },  
-  // {
-  //   name: 'Mike',
-  //   countryCode: 'uk',
-  //   img: mike,
-  //   values: [0, 1, 97, 300]
-  // }, 
-  // {
-  //   name: 'Stevooo',
-  //   countryCode: 'uk',
-  //   img: stevooo,
-  //   values: [3, 1, 95, 0]
-  // },   
-];
+console.log('CATS', categories);
+console.log('CARDS', cards);
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -166,16 +24,16 @@ function useGame() {
   const [categoryIndex, setCategoryIndex] = useState<number | null>(null);
   const [result, setResult] = useState<ResultType>(null);
 
-  // Shuffle and setup each player decks
+  // Shuffle and deal cards
   useEffect(() => {
-    const numCards = DATA.length / 2;
+    const numCards = cards.length / 2;
     const index = Math.floor(Math.random() * numCards);
     for (let i = 0; i < numCards; i++) {
       const index = Math.floor(Math.random() * numCards);
-      const [item] = DATA.splice(index, 1);
+      const [item] = cards.splice(index, 1);
       setPlayer1Stack(prevState => [...prevState, item]);
     }
-    setPlayer2Stack(DATA);
+    setPlayer2Stack(cards);
   }, [])
 
   const handleSelectCategory = useCallback((categoryIndex: number) => {
@@ -183,15 +41,11 @@ function useGame() {
       return;
     }
     setCategoryIndex(categoryIndex);
-    const category = META_DATA[categoryIndex]
+    const category = categories[categoryIndex]
     let player1Value = player1Stack[0]['values'][categoryIndex];
     let player2Value = player2Stack[0]['values'][categoryIndex];
 
-    console.log('CATEGORY', category);
-    console.log('P1_VALUE', player1Value);
-
     if (category.ranking && typeof player1Value === 'string' && typeof player2Value === 'string') {
-      console.log('IDX OF', category.ranking.indexOf(player1Value));
       player1Value = category.ranking.indexOf(player1Value); 
       player2Value = category.ranking.indexOf(player2Value); 
     }
@@ -308,7 +162,7 @@ function App() {
           <>
             <Segment inverted color='red'><Header as='h2'>Player 1 {result !== null && PLAYER1_RESULT[result]}</Header></Segment>
             <CardComponent
-              categories={CATEGORIES}
+              categories={categories}
               categoryIndex={categoryIndex}
               player={1}
               result={result}
@@ -322,7 +176,7 @@ function App() {
           <>
             <Segment inverted color='blue'><Header as='h2'>Player 2 {result !== null && PLAYER2_RESULT[result]}</Header></Segment>
             <CardComponent
-              categories={CATEGORIES}
+              categories={categories}
               categoryIndex={categoryIndex}
               player={2}
               result={result}
@@ -333,16 +187,6 @@ function App() {
       <br />
     </Container>
   );
-}
-
-function player1Result(result: ResultType) {
-  if (result === 1) {
-    return 'WINS!';
-  } else if (result === 2) {
-    return 'LOSES!'
-  } else {
-    return 'DRAWS!'
-  }
 }
 
 type CardPropsType = CardType & {
@@ -372,14 +216,12 @@ function CardComponent(props: CardPropsType) {
             <Image src={img} size='small' />
           </Table.Cell>
         </Table.Row>
-        {CATEGORIES.map((category, i) => {
-          const metaData = META_DATA.find(x => x.category === category);
-          if (!metaData) return;
-          const { title } = metaData;
+        {categories.map((category, i) => {
+          const { title } = category;
           const stat = values[i];
           if (categoryIndex === i && result === 0) {
             return (
-              <Table.Row warning key={category} onClick={() => onSelectCatgory(i)}>
+              <Table.Row warning key={title} onClick={() => onSelectCatgory(i)}>
                 <Table.Cell>{title}</Table.Cell>
                 <Table.Cell>{stat}</Table.Cell>
                 <Table.Cell><Icon name='checkmark' /></Table.Cell>
@@ -387,7 +229,7 @@ function CardComponent(props: CardPropsType) {
             )
           } else if (categoryIndex === i && result === player) {
             return (
-              <Table.Row positive key={category} onClick={() => onSelectCatgory(i)}>
+              <Table.Row positive key={title} onClick={() => onSelectCatgory(i)}>
                 <Table.Cell>{title}</Table.Cell>
                 <Table.Cell>{stat}</Table.Cell>
                 <Table.Cell><Icon name='checkmark' /></Table.Cell>
@@ -395,7 +237,7 @@ function CardComponent(props: CardPropsType) {
             )
           } else if (categoryIndex === i && result !== player) {
             return (
-              <Table.Row negative key={category} onClick={() => onSelectCatgory(i)}>
+              <Table.Row negative key={title} onClick={() => onSelectCatgory(i)}>
                 <Table.Cell>{title}</Table.Cell>
                 <Table.Cell>{stat}</Table.Cell>
                 <Table.Cell><Icon name='close' /></Table.Cell>
@@ -403,7 +245,7 @@ function CardComponent(props: CardPropsType) {
             )
           }
           return (
-            <Table.Row key={category} onClick={() => onSelectCatgory(i)}>
+            <Table.Row key={title} onClick={() => onSelectCatgory(i)}>
               <Table.Cell>{title}</Table.Cell>
               <Table.Cell>{stat}</Table.Cell>
               <Table.Cell></Table.Cell>
