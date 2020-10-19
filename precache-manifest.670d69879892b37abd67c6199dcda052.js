@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ec0c1131a9d89cea3ff95ca0304e0b30",
+    "revision": "63ee90b23a75888727e665c4fc88a1ba",
     "url": "/trumps/index.html"
   },
   {
-    "revision": "40ae16466b4b2f76060d",
+    "revision": "a9709f686b480d908313",
     "url": "/trumps/static/css/2.6a4efc55.chunk.css"
   },
   {
-    "revision": "65947a4886e202f6e699",
+    "revision": "3c2ff61aafd7e6e1fecf",
     "url": "/trumps/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "40ae16466b4b2f76060d",
-    "url": "/trumps/static/js/2.7f7c2c1f.chunk.js"
+    "revision": "a9709f686b480d908313",
+    "url": "/trumps/static/js/2.fec43e93.chunk.js"
   },
   {
     "revision": "1a1a42c150bd05496b97b265c552c789",
-    "url": "/trumps/static/js/2.7f7c2c1f.chunk.js.LICENSE.txt"
+    "url": "/trumps/static/js/2.fec43e93.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "65947a4886e202f6e699",
-    "url": "/trumps/static/js/main.ab77c36b.chunk.js"
+    "revision": "3c2ff61aafd7e6e1fecf",
+    "url": "/trumps/static/js/main.39eccef2.chunk.js"
   },
   {
     "revision": "95d82a9caed866a55fc7",
@@ -34,6 +34,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "6cba428d232580549ada0f9d75587c99",
     "url": "/trumps/static/media/ben.6cba428d.jpeg"
+  },
+  {
+    "revision": "d2e8d827f5601f69e958520d864efe71",
+    "url": "/trumps/static/media/ben_gt.d2e8d827.jpg"
   },
   {
     "revision": "13db00b7a34fee4d819ab7f9838cc428",
@@ -76,6 +80,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/media/grant.39b9be86.jpeg"
   },
   {
+    "revision": "468b790d78da82674ec1a29b10843350",
+    "url": "/trumps/static/media/grant_gt.468b790d.jpeg"
+  },
+  {
     "revision": "94ab6c186f52a4b6f4c140e6f2b4dfc0",
     "url": "/trumps/static/media/gt.94ab6c18.jpg"
   },
@@ -108,8 +116,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/media/mike.006e457e.jpeg"
   },
   {
+    "revision": "277b2b4022bdb148634efe877f8f8192",
+    "url": "/trumps/static/media/mike_gt.277b2b40.jpg"
+  },
+  {
     "revision": "9c9ff2b1ef51989202002088d734b446",
     "url": "/trumps/static/media/morgan.9c9ff2b1.jpeg"
+  },
+  {
+    "revision": "d328e7fd2d320b2cf29042ef0c9cb28c",
+    "url": "/trumps/static/media/morgan_gt.d328e7fd.jpg"
   },
   {
     "revision": "c153051e4fdfd56f20d2ef87eac7c4fb",
@@ -148,6 +164,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/media/rob.5110024b.jpeg"
   },
   {
+    "revision": "5e5a5e742610861906d3056ed2598b4d",
+    "url": "/trumps/static/media/rob_gt.5e5a5e74.jpeg"
+  },
+  {
     "revision": "d02204f4a784bb0ec98b0a01cdb9b8d1",
     "url": "/trumps/static/media/scouse.d02204f4.jpeg"
   },
@@ -164,11 +184,19 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/media/sunny.c00e8603.jpeg"
   },
   {
+    "revision": "9f13e1cdbe8403af526e7b06a417ca83",
+    "url": "/trumps/static/media/sunny_gt.9f13e1cd.jpeg"
+  },
+  {
     "revision": "bb7ff1a72dc667990374d2a1dd9e4708",
     "url": "/trumps/static/media/vinnie.bb7ff1a7.jpeg"
   },
   {
     "revision": "32aef3bdef7d31f959843f316f448367",
     "url": "/trumps/static/media/will.32aef3bd.jpeg"
+  },
+  {
+    "revision": "c2ded395deaaed20520577c1591e0f2b",
+    "url": "/trumps/static/media/will_gt.c2ded395.jpeg"
   }
 ]);
