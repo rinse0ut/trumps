@@ -23,7 +23,7 @@ type CardType = {
   name: string;
   countryCode: FlagNameValues;
   img: any;
-  values: number[];
+  values: (string | number)[];
 }
 
 const CATEGORIES: CategoryType[] = ['status', 'banter', 'weight', 'chess'];
@@ -32,12 +32,12 @@ const META_DATA = [
   {
     category: 'status',
     title: 'Status',
-    subCategories: ['🐌', '🛎', '🛋', '🐿', '🌎 🚀'],
+    ranking: ['🐌', '🛎', '🛋', '🐿', '🌎 🚀'],
   },
   {
     category: 'banter',
     title: 'Banter Level',
-    subCategories: ['GNVQ', 'GCSE', 'A Level', 'Covid20'],
+    ranking: ['GNVQ', 'GCSE', 'A Level', 'Covid20'],
   },
   {
     category: 'weight',
@@ -54,119 +54,99 @@ const DATA: CardType[] = [
     name: 'DT',
     countryCode: 'uk',
     img: dt,
-    values: [3, 3, 88, 935]
+    values: ['🛋', 'Covid20', 88, 935]
   },
   {
     name: 'Grant',
     countryCode: 'gb wls',
-    img: grant, 
-    values: [3, 0, 65, 0]
-  },   
-  {
-    name: 'Captain Morgan',
-    countryCode: 'gb sct',
-    img: morgan,
-    values: [2, 1, 68, 1078]
-  },  
-  {
-    name: 'Sunny',
-    countryCode: 'uk',
-    img: sunny,
-    values: [1, 0, 94, 1261]
-  },    
-  {
-    name: 'American Ben',
-    countryCode: 'us',
-    img: ben,
-    values: [4, 1, 95, 0]
-  },     
-  {
-    name: 'Will',
-    countryCode: 'gb sct',
-    img: will,
-    values: [4, 2, 90, 669]
-  },  
-  {
-    name: 'Rob',
-    countryCode: 'uk',
-    img: rob,
-    values: [3, 2, 70, 600]
+    img: grant,
+    values: ['🐿', 'GNVQ', 65, 0]
   },
-  {
-    name: 'Scouse',
-    countryCode: 'gb sct',
-    img: scouse,
-    values: [2, 1, 85, 1149]
-  },
-  {
-    name: 'Vinnie',
-    countryCode: 'gb wls',
-    img: vinnie,
-    values: [4, 2, 80, 0]
-  },
-  {
-    name: 'Didun',
-    countryCode: 'gb wls',
-    img: didun,
-    values: [4, 1, 80, 600]
-  },  
-  {
-    name: 'Nick',
-    countryCode: 'uk',
-    img: nick,
-    values: [0, 1, 99, 500]
-  },
-  {
-    name: 'Pierce',
-    countryCode: 'uk',
-    img: pierce,
-    values: [2, 1, 70, 0]
-  },
-  {
-    name: 'Dan',
-    countryCode: 'gb sct',
-    img: dan,
-    values: [2, 1, 125, 746]
-  },  
-  {
-    name: 'Ant',
-    countryCode: 'uk',
-    img: ant,
-    values: [2, 1, 90, 0]
-  },  
-  {
-    name: 'Mike',
-    countryCode: 'uk',
-    img: mike,
-    values: [0, 1, 97, 300]
-  }, 
-  {
-    name: 'Stevooo',
-    countryCode: 'uk',
-    img: stevooo,
-    values: [3, 1, 95, 0]
-  },   
+  // {
+  //   name: 'Captain Morgan',
+  //   countryCode: 'gb sct',
+  //   img: morgan,
+  //   values: [2, 1, 68, 1078]
+  // },  
+  // {
+  //   name: 'Sunny',
+  //   countryCode: 'uk',
+  //   img: sunny,
+  //   values: [1, 0, 94, 1261]
+  // },    
+  // {
+  //   name: 'American Ben',
+  //   countryCode: 'us',
+  //   img: ben,
+  //   values: [4, 1, 95, 0]
+  // },     
+  // {
+  //   name: 'Will',
+  //   countryCode: 'gb sct',
+  //   img: will,
+  //   values: [4, 2, 90, 669]
+  // },  
+  // {
+  //   name: 'Rob',
+  //   countryCode: 'uk',
+  //   img: rob,
+  //   values: [3, 2, 70, 600]
+  // },
+  // {
+  //   name: 'Scouse',
+  //   countryCode: 'gb sct',
+  //   img: scouse,
+  //   values: [2, 1, 85, 1149]
+  // },
+  // {
+  //   name: 'Vinnie',
+  //   countryCode: 'gb wls',
+  //   img: vinnie,
+  //   values: [4, 2, 80, 0]
+  // },
+  // {
+  //   name: 'Didun',
+  //   countryCode: 'gb wls',
+  //   img: didun,
+  //   values: [4, 1, 80, 600]
+  // },  
+  // {
+  //   name: 'Nick',
+  //   countryCode: 'uk',
+  //   img: nick,
+  //   values: [0, 1, 99, 500]
+  // },
+  // {
+  //   name: 'Pierce',
+  //   countryCode: 'uk',
+  //   img: pierce,
+  //   values: [2, 1, 70, 0]
+  // },
+  // {
+  //   name: 'Dan',
+  //   countryCode: 'gb sct',
+  //   img: dan,
+  //   values: [2, 1, 125, 746]
+  // },  
+  // {
+  //   name: 'Ant',
+  //   countryCode: 'uk',
+  //   img: ant,
+  //   values: [2, 1, 90, 0]
+  // },  
+  // {
+  //   name: 'Mike',
+  //   countryCode: 'uk',
+  //   img: mike,
+  //   values: [0, 1, 97, 300]
+  // }, 
+  // {
+  //   name: 'Stevooo',
+  //   countryCode: 'uk',
+  //   img: stevooo,
+  //   values: [3, 1, 95, 0]
+  // },   
 ];
-
-//   { name: 'Captain Morgan', values: [45, 178, 60, 8] },
-//   { name: 'Will', values: [33, 188, 95, 9] },
-//   { name: 'Sunny', values: [37, 187, 0, -1] },
-//   { name: 'American Ben', values: [32, 185, 90, 8] },
-//   { name: 'Ant', values: [38, 187, 85, 6] },
-//   { name: 'Dan', values: [33, 170, 96, 7] },
-//   { name: 'Didun', values: [26, 171, 70, 8] },
-//   { name: 'Mike', values: [34, 172, 87, 1] },
-//   { name: 'Nick', values: [43, 188, 89, 5] },
-//   { name: 'Pierce', values: [42, 188, 55, 7] },
-//   { name: 'Rob', values: [42, 188, 52, 9] },
-//   { name: 'Scouse', values: [34, 188, 61, 8] },
-//   { name: 'Vinnie', values: [35, 173, 42, 7] },
-//   { name: 'Grant', values: [35, 44, 79, 9] },
-//   { name: 'Hitchy', values: [35, 45, 75, 3] },
-//   { name: 'Tom Ted', values: [35, 191, 91, 2] },
-//   { name: 'La Rocca Andy', values: [51, 178, 35, 8] },
-//   { name: 'Donald Trump', values: [73, 190, 20, 2] },
-//   { name: 'Adolf Hitler', values: [56, 160, 30, 5] }
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -203,8 +183,19 @@ function useGame() {
       return;
     }
     setCategoryIndex(categoryIndex);
-    const player1Value = player1Stack[0]['values'][categoryIndex];
-    const player2Value = player2Stack[0]['values'][categoryIndex];
+    const category = META_DATA[categoryIndex]
+    let player1Value = player1Stack[0]['values'][categoryIndex];
+    let player2Value = player2Stack[0]['values'][categoryIndex];
+
+    console.log('CATEGORY', category);
+    console.log('P1_VALUE', player1Value);
+
+    if (category.ranking && typeof player1Value === 'string' && typeof player2Value === 'string') {
+      console.log('IDX OF', category.ranking.indexOf(player1Value));
+      player1Value = category.ranking.indexOf(player1Value); 
+      player2Value = category.ranking.indexOf(player2Value); 
+    }
+
     if (player1Value > player2Value) {
       setCurrentPlayer(1);
       setResult(1);
@@ -214,6 +205,7 @@ function useGame() {
     } else {
       setResult(0);
     }
+
   }, [player1Stack, player2Stack, result]);
 
   const handleTurn = useCallback(() => {
@@ -276,7 +268,7 @@ function App() {
   }
   return (
     <Container>
-      <br/>
+      <br />
       <div>
         <Button
           color='red'
@@ -296,21 +288,21 @@ function App() {
             content: player2Stack.length,
           }}
         />
-        { result !== null
-          ? <Button circular color='green' icon='arrow right' floated='right' onClick={handleTurn} /> 
-          : <Button circular color='green' icon='arrow right' floated='right' disabled />  }
-      </div>            
-      { 
-        result == null ? ( 
+        {result !== null
+          ? <Button circular color='green' icon='arrow right' floated='right' onClick={handleTurn} />
+          : <Button circular color='green' icon='arrow right' floated='right' disabled />}
+      </div>
+      {
+        result == null ? (
           <Message warning>
             <Message.Header>Top Trumps. Tap that stat!</Message.Header>
           </Message>
-        ) : ( 
-          <Message warning>
-            <Message.Header>Tap the green button for the next hand</Message.Header>
-          </Message>
-        )
-      }           
+        ) : (
+            <Message warning>
+              <Message.Header>Tap the green button for the next hand</Message.Header>
+            </Message>
+          )
+      }
       {currentPlayer === 1 || result !== null
         ? (
           <>
@@ -321,24 +313,24 @@ function App() {
               player={1}
               result={result}
               onSelectCatgory={handleSelectCategory}
-              {...player1Stack[0]} /> 
-          </>    
-         ) : null}
-  
+              {...player1Stack[0]} />
+          </>
+        ) : null}
+
       {currentPlayer === 2 || result !== null
         ? (
-        <>
-          <Segment inverted color='blue'><Header as='h2'>Player 2 {result !== null && PLAYER2_RESULT[result]}</Header></Segment>
-          <CardComponent
-            categories={CATEGORIES}
-            categoryIndex={categoryIndex}
-            player={2}
-            result={result}
-            onSelectCatgory={handleSelectCategory}
-            {...player2Stack[0]} /> 
-        </>
-        ): null}       
-    <br/>  
+          <>
+            <Segment inverted color='blue'><Header as='h2'>Player 2 {result !== null && PLAYER2_RESULT[result]}</Header></Segment>
+            <CardComponent
+              categories={CATEGORIES}
+              categoryIndex={categoryIndex}
+              player={2}
+              result={result}
+              onSelectCatgory={handleSelectCategory}
+              {...player2Stack[0]} />
+          </>
+        ) : null}
+      <br />
     </Container>
   );
 }
@@ -377,16 +369,14 @@ function CardComponent(props: CardPropsType) {
       <Table.Body>
         <Table.Row>
           <Table.Cell>
-            <Image src={img} size='small'/>
+            <Image src={img} size='small' />
           </Table.Cell>
         </Table.Row>
         {CATEGORIES.map((category, i) => {
           const metaData = META_DATA.find(x => x.category === category);
           if (!metaData) return;
-          const { title, subCategories } = metaData;
-          const value = values[i];
-          const stat = subCategories ? subCategories[value] : value;
-          let status;
+          const { title } = metaData;
+          const stat = values[i];
           if (categoryIndex === i && result === 0) {
             return (
               <Table.Row warning key={category} onClick={() => onSelectCatgory(i)}>
