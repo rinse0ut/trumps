@@ -15,6 +15,7 @@ import vinnie from './img/vinnie.jpeg';
 import grant from './img/grant.jpeg';
 import rob from './img/rob.jpeg';
 import dt from './img/dt.jpeg';
+import stevooo from './img/stevooo.jpeg';
 
 type CategoryType = 'status' | 'banter' | 'weight' | 'chess';
 
@@ -139,6 +140,12 @@ const DATA: CardType[] = [
     img: mike,
     values: [0, 1, 97, 300]
   }, 
+  {
+    name: 'Stevooo',
+    countryCode: 'uk',
+    img: stevooo,
+    values: [3, 1, 95, 0]
+  },   
 ];
 
 //   { name: 'Captain Morgan', values: [45, 178, 60, 8] },
@@ -419,57 +426,3 @@ function CardComponent(props: CardPropsType) {
 }
 
 export default App;
-
-//   { name: 'Captain Morgan', values: [45, 178, 60, 8] },
-//   { name: 'Will', values: [33, 188, 95, 9] },
-//   { name: 'Sunny', values: [37, 187, 0, -1] },
-//   { name: 'American Ben', values: [32, 185, 90, 8] },
-//   { name: 'Ant', values: [38, 187, 85, 6] },
-//   { name: 'Dan', values: [33, 170, 96, 7] },
-//   { name: 'Didun', values: [26, 171, 70, 8] },
-//   { name: 'Mike', values: [34, 172, 87, 1] },
-//   { name: 'Nick', values: [43, 188, 89, 5] },
-//   { name: 'Pierce', values: [42, 188, 55, 7] },
-//   { name: 'Rob', values: [42, 188, 52, 9] },
-//   { name: 'Scouse', values: [34, 188, 61, 8] },
-//   { name: 'Vinnie', values: [35, 173, 42, 7] },
-//   { name: 'Grant', values: [35, 44, 79, 9] },
-//   { name: 'Hitchy', values: [35, 45, 75, 3] },
-//   { name: 'Tom Ted', values: [35, 191, 91, 2] },
-//   { name: 'La Rocca Andy', values: [51, 178, 35, 8] },
-//   { name: 'Donald Trump', values: [73, 190, 20, 2] },
-//   { name: 'Adolf Hitler', values: [56, 160, 30, 5] },
-
-// const handleTurn = useCallback((categoryIndex: number) => {
-//   const player1Card = player1Stack[0];
-//   const player2Card = player2Stack[0];
-//   const player1Value = player1Card['values'][categoryIndex];
-//   const player2Value = player2Card['values'][categoryIndex];
-//   const _player1Stack = player1Stack.slice(1);
-//   const _player2Stack = player2Stack.slice(1);
-
-//   setResult(null);
-//   setCategoryIndex(categoryIndex);
-
-//   if (player1Value > player2Value) {
-//     setPlayer1Stack([..._player1Stack, player2Card, player1Card, ...drawnStack]);
-//     setPlayer2Stack([..._player2Stack]);
-//     setDrawnStack([]);
-//     setCurrentPlayer(1);
-//     setResult(1);
-//   } else if (player1Value < player2Value) {
-//     setPlayer1Stack([..._player1Stack]);
-//     setPlayer2Stack([..._player2Stack, player2Card, player1Card, ...drawnStack]);
-//     setDrawnStack([]);
-//     setCurrentPlayer(2);
-//     setResult(2);
-//   } else {
-//     setPlayer1Stack([..._player1Stack]);
-//     setPlayer2Stack([..._player2Stack]);
-//     setDrawnStack([...drawnStack, player2Card, player1Card]);
-//     setResult(0);
-//   }
-// }, [player1Stack, player2Stack, drawnStack, categoryIndex, result])
-
-// return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleSelectCategory, handleTurn }
-// }
