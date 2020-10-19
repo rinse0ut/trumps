@@ -1,7 +1,7 @@
 import pilot from './pilot';
 import classic from './classic';
 
-export {
+export default {
   pilot,
   classic
 }

@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Table, Image, Flag, FlagNameValues, Segment, Header, Button, Icon, Message } from 'semantic-ui-react';
 import {CardType, CategoryType} from './types';
-import {categories, cards} from './variants/pilot';
+import _variants from './variants';
 
-console.log('CATS', categories);
-console.log('CARDS', cards);
+// console.log('CATS', categories);
+// console.log('CARDS', cards);
+console.log('VARS', _variants);
+// const {classic} = _variants;
+// const {categories, cards} = classic;
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -16,7 +19,7 @@ type ResultType = null | 0 | 1 | 2;
 const PLAYER1_RESULT = ['DRAWS!', 'WINS!', 'LOSES!']
 const PLAYER2_RESULT = ['DRAWS!', 'LOSES!', 'WINS!']
 
-function useGame() {
+function useGame(categories: CategoryType[], cards: CardType[]) {
   const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
   const [player1Stack, setPlayer1Stack] = useState<CardType[]>([]);
   const [player2Stack, setPlayer2Stack] = useState<CardType[]>([]);
@@ -34,7 +37,7 @@ function useGame() {
       setPlayer1Stack(prevState => [...prevState, item]);
     }
     setPlayer2Stack(cards);
-  }, [])
+  }, [cards])
 
   const handleSelectCategory = useCallback((categoryIndex: number) => {
     if (result) {
@@ -60,7 +63,7 @@ function useGame() {
       setResult(0);
     }
 
-  }, [player1Stack, player2Stack, result]);
+  }, [categories, player1Stack, player2Stack, result]);
 
   const handleTurn = useCallback(() => {
     const player1Card = player1Stack[0];
@@ -93,7 +96,27 @@ function useGame() {
   return { currentPlayer, categoryIndex, result, player1Stack, player2Stack, drawnStack, handleSelectCategory, handleTurn }
 }
 
+function prop<T, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
+}
+
 function App() {
+
+  const [variant, setVariant] = useState<string>();
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [cards, setCards] = useState<CardType[]>([]);
+
+  const handleSelectVariant = useCallback(
+    (variant) => {
+      if (_variants && _variants.hasOwnProperty(variant)) {
+        const {categories, cards} = prop(_variants, variant);
+        setVariant(variant);
+        setCategories(categories);
+        setCards(cards);
+      }
+    },
+    [_variants]
+  )
 
   const {
     currentPlayer,
@@ -104,13 +127,28 @@ function App() {
     result,
     handleSelectCategory,
     handleTurn,
-  } = useGame();
+  } = useGame(categories, cards);
+
+  if (!variant || !categories || !cards) {
+    return (
+      <Container>
+        <br/>
+        <Message warning>
+          <Message.Header>Top Trumps. Tap that category!</Message.Header>
+        </Message>
+        <br/>
+        {Object.keys(_variants).map(variant => (
+          <><Button positive fluid size='big' onClick={() => handleSelectVariant(variant)}>{variant.toUpperCase()}</Button><br/></>
+        ))}
+      </Container>
+    )
+  }
 
   console.log('1UP STACK', player1Stack);
   console.log('2UP STACK', player2Stack);
   console.log('DRAWN STACK', drawnStack);
   console.log('CAT IDX', categoryIndex);
-  console.log('RESULT', result);
+  // console.log('RESULT', result);
   if (player1Stack.length === 0 && player2Stack.length === 0) {
     return (<h1>ITS A DRAW!</h1>);
   }
@@ -199,7 +237,10 @@ type CardPropsType = CardType & {
 
 function CardComponent(props: CardPropsType) {
   console.log('CARD PROPS', props);
-  const { name, countryCode, img, values, player, categoryIndex, result, onSelectCatgory } = props;
+  if (!props.name) {
+    return null
+  }
+  const { name, countryCode, img, values, player, categories, categoryIndex, result, onSelectCatgory } = props;
   return (
     <Table celled selectable unstackable size="small">
       <Table.Header>

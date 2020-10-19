@@ -137,7 +137,7 @@ const cards: CardType[] = [
   },   
 ];
 
-export {
+export default {
   categories,
   cards
 }

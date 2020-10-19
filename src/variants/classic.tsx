@@ -41,37 +41,37 @@ const cards: CardType[] = [
     name: 'DT',
     countryCode: 'uk',
     img: dt,
-    values: [40, 70, 90, 90]
+    values: [40, 70, 90, 80]
   },
   {
     name: 'G Dawg',
     countryCode: 'gb wls',
     img: grant,
-    values: [36, 70, 90, 90]
+    values: [36, 80, 90, 90]
   },
   {
     name: 'Captain Morgan',
     countryCode: 'gb sct',
     img: morgan,
-    values: [45, 70, 90, 90]
+    values: [45, 75, 90, 90]
   },  
   {
     name: 'Sunny',
     countryCode: 'uk',
     img: sunny,
-    values: [37, 70, 90, 90]
+    values: [37, 1, 0, 0]
   },    
   {
     name: 'American Ben',
     countryCode: 'us',
     img: ben,
-    values: [32, 70, 90, 90]
+    values: [32, 90, 90, 85]
   },     
   {
     name: 'Willbert',
     countryCode: 'gb sct',
     img: will,
-    values: [33, 70, 90, 90]
+    values: [33, 90, 90, 90]
   },  
   {
     name: 'Landers',
@@ -95,13 +95,13 @@ const cards: CardType[] = [
     name: 'Didun',
     countryCode: 'gb wls',
     img: didun,
-    values: [26, 70, 90, 90]
+    values: [26, 70, 80, 80]
   },  
   {
     name: 'Nick',
     countryCode: 'uk',
     img: nick,
-    values: [43, 70, 90, 90]
+    values: [43, 90, 60, 90]
   },
   {
     name: 'Pierce',
@@ -113,13 +113,13 @@ const cards: CardType[] = [
     name: 'Karate Kid',
     countryCode: 'gb sct',
     img: dan,
-    values: [33, 'GCSE', 73, 300]
+    values: [33, 89, 73, 80]
   },  
   {
     name: 'Ant',
     countryCode: 'uk',
     img: ant,
-    values: [40, 70, 90, 90]
+    values: [40, 90, 90, 90]
   },  
   {
     name: 'Mike',
@@ -131,11 +131,11 @@ const cards: CardType[] = [
     name: 'Stevooo',
     countryCode: 'uk',
     img: stevooo,
-    values: [41, 70, 90, 90]
+    values: [41, 90, 90, 90]
   },   
 ];
 
-export {
+export default {
   categories,
   cards
 }
