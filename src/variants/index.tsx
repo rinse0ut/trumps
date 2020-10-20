@@ -8,6 +8,6 @@ export default {
   pilot,
   classic,
   drink,
-  player,
+  // player,
   gaytimes
 }
