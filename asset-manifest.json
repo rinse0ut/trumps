@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/trumps/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/trumps/static/js/main.e612e3da.chunk.js",
-    "main.js.map": "/trumps/static/js/main.e612e3da.chunk.js.map",
+    "main.js": "/trumps/static/js/main.029b73eb.chunk.js",
+    "main.js.map": "/trumps/static/js/main.029b73eb.chunk.js.map",
     "runtime-main.js": "/trumps/static/js/runtime-main.115d4ff9.js",
     "runtime-main.js.map": "/trumps/static/js/runtime-main.115d4ff9.js.map",
     "static/css/2.6a4efc55.chunk.css": "/trumps/static/css/2.6a4efc55.chunk.css",
-    "static/js/2.bbde77e0.chunk.js": "/trumps/static/js/2.bbde77e0.chunk.js",
-    "static/js/2.bbde77e0.chunk.js.map": "/trumps/static/js/2.bbde77e0.chunk.js.map",
+    "static/js/2.cbc07a3b.chunk.js": "/trumps/static/js/2.cbc07a3b.chunk.js",
+    "static/js/2.cbc07a3b.chunk.js.map": "/trumps/static/js/2.cbc07a3b.chunk.js.map",
     "index.html": "/trumps/index.html",
-    "precache-manifest.132d06b6e900fdd0323585a2335c91bf.js": "/trumps/precache-manifest.132d06b6e900fdd0323585a2335c91bf.js",
+    "precache-manifest.1902b5d18208e58d8a2ee466e1bcf088.js": "/trumps/precache-manifest.1902b5d18208e58d8a2ee466e1bcf088.js",
     "service-worker.js": "/trumps/service-worker.js",
     "static/css/2.6a4efc55.chunk.css.map": "/trumps/static/css/2.6a4efc55.chunk.css.map",
     "static/css/main.5ecd60fb.chunk.css.map": "/trumps/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.bbde77e0.chunk.js.LICENSE.txt": "/trumps/static/js/2.bbde77e0.chunk.js.LICENSE.txt",
+    "static/js/2.cbc07a3b.chunk.js.LICENSE.txt": "/trumps/static/js/2.cbc07a3b.chunk.js.LICENSE.txt",
     "static/media/ant.jpeg": "/trumps/static/media/ant.2fe8faf8.jpeg",
     "static/media/ben.jpeg": "/trumps/static/media/ben.6cba428d.jpeg",
     "static/media/ben_gt.jpg": "/trumps/static/media/ben_gt.d2e8d827.jpg",
@@ -23,7 +23,7 @@
     "static/media/didun_gt.jpg": "/trumps/static/media/didun_gt.f3ceb5a7.jpg",
     "static/media/grant.jpeg": "/trumps/static/media/grant.39b9be86.jpeg",
     "static/media/grant_gt.jpeg": "/trumps/static/media/grant_gt.468b790d.jpeg",
-    "static/media/gt.jpg": "/trumps/static/media/gt.94ab6c18.jpg",
+    "static/media/gt.jpg": "/trumps/static/media/gt.c8605e68.jpg",
     "static/media/gt3.jpg": "/trumps/static/media/gt3.5510d458.jpg",
     "static/media/mike.jpeg": "/trumps/static/media/mike.006e457e.jpeg",
     "static/media/mike_gt.jpg": "/trumps/static/media/mike_gt.277b2b40.jpg",
@@ -31,7 +31,7 @@
     "static/media/morgan_gt.jpg": "/trumps/static/media/morgan_gt.d328e7fd.jpg",
     "static/media/nick.jpeg": "/trumps/static/media/nick.c153051e.jpeg",
     "static/media/pierce.jpeg": "/trumps/static/media/pierce.2064c0f2.jpeg",
-    "static/media/pierce_gt.jpg": "/trumps/static/media/pierce_gt.5447ddbf.jpg",
+    "static/media/pierce_gt.jpg": "/trumps/static/media/pierce_gt.682ccd16.jpg",
     "static/media/rob.jpeg": "/trumps/static/media/rob.5110024b.jpeg",
     "static/media/rob_gt.jpeg": "/trumps/static/media/rob_gt.5e5a5e74.jpeg",
     "static/media/scouse.jpeg": "/trumps/static/media/scouse.d02204f4.jpeg",
@@ -46,8 +46,8 @@
   "entrypoints": [
     "static/js/runtime-main.115d4ff9.js",
     "static/css/2.6a4efc55.chunk.css",
-    "static/js/2.bbde77e0.chunk.js",
+    "static/js/2.cbc07a3b.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.e612e3da.chunk.js"
+    "static/js/main.029b73eb.chunk.js"
   ]
 }

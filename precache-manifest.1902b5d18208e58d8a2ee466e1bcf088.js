@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a7f3c4dc2908911c8a714d8d809509ac",
+    "revision": "0414b984ec0f74f2f7c01ab1511d930a",
     "url": "/trumps/index.html"
   },
   {
-    "revision": "51fb6c21b5242b1630a3",
+    "revision": "95841f34b1d14edfe000",
     "url": "/trumps/static/css/2.6a4efc55.chunk.css"
   },
   {
-    "revision": "843055d8c7973f421c7a",
+    "revision": "0de8c07e15babb1a50b7",
     "url": "/trumps/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "51fb6c21b5242b1630a3",
-    "url": "/trumps/static/js/2.bbde77e0.chunk.js"
+    "revision": "95841f34b1d14edfe000",
+    "url": "/trumps/static/js/2.cbc07a3b.chunk.js"
   },
   {
     "revision": "1a1a42c150bd05496b97b265c552c789",
-    "url": "/trumps/static/js/2.bbde77e0.chunk.js.LICENSE.txt"
+    "url": "/trumps/static/js/2.cbc07a3b.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "843055d8c7973f421c7a",
-    "url": "/trumps/static/js/main.e612e3da.chunk.js"
+    "revision": "0de8c07e15babb1a50b7",
+    "url": "/trumps/static/js/main.029b73eb.chunk.js"
   },
   {
     "revision": "95d82a9caed866a55fc7",
@@ -84,8 +84,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/media/grant_gt.468b790d.jpeg"
   },
   {
-    "revision": "94ab6c186f52a4b6f4c140e6f2b4dfc0",
-    "url": "/trumps/static/media/gt.94ab6c18.jpg"
+    "revision": "c8605e68b31adf42945f0089e9c244c4",
+    "url": "/trumps/static/media/gt.c8605e68.jpg"
   },
   {
     "revision": "5510d458931aede1993e6509acb88e0b",
@@ -156,8 +156,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/trumps/static/media/pierce.2064c0f2.jpeg"
   },
   {
-    "revision": "5447ddbf1221162f1db6a71aff08e8ce",
-    "url": "/trumps/static/media/pierce_gt.5447ddbf.jpg"
+    "revision": "682ccd16aae54f950a1364410f676c22",
+    "url": "/trumps/static/media/pierce_gt.682ccd16.jpg"
   },
   {
     "revision": "5110024b737f237f181c5d2b59c48b94",
