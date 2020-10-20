@@ -24,15 +24,15 @@ const categories: CategoryType[] = [
   },
   {
     category: 'strength',
-    title: 'Strength',
+    title: 'Bench (kg)',
   },
   {
-    category: 'skill',
-    title: 'Skill',
+    category: 'height',
+    title: 'Height (cm)',
   },
   {
-    category: 'intelligence',
-    title: 'IQ',
+    category: 'weight',
+    title: 'Weight (kg)',
   },
 ]
 
@@ -41,97 +41,97 @@ const cards: CardType[] = [
     name: 'DT',
     countryCode: 'uk',
     img: dt,
-    values: [40, 70, 90, 80]
+    values: [40, 50, 188, 85]
   },
   {
     name: 'G Dawg',
     countryCode: 'gb wls',
     img: grant,
-    values: [36, 85, 90, 95]
+    values: [36, 100, 121, 100]
   },
   {
     name: 'Captain Morgan',
     countryCode: 'gb sct',
     img: morgan,
-    values: [45, 75, 80, 90]
+    values: [45, 80, 170, 74]
   },  
   {
     name: 'Sunny',
     countryCode: 'uk',
     img: sunny,
-    values: [37, 10, 5, 2]
+    values: [37, 120, 188, 90]
   },    
   {
     name: 'American Ben',
     countryCode: 'us',
     img: ben,
-    values: [32, 92, 80, 85]
+    values: [32, 120, 185, 95]
   },     
   {
     name: 'Willbert',
     countryCode: 'gb sct',
     img: will,
-    values: [33, 95, 90, 94]
+    values: [33, 135, 170, 75]
   },  
   {
     name: 'Landers',
     countryCode: 'uk',
     img: rob,
-    values: [42, 70, 90, 95]
+    values: [42, 60, 175, 70]
   },
   {
     name: 'Scouse',
     countryCode: 'gb sct',
     img: scouse,
-    values: [35, 70, 80, 94]
+    values: [35, 60, 188, 80]
   },
   {
     name: 'Master of Weights and Measures',
     countryCode: 'gb wls',
     img: vinnie,
-    values: [37, 70, 80, 90]
+    values: [37, 50, 186, 75]
   },
   {
     name: 'Didun',
     countryCode: 'gb wls',
     img: didun,
-    values: [26, 70, 80, 80]
+    values: [26, 80, 180, 80]
   },  
   {
     name: 'Nick',
     countryCode: 'uk',
     img: nick,
-    values: [43, 90, 2, 80]
+    values: [43, 120,186, 90]
   },
   {
     name: 'Pierce',
     countryCode: 'uk',
     img: pierce,
-    values: [43, 75, 90, 80]
+    values: [43, 80, 170, 75]
   },
   {
     name: 'Karate Kid',
     countryCode: 'gb sct',
     img: dan,
-    values: [33, 94, 75, 80]
+    values: [33, 99, 170, 99]
   },  
   {
     name: 'Ant',
     countryCode: 'uk',
     img: ant,
-    values: [40, 93, 70, 80]
+    values: [40, 120, 188, 90]
   },  
   {
     name: 'Mike',
     countryCode: 'uk',
     img: mike,
-    values: [37, 70, 70, 80]
+    values: [37, 113, 175, 76]
   }, 
   {
     name: 'Stevooo',
     countryCode: 'uk',
     img: stevooo,
-    values: [41, 93, 85, 90]
+    values: [41, 125, 188, 95]
   },   
 ];
 

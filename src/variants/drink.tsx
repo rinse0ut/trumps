@@ -20,21 +20,22 @@ import stevooo from '../img/stevooo.jpeg';
 const categories: CategoryType[] = [
   {
     category: 'usual',
-    title: 'Usual',
+    title: 'The Usual',
     ranking: ['☀️ 🍺 🍦','🥛','🍺 🍏','🍺','🍋 🍋','🍹','🥃','🍸 🍸 🍸 🍸 🍸','🍾']
   },
   {
-    category: 'rounds',
-    title: 'Rounds Bought',
+    category: 'habitat',
+    title: 'Natural Habitat',
+    ranking: ['Cafe Nero', 'Predrinks', 'Pub', 'La Rocca', 'Lolas', 'Be At One']
   },
   {
-    category: 'drinking',
-    title: 'Drinking Ability',
+    category: 'drunk',
+    title: 'Drunk Factor',
   },
   {
-    category: 'driving',
-    title: 'Drink Driving',
-  }
+    category: 'offense',
+    title: 'People Offended',
+  },
 ]
 
 const cards: CardType[] = [
@@ -42,97 +43,97 @@ const cards: CardType[] = [
     name: 'DT',
     countryCode: 'uk',
     img: dt,
-    values: ['🍋 🍋', 70, 90, 80]
+    values: ['🍋 🍋', 'Cafe Nero', 3, 1]
   },
   {
     name: 'G Dawg',
     countryCode: 'gb wls',
     img: grant,
-    values: ['🥃', 85, 90, 95]
+    values: ['🥃', 'Be At One', 4, 3]
   },
   {
     name: 'Captain Morgan',
     countryCode: 'gb sct',
     img: morgan,
-    values: ['🍺', 75, 80, 90]
+    values: ['🍺', 'Cafe Nero', 0, 1]
   },  
   {
     name: 'Sunny',
     countryCode: 'uk',
     img: sunny,
-    values: ['☀️ 🍺 🍦', 10, 5, 2]
+    values: ['☀️ 🍺 🍦', 'Predrinks', 4, 5]
   },    
   {
     name: 'American Ben',
     countryCode: 'us',
     img: ben,
-    values: ['🍺', 92, 80, 85]
+    values: ['🍺', 'La Rocca', 5, 4]
   },     
   {
     name: 'Willbert',
     countryCode: 'gb sct',
     img: will,
-    values: ['🍸 🍸 🍸 🍸 🍸', 95, 90, 94]
+    values: ['🍸 🍸 🍸 🍸 🍸', 'Be At One', 5, 11]
   },  
   {
     name: 'Landers',
     countryCode: 'uk',
     img: rob,
-    values: ['🍹', 70, 90, 95]
+    values: ['🍹', 'Lolas', 3, 1]
   },
   {
     name: 'Scouse',
     countryCode: 'gb sct',
     img: scouse,
-    values: ['🍺', 70, 80, 94]
+    values: ['🍺', 'Pub', 3, 1]
   },
   {
     name: 'Master of Weights and Measures',
     countryCode: 'gb wls',
     img: vinnie,
-    values: ['🥛', 70, 80, 90]
+    values: ['🍺', 'Pub', 3, 5]
   },
   {
     name: 'Didun',
     countryCode: 'gb wls',
     img: didun,
-    values: ['🍺', 70, 80, 80]
+    values: ['🍺', 'Lolas', 3, 3]
   },  
   {
     name: 'Nick',
     countryCode: 'uk',
     img: nick,
-    values: ['🍾', 90, 2, 80]
+    values: ['🍾', 'La Rocca', 3, 4]
   },
   {
     name: 'Pierce',
     countryCode: 'uk',
     img: pierce,
-    values: ['🍺 🍏', 75, 90, 80]
+    values: ['🍺 🍏', 'La Rocca', 2, 1]
   },
   {
     name: 'Karate Kid',
     countryCode: 'gb sct',
     img: dan,
-    values: ['🥛', 94, 75, 80]
+    values: ['🥛', 'Cafe Nero', 0, 10]
   },  
   {
     name: 'Ant',
     countryCode: 'uk',
     img: ant,
-    values: ['🍺', 93, 70, 80]
+    values: ['🍺', 'Pub', 2, 3]
   },  
   {
     name: 'Mike',
     countryCode: 'uk',
     img: mike,
-    values: ['🥛', 70, 70, 80]
+    values: ['🍺', 'Pub', 2, 9]
   }, 
   {
     name: 'Stevooo',
     countryCode: 'uk',
     img: stevooo,
-    values: ['🍹', 93, 85, 90]
+    values: ['🍹', 'La Rocca', 5, 3]
   },  
 ];
 
