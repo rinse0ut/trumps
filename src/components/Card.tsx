@@ -12,7 +12,7 @@ type CardPropType = CardType & {
   onSelectCatgory: (categoryIndex: number) => void;
 }
 
-function CardComponent(props: CardPropType) {
+function Card(props: CardPropType) {
   console.log('CARD PROPS', props);
   if (!props.name) {
     return null
@@ -121,4 +121,4 @@ function Cell(props: CellPropType) {
   );
 }
 
-export default CardComponent;
+export default Card;
