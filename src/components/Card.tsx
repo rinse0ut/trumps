@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Image, Flag, Icon } from 'semantic-ui-react';
+import { Table, Image, Flag, Icon, SemanticICONS } from 'semantic-ui-react';
 import { CardType, CategoryType } from '../types';
 
 type PlayerType = 1 | 2;
@@ -37,74 +37,19 @@ function CardComponent(props: CardPropType) {
         {categories.map((category, i) => {
           const { title } = category;
           const stat = values[i];
-          if (categoryIndex === i && result === 0) {
-            return (
-              <Table.Row warning key={title} onClick={() => onSelectCatgory(i)}>
-              { i === 0 
-                ? (
-                <Table.Cell rowSpan='4'>
-                  <Image src={img} size='tiny' fluid />
-                </Table.Cell>
-                )
-                : null
-              }                
-                <Table.Cell>{title}</Table.Cell>
-                <Table.Cell>{stat}</Table.Cell>
-                <Table.Cell><Icon name='checkmark' /></Table.Cell>
-              </Table.Row>
-            )
-          } else if (categoryIndex === i && result === player) {
-            return (
+          return (
               <Row 
                 key={title} 
-                status='positive'
                 rowIndex={i}
+                categoryIndex={categoryIndex} // @todo change to selectedCategoryIndex
                 img={img}
                 title={title}
                 value={stat}
+                result={result}
+                player={player}
                 onSelectCatgory={() => onSelectCatgory(i)}
               />
-              // <Table.Row positive key={title} onClick={() => onSelectCatgory(i)}>
-              // { i === 0 
-              //   ? (
-              //   <Table.Cell rowSpan='4'>
-              //     <Image src={img} size='tiny' fluid />
-              //   </Table.Cell>
-              //   )
-              //   : null
-              // }                
-              //   <Table.Cell>{title}</Table.Cell>
-              //   <Table.Cell>{stat}</Table.Cell>
-              //   <Table.Cell><Icon name='checkmark' /></Table.Cell>
-              // </Table.Row>
-            )
-          } else if (categoryIndex === i && result !== player) {
-            return (
-              <Table.Row negative key={title} onClick={() => onSelectCatgory(i)}>
-              { i === 0 
-                ? (
-                <Table.Cell rowSpan='4'>
-                  <Image src={img} size='tiny' fluid />
-                </Table.Cell>
-                )
-                : null
-              }                
-                <Table.Cell>{title}</Table.Cell>
-                <Table.Cell>{stat}</Table.Cell>
-                <Table.Cell><Icon name='close' /></Table.Cell>
-              </Table.Row>
-            )
-          }
-          return (
-            <Row 
-              key={title} 
-              rowIndex={i}
-              img={img}
-              title={title}
-              value={stat}
-              onSelectCatgory={() => onSelectCatgory(i)}
-            />
-          )
+          )  
         })}
       </Table.Body>
     </Table>
@@ -116,42 +61,62 @@ type StatusType = 'positive' | 'negative' | 'warning';
 type RowPropType = {
   rowIndex: number;
   title: string;
-  value: string|number;
+  value: string|number;  
+  categoryIndex: number | null;
+  player: PlayerType;
+  result: number | null;
   img: any;
-  status?: 'positive' | 'negative' | 'warning';
   onSelectCatgory: (categoryIndex: number) => void;
 }
 
 function Row(props: RowPropType) {
-  const {title, value, rowIndex, img, status, onSelectCatgory} = props;
-  return (
+  const {title, value, rowIndex, img, categoryIndex, result, player, onSelectCatgory} = props;
+  let status: StatusType | undefined;
+  let iconName: SemanticICONS|null = null;
+  if (categoryIndex === rowIndex && result === 0) {
+    status = 'warning';
+    iconName = 'checkmark';
+  } else if (categoryIndex === rowIndex && result === player) {
+    status = 'positive';
+    iconName = 'checkmark';
+  } else if (categoryIndex === rowIndex && result !== player) {
+    status = 'negative';
+    iconName = 'close';
+  }  
+    return (
     <Table.Row key={title} onClick={onSelectCatgory}>
       {rowIndex === 0 ? (
         <Table.Cell rowSpan='4'>
           <Image src={img} size='tiny' fluid />
         </Table.Cell>        
       ) : null}
-      <Cell status={status} value={title}/>
-      <Cell status={status} value={value}/>
-      <Table.Cell></Table.Cell>
+      <Cell status={status}>
+        {title}
+      </Cell>
+      <Cell status={status}>
+        {value}
+      </Cell>
+      <Cell status={status}>
+        { iconName && <Icon name={iconName} /> }
+      </Cell>
     </Table.Row>    
   )
 }
 
 type CellPropType = {
   status?: StatusType;
-  value: string|number;
+  children: any;
 }
 
 function Cell(props: CellPropType) {
-  const {status, value} = props;
+  const {status, children} = props;
   return (
     <Table.Cell
       positive={status === 'positive'} 
       negative={status === 'negative'} 
       warning={status === 'warning'} 
     >
-      {value}
+      {children}
     </Table.Cell> 
   );
 }
