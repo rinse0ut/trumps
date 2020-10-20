@@ -110,7 +110,7 @@ function App() {
       {currentPlayer === 1 || result !== null
         ? (
           <>
-            <Segment inverted color='red'><Header as='h2'>Player 1 {result !== null && PLAYER1_RESULT[result]}</Header></Segment>
+            <Segment inverted color='red'><Header as='h3'>Player 1 {result !== null && PLAYER1_RESULT[result]}</Header></Segment>
             <Card
               categories={categories}
               categoryIndex={categoryIndex}
@@ -124,7 +124,7 @@ function App() {
       {currentPlayer === 2 || result !== null
         ? (
           <>
-            <Segment inverted color='blue'><Header as='h2'>Player 2 {result !== null && PLAYER2_RESULT[result]}</Header></Segment>
+            <Segment inverted color='blue'><Header as='h3'>Player 2 {result !== null && PLAYER2_RESULT[result]}</Header></Segment>
             <Card
               categories={categories}
               categoryIndex={categoryIndex}

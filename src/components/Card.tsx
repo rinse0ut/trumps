@@ -22,18 +22,18 @@ function Card(props: CardPropType) {
     <Table celled selectable unstackable size="small">
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell colSpan='3'>{name.toUpperCase()}</Table.HeaderCell>
+          <Table.HeaderCell colSpan='2'>{name.toUpperCase()}</Table.HeaderCell>
           <Table.HeaderCell textAlign='center'>
             <Flag name={countryCode} />
           </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {/* <Table.Row>
-          <Table.Cell>
-            <Image src={img} size='small' />
+        <Table.Row>
+          <Table.Cell colSpan='3'>
+            <Image src={img} fluid />
           </Table.Cell>
-        </Table.Row> */}
+        </Table.Row>
         {categories.map((category, i) => {
           const { title } = category;
           const stat = values[i];
@@ -85,11 +85,11 @@ function Row(props: RowPropType) {
   }  
     return (
     <Table.Row key={title} onClick={onSelectCatgory}>
-      {rowIndex === 0 ? (
+      {/* {rowIndex === 0 ? (
         <Table.Cell rowSpan='4'>
           <Image src={img} size='tiny' fluid />
         </Table.Cell>        
-      ) : null}
+      ) : null} */}
       <Cell status={status}>
         {title}
       </Cell>
