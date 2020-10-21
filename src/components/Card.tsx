@@ -29,11 +29,11 @@ function Card(props: CardPropType) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {/* <Table.Row>
+        <Table.Row>
           <Table.Cell colSpan='3'>
             <Image src={img} fluid />
           </Table.Cell>
-        </Table.Row> */}
+        </Table.Row>
         {categories.map((category, i) => {
           const { title } = category;
           const stat = values[i];
