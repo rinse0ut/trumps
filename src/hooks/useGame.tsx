@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CardType, CategoryType } from '../types';
+import * as FirestoreService from '../services/firestore';
+import {getCard} from '../services/firestore';
 
 type ResultType = null | 0 | 1 | 2;
 
@@ -13,6 +15,14 @@ function useGame(categories: CategoryType[], cards: CardType[]) {
 
   // Shuffle and deal cards
   useEffect(() => {
+    getCard('9Pt2dgrZMi5CiDoMIc91').then(doc => {
+      if (doc.exists) {
+        console.log('DOC', doc.data());
+      } else {
+        console.log('DOC 404');
+      }
+    });  
+
     const numCards = cards.length / 2;
     const index = Math.floor(Math.random() * numCards);
     for (let i = 0; i < numCards; i++) {

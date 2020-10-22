@@ -9,5 +9,5 @@ export default {
   classic,
   drink,
   // player,
-  gaytimes
+  // gaytimes
 }
