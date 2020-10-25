@@ -2,6 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
+// @todo move to .env file
 const firebaseConfig = {
   apiKey: "AIzaSyDPk2j-y4TB9ex6MWD0jZmHXsN2aw6VZv4",
   authDomain: "trumps-53976.firebaseapp.com",
@@ -14,11 +15,32 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
 const db = firebase.firestore();
 
+// https://marmelab.com/react-admin/Readme.html
+// https://marmelab.com/react-admin/Authentication.html
+// https://fettblog.eu/typescript-react/context/
+// https://blog.flexiple.com/provider-pattern-with-react-context-api/
+// https://hackernoon.com/authentication-in-react-with-firebase-qc3x3vjl
+// https://github.com/NaguiHW/react-firebase-authentication?ref=hackernoon.com
+
 export const authenticateAnonymously = () => {
-    return firebase.auth().signInAnonymously();
+  return auth.signInAnonymously();
 };
+
+export function signUp(email, password) {
+  return auth.createUserWithEmailAndPassword(email, password);
+}
+
+export function signIn(email, password) {
+  return auth.signInWithEmailAndPassword(email, password);
+}
+
+export function signOut(email, password) {
+  return auth.signOut();
+}
 
 export const getCard = id => {
   return db
