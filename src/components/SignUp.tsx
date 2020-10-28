@@ -11,6 +11,8 @@ const SignUp = () => {
     error: '',
   });
 
+  console.log('SIGN UP');
+
   // onChange function
   // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const handleChange = (e: any) => {

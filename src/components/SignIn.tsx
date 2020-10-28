@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 // import './Signup.css';
 import { signIn, signOut } from '../services/firestore';
+import { useAuthContext } from '../components/AuthProvider';
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   // User State
@@ -9,6 +11,12 @@ const Login = () => {
     password: '',
     error: '',
   });
+
+  console.log('LOGIN');
+  const {auth, setAuthData} = useAuthContext();
+  console.log('AUTH VAL', auth);
+
+  const history = useHistory();
 
   // onChange function
   const handleChange = (e: any) => {
@@ -32,7 +40,13 @@ const Login = () => {
           error: 'Please verify your email before to continue',
         });
         await signOut();
-      }
+      } else {
+        console.log('CALL ON LOGIN');
+        // const {uid, displayName, email, emailVerified} = result.user;
+        // setAuthData({uid, displayName, email, emailVerified});
+        setAuthData(result.user);
+        history.push("/home");
+      }  
     } catch (e) {
       setUser({
         ...user,
