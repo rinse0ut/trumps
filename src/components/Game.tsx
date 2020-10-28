@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { Container, Segment, Header, Button, Message } from 'semantic-ui-react';
-import { CardType, CategoryType } from './types';
-import useGame from './hooks/useGame';
-import Card from './components/Card';
-import _variants from './variants';
+import { CardType, CategoryType } from '../types';
+import useGame from '../hooks/useGame';
+import Card from './Card';
+import _variants from '../variants';
+import SignOut from './SignOut';
 
 const PLAYER1_RESULT = ['DRAWS!', 'WINS!', 'LOSES!']
 const PLAYER2_RESULT = ['DRAWS!', 'LOSES!', 'WINS!']
@@ -45,6 +46,7 @@ function App() {
     return (
       <Container>
         <br />
+        <SignOut/>
         <Message warning>
           <Message.Header>Top Trumps. Tap that category!</Message.Header>
         </Message>

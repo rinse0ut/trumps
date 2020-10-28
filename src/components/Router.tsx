@@ -5,6 +5,7 @@ import { useAuthContext } from './AuthProvider';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import SignOut from './SignOut';
+import Game from './Game';
 
 const HomePage = () => (
   <> 
@@ -14,20 +15,19 @@ const HomePage = () => (
   </> 
 );  
 
-const GamePage = () => {
-  const {hasAuth, auth, setAuthData} = useAuthContext();
-  console.log('GAME AUTH VAL', auth);
-  return (
-    <> 
-      <div>GAME</div>
-      <SignOut/>
-    </> 
-  )  
-};
+// const GamePage = () => {
+//   const {currentUser} = useAuthContext();
+//   console.log('GAME CURR USER', currentUser);
+//   return (
+//     <> 
+//       <div>GAME</div>
+//       <Link to="/home">Home</Link>
+//       <SignOut/>
+//     </> 
+//   )  
+// };
 
 function Router() {
-  const {hasAuth, auth, setAuthData} = useAuthContext();
-  console.log('ROUTER', {hasAuth, auth, setAuthData});
   return (
     <Switch>
 
@@ -36,9 +36,9 @@ function Router() {
       <Route path="/signin" component={SignIn} />
 
        {/* Private Routes */}
-      <AuthRoute path="/home" component={HomePage} auth={hasAuth} />
-      <AuthRoute path="/game" component={GamePage} auth={hasAuth} />
-      <AuthRoute path="/signout" component={SignOut} auth={hasAuth} />
+      <AuthRoute path="/home" component={HomePage} />
+      <AuthRoute path="/game" component={Game} />
+      <AuthRoute path="/signout" component={SignOut} />
 
       <Redirect from="/" to="/signin" />
     </Switch>

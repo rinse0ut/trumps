@@ -19,13 +19,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// https://marmelab.com/react-admin/Readme.html
-// https://marmelab.com/react-admin/Authentication.html
-// https://fettblog.eu/typescript-react/context/
-// https://blog.flexiple.com/provider-pattern-with-react-context-api/
-// https://hackernoon.com/authentication-in-react-with-firebase-qc3x3vjl
-// https://github.com/NaguiHW/react-firebase-authentication?ref=hackernoon.com
-
 export const authenticateAnonymously = () => {
   return auth.signInAnonymously();
 };
@@ -40,6 +33,10 @@ export function signIn(email, password) {
 
 export function signOut(email, password) {
   return auth.signOut();
+}
+
+export function onAuthStateChanged(user) {
+  return auth.onAuthStateChanged(user);
 }
 
 export const getCard = id => {
