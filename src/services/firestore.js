@@ -31,13 +31,22 @@ export function signIn(email, password) {
   return auth.signInWithEmailAndPassword(email, password);
 }
 
-export function signOut(email, password) {
+export function signOut() {
   return auth.signOut();
 }
 
 export function onAuthStateChanged(user) {
   return auth.onAuthStateChanged(user);
 }
+
+export function getUsers() {
+  console.log('FB AUTH', auth);
+  return auth.listUsers(1000);
+}
+
+export function getCollection(path) {
+  return db.collection(path);
+};
 
 export const getCard = id => {
   return db

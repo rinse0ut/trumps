@@ -6,11 +6,15 @@ import SignUp from './SignUp';
 import SignIn from './SignIn';
 import SignOut from './SignOut';
 import Game from './Game';
+import FriendsPage from '../pages/FriendsPage';
 
 const HomePage = () => (
   <> 
     <div>HOME</div>
-    <Link to="/game">Play</Link>
+    <ul>
+      <li><Link to="/friends">Friends</Link></li>
+      <li><Link to="/game">Play</Link></li>
+    </ul>
     <SignOut/>
   </> 
 );  
@@ -28,6 +32,7 @@ const HomePage = () => (
 // };
 
 function Router() {
+  return <FriendsPage/>
   return (
     <Switch>
 
@@ -37,6 +42,7 @@ function Router() {
 
        {/* Private Routes */}
       <AuthRoute path="/home" component={HomePage} />
+      <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/game" component={Game} />
       <AuthRoute path="/signout" component={SignOut} />
 

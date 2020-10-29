@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // import './Signup.css';
-import { signUp, signOut } from '../services/firestore';
+import { db, signUp, signOut } from '../services/firestore';
 
 const SignUp = () => {
   // User State
@@ -29,9 +29,14 @@ const SignUp = () => {
     try {
       const result = await signUp(user.email, user.password);
       if (result?.user) {
+        console.log('USER', user);
         await result.user.updateProfile({
           displayName: user.nickname,
         })
+
+        await db.collection('users').doc(user.nickname).set({
+          email: user.email
+        });
 
         // URL of my website.
         const myURL = { url: 'http://localhost:3000/' }
