@@ -1,37 +1,26 @@
 import React, { useEffect, useState } from "react";
 import {getUsers} from '../services/firestore';
-
-function useCollection(path: string) {
-  const [data, setData] = useState<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>();
-
-  useEffect(() => {
-    if (!path) return;
-
-    async function doAsync() {
-      const data = await getUsers();
-      console.log('USERS', data);
-      setData(data);
-    }
-
-    doAsync();
-  }, [])
-
-  return data;
-}
+import useCollection from '../hooks/useCollection';
 
 function FriendsPage() {
 
-  useEffect(() => {
+  const users = useCollection('users');
 
-    async function doAsync() {
-      const data = await getUsers();
-      console.log('USERS', data);
-    }
+  if (!users.length) {
+    return (
+      <div>Loading...</div>
+    )
+  }
 
-    doAsync();
-  }, [])
-
-  return <div>USER LIST</div>
+  return (
+    <>
+    <div>USER LIST</div>
+    <ul>
+      { users.map(user => (<li>{user.id} {user.email}</li>)) }
+      <li></li>
+    </ul>
+    </>
+  )
 }
 
 export default FriendsPage;

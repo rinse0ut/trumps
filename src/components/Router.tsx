@@ -32,7 +32,7 @@ const HomePage = () => (
 // };
 
 function Router() {
-  return <FriendsPage/>
+  // return <FriendsPage/>
   return (
     <Switch>
 

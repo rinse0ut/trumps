@@ -17,7 +17,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-const db = firebase.firestore();
+export const db = firebase.firestore();
 
 export const authenticateAnonymously = () => {
   return auth.signInAnonymously();
@@ -39,13 +39,12 @@ export function onAuthStateChanged(user) {
   return auth.onAuthStateChanged(user);
 }
 
-export function getUsers() {
-  console.log('FB AUTH', auth);
-  return auth.listUsers(1000);
-}
-
 export function getCollection(path) {
   return db.collection(path);
+};
+
+export function getUsers() {
+  return db.collection('users');
 };
 
 export const getCard = id => {
