@@ -1,9 +1,13 @@
 import { FlagNameValues } from 'semantic-ui-react';
 
-export type CategoryType = {
-  category: string;
+export type StatType = {
   title: string;
-  ranking?: string[];
+}
+
+export type CategoryType = {
+  id: string;
+  title: string;
+  stats: StatType[];
 }
 
 export type CardType = {

@@ -4,9 +4,9 @@ import useCollection from '../hooks/useCollection';
 
 function FriendsPage() {
 
-  const users = useCollection('users');
+  const users = useCollection<any>('users');
 
-  if (!users.length) {
+  if (users && !users.length) {
     return (
       <div>Loading...</div>
     )
@@ -16,8 +16,7 @@ function FriendsPage() {
     <>
     <div>USER LIST</div>
     <ul>
-      { users.map(user => (<li>{user.id} {user.email}</li>)) }
-      <li></li>
+      { users && users.map(user => (<li>{user?.id} {user?.email}</li>)) }
     </ul>
     </>
   )
