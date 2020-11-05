@@ -16,30 +16,25 @@ function StatsPage() {
     )
   }
 
-  // return <div>STATS</div>; 
-
   return (
     <>
       <div>STATS LIST</div>
       <ul>
-        { category?.stats?.map((stat: StatType) => (<li>{stat.title}</li>)) }
-        {/* { stats.map(category => (<InputEdit category={category}/>)) } */}
+        { Object.entries(category.stats).map(([statKey, stat])  => (
+          <InputEdit categoryId={categoryId} category={category} statKey={statKey} stat={stat}/>
+        ))}
         <InputCreate categoryId={categoryId} category={category} />
       </ul>
     </>
   )
 }
 
-type CreatePropsType = {
-  category: {id: string; title?: string};
-}
-
-function InputEdit({category}: CreatePropsType) {
-  const [title, setTitle] = useState(category.title);
-
+function InputEdit({categoryId, category, statKey, stat}: any) {
+  const [title, setTitle] = useState(stat.title);
   function handleUpdate() {
-    db.collection('categories').doc(category.id).set({...category, title});
-    window.location.reload();
+    const updatedStat: {[id: string]: StatType} = {}; 
+    updatedStat[`stats.${statKey}`] = {title};
+    db.collection('categories').doc(categoryId).update(updatedStat);
   }
 
   return (
@@ -47,7 +42,7 @@ function InputEdit({category}: CreatePropsType) {
       <input 
         value={title}
         onChange={e => {
-          setTitle(e.target.value)
+          setTitle(e.target.value);
         }}
       />  
       <button onClick={handleUpdate}>Update</button>
@@ -56,11 +51,11 @@ function InputEdit({category}: CreatePropsType) {
 }
 
 function InputCreate({categoryId, category}: {categoryId: string; category: CategoryType}) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState<string>('');
 
   function handleCreate() {
-    db.collection('categories').doc(categoryId).set({...category, stats: [...category.stats, {title}]});
-    window.location.reload();
+    category.stats[title] = {title};
+    db.collection('categories').doc(categoryId).set(category);
   }
 
   return (

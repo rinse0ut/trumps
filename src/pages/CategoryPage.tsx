@@ -55,7 +55,7 @@ function InputCreate() {
   const [title, setTitle] = useState('');
 
   function handleCreate() {
-    db.collection('categories').add({title, stats: []})
+    db.collection('categories').add({title, stats: {}})
   }
 
   return (
