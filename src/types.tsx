@@ -6,15 +6,24 @@ export type StatsType = {
   [id: string]: StatType;
 }
 
+export type StatValueType = {
+  [id: string]: number | string;
+}
+
+export type CardType = {
+  title: string;
+  countryCode: FlagNameValues | '';
+  // img: any;
+  // statValues: number;
+} & StatValueType;
+
+export type CardsType = {
+  [id: string]: CardType;
+}
+
 export type CategoryType = {
   id: string;
   title: string;
   stats: StatsType;
-}
-
-export type CardType = {
-  name: string;
-  countryCode: FlagNameValues;
-  img: any;
-  values: (string | number)[];
+  cards: CardsType;
 }

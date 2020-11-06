@@ -7,6 +7,7 @@ import useCollection from '../hooks/useCollection';
 function CategoryPage() {
 
   const categories = useCollection<CategoryType>('categories');
+  console.log('CATS', categories);
 
   // if (categories && !categories.length) {
   //   return (
@@ -18,7 +19,13 @@ function CategoryPage() {
     <>
       <div>CATEGORY LIST</div>
       <ul>
-        { categories?.map(category => (<li>{category.title}<Link to={`/category/${category?.id}/stats`}>Stats</Link></li>)) }
+        { categories?.map(category => (
+          <li>
+            {category.title} | 
+            <Link to={`/category/${category?.id}/stats`}> Stats</Link> |
+            <Link to={`/category/${category?.id}/cards`}> Cards</Link>
+          </li>
+        )) }
         {/* { categories.map(category => (<li>{category.title}</li>)) } */}
         {/* { categories.map(category => (<InputEdit category={category}/>)) } */}
         <InputCreate/>
@@ -55,7 +62,7 @@ function InputCreate() {
   const [title, setTitle] = useState('');
 
   function handleCreate() {
-    db.collection('categories').add({title, stats: {}})
+    db.collection('categories').add({title, stats: {}, cards: {}})
   }
 
   return (

@@ -9,6 +9,7 @@ import SignOut from './SignOut';
 import FriendsPage from '../pages/FriendsPage';
 import CategoryPage from '../pages/CategoryPage';
 import StatsPage from '../pages/StatsPage';
+import CardsPage from '../pages/CardsPage';
 
 const HomePage = () => (
   <> 
@@ -48,6 +49,7 @@ function Router() {
       <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/categories" component={CategoryPage} />
       <AuthRoute path="/category/:categoryId/stats" component={StatsPage} />
+      <AuthRoute path="/category/:categoryId/cards" component={CardsPage} />
       {/* <AuthRoute path="/game" component={Game} /> */}
       <AuthRoute path="/signout" component={SignOut} />
 
