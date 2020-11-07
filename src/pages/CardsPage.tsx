@@ -48,6 +48,13 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
     db.collection('categories').doc(categoryId).update(updatedCard);
   }
 
+  function handleDelete() {
+    console.log('CAT PRE DELETE', category, cardKey);
+    delete category.cards[cardKey];
+    console.log('CAT POST DELETE', category);
+    db.collection('categories').doc(categoryId).set(category);
+  }
+
   return (
     <>
       <div>
@@ -85,6 +92,7 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
           </>    
         ))} 
       <button onClick={handleUpdate}>Update</button>
+      <button onClick={handleDelete}>Delete</button>
       <br/>
     </>
   )

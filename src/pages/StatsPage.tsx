@@ -31,10 +31,20 @@ function StatsPage() {
 
 function InputEdit({categoryId, category, statKey, stat}: any) {
   const [title, setTitle] = useState(stat.title);
+
   function handleUpdate() {
     const updatedStat: {[id: string]: StatType} = {}; 
     updatedStat[`stats.${statKey}`] = {title};
     db.collection('categories').doc(categoryId).update(updatedStat);
+  }
+
+  function handleDelete() {
+    delete category.stats[statKey];
+    // Remove stat from each card
+    for (let cardKey in category.cards) {
+      delete category.cards[cardKey][statKey];
+    }
+    db.collection('categories').doc(categoryId).set(category);
   }
 
   return (
@@ -46,6 +56,7 @@ function InputEdit({categoryId, category, statKey, stat}: any) {
         }}
       />  
       <button onClick={handleUpdate}>Update</button>
+      <button onClick={handleDelete}>Delete</button>
     </>
   )
 }
