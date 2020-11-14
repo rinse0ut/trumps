@@ -5,6 +5,7 @@ import {db} from '../services/firestore';
 import useCollection from '../hooks/useCollection';
 import useDocument from '../hooks/useDocument';
 import {CardsType, GameType} from '../types';
+import Card from '../components/Card';
 
   /*
     if there are no p1InitCards and p2InitCards
@@ -51,7 +52,9 @@ function useGame(id: string) {
     async function updateData() {
       await db.collection('games').doc(id).update({
         p1InitialCards: hand1, 
-        p2InitialCards: hand2
+        p2InitialCards: hand2,
+        p1Cards: hand1, 
+        p2Cards: hand2
       });
     }
     updateData();    
@@ -67,11 +70,26 @@ function GamePage() {
   const gameId = 'I53rrdNMAf4iTz5yTZpV';
 
   const game = useGame(gameId);
+
+  if (!game) return (
+    <div>Loading...</div>
+  );
+
+  const {p1InitialCards} = game;
   console.log('GAME', gameId, game);
+
+  const [firstCard] = p1InitialCards;
+  const showCard = game.pack.cards[firstCard];
 
   return (
     <>
     <div>GAME PAGE</div>
+    <Card 
+      card={showCard} 
+      stats={game.pack.stats}
+      selectedStatKey={null}
+      onSelectStat={()=>{}}
+     />
     </>
   )
 }

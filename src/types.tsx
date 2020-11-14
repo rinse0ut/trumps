@@ -43,6 +43,6 @@ export type GameType = {
   pack: CategoryType;
   player1: string;
   player2: string;
-  p1InitialCards: CardType[];
-  p2InitialCards: CardType[];
-}  
+  p1InitialCards: string[];
+  p2InitialCards: string[];
+}
