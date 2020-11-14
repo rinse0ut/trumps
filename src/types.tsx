@@ -1,5 +1,11 @@
 import { FlagNameValues } from 'semantic-ui-react';
 
+export type UserType = {
+  id: string;
+  username: string;
+  email: string;
+};
+
 export type StatType = {title: string};
 
 export type StatsType = {
@@ -27,3 +33,16 @@ export type CategoryType = {
   stats: StatsType;
   cards: CardsType;
 }
+
+export type GameFormType = {
+  categoryId: string;
+  player2Id: string;
+}  
+
+export type GameType = {
+  pack: CategoryType;
+  player1: string;
+  player2: string;
+  p1InitialCards: CardType[];
+  p2InitialCards: CardType[];
+}  

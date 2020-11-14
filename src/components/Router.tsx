@@ -10,6 +10,9 @@ import FriendsPage from '../pages/FriendsPage';
 import CategoryPage from '../pages/CategoryPage';
 import StatsPage from '../pages/StatsPage';
 import CardsPage from '../pages/CardsPage';
+import ChallengePage from '../pages/ChallengePage';
+import GameListPage from '../pages/GamesPage';
+import GamePage from '../pages/GamePage';
 
 const HomePage = () => (
   <> 
@@ -17,7 +20,8 @@ const HomePage = () => (
     <ul>
       <li><Link to="/friends">Friends</Link></li>
       <li><Link to="/categories">Categories</Link></li>
-      <li><Link to="/game">Play</Link></li>
+      <li><Link to="/challenge">New Game</Link></li>
+      <li><Link to="/games">Games</Link></li>
     </ul>
     <SignOut/>
   </> 
@@ -36,7 +40,7 @@ const HomePage = () => (
 // };
 
 function Router() {
-  // return <FriendsPage/>
+  return <GamePage/>
   return (
     <Switch>
 
@@ -48,6 +52,9 @@ function Router() {
       <AuthRoute path="/home" component={HomePage} />
       <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/categories" component={CategoryPage} />
+      <AuthRoute path="/challenge" component={ChallengePage} />
+      <AuthRoute path="/games" component={GameListPage} />
+      <AuthRoute path="/game/:gameId" component={GamePage} />
       <AuthRoute path="/category/:categoryId/stats" component={StatsPage} />
       <AuthRoute path="/category/:categoryId/cards" component={CardsPage} />
       {/* <AuthRoute path="/game" component={Game} /> */}

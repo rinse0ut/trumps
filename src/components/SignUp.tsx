@@ -5,7 +5,7 @@ import { db, signUp, signOut } from '../services/firestore';
 const SignUp = () => {
   // User State
   const [user, setUser] = useState({
-    nickname: '',
+    username: '',
     email: '',
     password: '',
     error: '',
@@ -31,10 +31,11 @@ const SignUp = () => {
       if (result?.user) {
         console.log('USER', user);
         await result.user.updateProfile({
-          displayName: user.nickname,
+          displayName: user.username,
         })
 
-        await db.collection('users').doc(user.nickname).set({
+        await db.collection('users').doc(result.user.uid).set({
+          username: user.username,
           email: user.email
         });
 
@@ -46,11 +47,11 @@ const SignUp = () => {
 
         setUser({
           ...user,
-          error: `Welcome ${user.nickname}. To continue please verify your email.`,
+          error: `Welcome ${user.username}. To continue please verify your email.`,
         })
 
         // Sign Out the user.
-        signOut(); 
+        signOut();
 
       }
     } catch (e) {
@@ -65,7 +66,7 @@ const SignUp = () => {
     <>
       <h1>Sign up</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Nickname" name="nickname" onChange={handleChange} /><br />
+        <input type="text" placeholder="Username" name="username" onChange={handleChange} /><br />
         <input type="text" placeholder="Email" name="email" onChange={handleChange} /><br />
         <input type="password" placeholder="Password" name="password" onChange={handleChange} /><br />
         <button type="submit">Sign Up</button>
