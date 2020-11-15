@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import {getUsers} from '../services/firestore';
 import {useParams} from 'react-router-dom';
 import {db} from '../services/firestore';
@@ -8,22 +8,138 @@ import {CardsType, GameType} from '../types';
 import Card from '../components/Card';
 import { useAuthContext } from '../components/AuthProvider';
 
-  /*
-    if there are no p1InitCards and p2InitCards
-      - shuffle and init them
-      - p1InitCards: {"1": "Tom", "2": "Jerry"}
-    
-    start with player1
-      - if user is player1
-      - show first card of their deck
-      - allow them to pick a stat
-      - record stat as a move
-      = "moves": {"1": { player: 1, card: Tom, stat: Jerry, result: 1}}  
+function useGame(gameId: string) {
 
-      - if user is player2
-      - show greyed out first card of their pack
-      - 
-  */
+  const game = useDocument<GameType>('games', gameId, true);
+  console.log('GAME', gameId, game);
+
+  const {currentUser} = useAuthContext();
+  const uid = currentUser?.uid;
+  let currentPlayer: null|1|2 = null;
+  let otherPlayer: null|1|2 = null;
+  if (game?.p1Id === uid) {
+    currentPlayer = 1;
+    otherPlayer = 2;
+  } else if (game?.p2Id === uid) {
+    currentPlayer = 2;
+    otherPlayer = 1;
+  }
+
+  let turnCount = game?.turnCount;
+  const playerTurnIndex = game && game[`p${currentPlayer}TurnIndex`];
+
+  let [turnNum, setTurnNum] = useState<number>(playerTurnIndex || 0);
+
+  const handleNextTurn = useCallback(() => {
+    turnNum++;
+    setTurnNum(turnNum)
+  } , [turnNum]);
+  
+  if (!currentPlayer) {
+    console.error('PLAYER NOT FOUND');
+  }
+  
+  const p1Cards = game && getTurnCards(game, turnNum, 1);
+  const p2Cards = game && getTurnCards(game, turnNum, 2);
+  
+  // const p1Cards = game && getTurnCards(game, turnNum, currentPlayer);
+  // const p2Cards = game && getTurnCards(game, turnNum, otherPlayer);
+
+  console.log('CARDS', p1Cards, p2Cards);
+
+  // Shuffle and deal cards - should be a serverless cloud function but that requires a Blaze payment plan :(
+  useEffect(() => {
+    console.log('DEAL CARDS?');
+    const cards = game?.pack?.cards;
+    const {p1InitialCards, p2InitialCards} = game || {} ;
+    if (!cards || (p1InitialCards && p2InitialCards)) return;
+    console.log('DEALING...');
+    const [hand1, hand2] = deal(cards);
+
+    async function updateCards() {
+      await db.collection('games').doc(gameId).update({
+        p1InitialCards: hand1, 
+        p2InitialCards: hand2,
+      });
+    }
+    updateCards();    
+    
+  }, [gameId, game]);  // @TODO change game to cards
+
+  const handleSelectStat = useCallback((statKey: string) => {
+
+    if (!p1Cards || !p2Cards) {
+      return null;
+    }
+
+    let result;
+    let p1UpdatedCards;
+    let p2UpdatedCards;
+    let drawnCards;
+
+    const [p1TopCard, ...p1HandCards] = p1Cards;
+    const [p2TopCard, ...p2HandCards] = p2Cards;
+    const p1Value = game?.pack.cards[p1TopCard][statKey];
+    const p2Value = game?.pack.cards[p2TopCard][statKey];
+
+    if (!p1Value || !p2Value) {
+      return null;
+    }
+    console.log('CARD DUMP', p1TopCard)
+
+    console.log(`You said: ${game?.pack.stats[statKey].title} ${p1Value}`);
+
+    if (p1Value > p2Value) {
+      console.log('P1 WINS');
+      result = 1;
+      p1UpdatedCards = [...p1HandCards, p1TopCard, p2TopCard];
+      p2UpdatedCards = [...p2HandCards]
+    } else if (p1Value < p2Value) {
+      result = 2;
+      console.log('P2 WINS');
+      p1UpdatedCards = [...p1HandCards];
+      p2UpdatedCards = [...p2HandCards, p2TopCard, p1TopCard]
+    } else { // @TODO make first condition ===
+      result = 0;
+      console.log('DRAW!');
+    }
+
+    let turn = {
+      player: currentPlayer,
+      result,
+      statKey: statKey,
+      p1Cards: p1UpdatedCards,
+      p2Cards: p2UpdatedCards,
+    };
+
+    console.log('TURN', turn);
+
+    async function updateTurn() {
+      if (turnCount == undefined) {
+        console.log('TURN COUNT UNDEFINED');
+        return null;
+      }
+      console.log('UPDATE TURN');
+      turnCount++;
+      await db.collection('games').doc(gameId).update({
+        [`turns.turn${turnCount}`]: turn,
+        turnCount: turnCount,
+        [`p${currentPlayer}TurnIndex`]: turnCount,
+
+      });
+    }
+    updateTurn();      
+
+  } , [game, p1Cards, p2Cards, turnCount]);
+
+  const cards = currentPlayer === 1 ? p1Cards : p2Cards;
+  console.log('CARDS', cards);
+  if (!game || !cards) return {game, cards: [], handleSelectStat};
+  const [topCard] = cards;
+  const currentCard = topCard && game.pack.cards[topCard];
+
+  return {game, currentCard, handleSelectStat, handleNextTurn};
+}
 
 function deal(items: CardsType) {
   let hand1 = [];
@@ -40,125 +156,36 @@ function deal(items: CardsType) {
   return [hand1, hand2];
 }
 
-function useGame(gameId: string) {
-  const game = useDocument<GameType>('games', gameId, true);
-
-  const {currentUser} = useAuthContext();
-  const uid = currentUser?.uid;
-  let currentPlayer: 1|2;
-  if (game?.p1Id === uid) {
-    currentPlayer = 1;
-  } else if (game?.p2Id === uid) {
-    currentPlayer = 2;
-  } else {
-    console.error('PLAYER NOT FOUND');
+function getTurnCards(game: GameType, turnNum: number, playerNum: null|1|2) {
+  console.log('GET TURN CARDS', turnNum, playerNum, game.turns);
+  if (!playerNum) return [];
+  if (turnNum === 0) {
+    console.log('NO TURNS');
+    return game[`p${playerNum}InitialCards`];
   }
-  
-  const turnCount = game?.turnCount;
-  const p1Card = game?.p1Cards ? game.pack.cards[game.p1Cards[0]] : null; // @TODO add check length
-  const p2Card = game?.p2Cards ? game.pack.cards[game.p2Cards[0]] : null;
-
-  console.log('CARDS', p1Card, p2Card);
-
-  // Shuffle and deal cards - should be a serverless cloud function but that requires a Blaze payment plan :(
-  useEffect(() => {
-    console.log('DEAL CARDS?');
-    const cards = game?.pack?.cards;
-    const {p1InitialCards, p2InitialCards} = game || {} ;
-    if (!cards || (p1InitialCards && p2InitialCards)) return;
-    console.log('DEALING...');
-    const [hand1, hand2] = deal(cards);
-
-    async function updateCards() {
-      await db.collection('games').doc(gameId).update({
-        p1InitialCards: hand1, 
-        p2InitialCards: hand2,
-        p1Cards: hand1, 
-        p2Cards: hand2
-      });
-    }
-    updateCards();    
-    
-  }, [gameId, game]);  // @TODO change game to cards
-
-  const handleSelectStat = useCallback((statKey: string) => {
-
-    let result;
-    const p1Value = p1Card && p1Card[statKey];
-    const p12Value = p2Card && p2Card[statKey];
-
-    if (!p1Value || !p12Value) {
-      return null;
-    }
-
-    if (p1Value > p12Value) {
-      console.log('P1 WINS');
-      result = 1;
-    } else if (p1Value < p12Value) {
-      result = 2;
-      console.log('P2 WINS');
-    } else {
-      result = 0;
-      console.log('DRAW!');
-    }
-
-    let turn = {
-      player: currentPlayer,
-      statKey: statKey,
-      result,
-    };
-
-    console.log('TURN', turn);
-
-    async function updateTurn() {
-      if (turnCount == undefined) {
-        return null;
-      }
-      await db.collection('games').doc(gameId).update({
-        [`turns.turn${turnCount}`]: turn,
-        turnCount: turnCount + 1,
-      });
-    }
-    updateTurn();      
-
-  } , [p1Card, p2Card, turnCount]);
-
-  if (!game || !uid) {
-    return {game, cards: null, handleSelectStat}
-  }
-
-  let cards = null;
-
-  if (game.p1Id === uid) {
-    cards = game.p1Cards;
-  } else if (game.p2Id === uid) {
-    cards = game.p2Cards;
-  }
-
-  return {game, cards, handleSelectStat};
+  console.log('TURN DUMP', `turn${turnNum}`, game.turns[`turn${turnNum}`]);
+  return game.turns[`turn${turnNum}`][`p${playerNum}Cards`];
 }
 
 function GamePage() {
 
   const {gameId} = useParams<{gameId:string}>();
-  // const gameId = 'wB0ZnPS016xrqQwng7EV';
+  // const gameId = 'HBqQxN5sDoLwqiGkABRu';
 
-  const {game, cards, handleSelectStat} = useGame(gameId);
+  const {game, currentCard, handleSelectStat, handleNextTurn} = useGame(gameId);
 
-  if (!game || !cards) return (
+  if (!game || !currentCard) return (
     <div>Loading...</div>
   );
-
-  console.log('GAME', gameId, cards);
-
-  const [firstCard] = cards
-  const showCard = game.pack.cards[firstCard];
 
   return (
     <>
     <div>GAME PAGE</div>
+    <button onClick={handleNextTurn}>
+      Next Turn
+    </button>
     <Card 
-      card={showCard} 
+      card={currentCard} 
       stats={game.pack.stats}
       selectedStatKey={null}
       onSelectStat={handleSelectStat}

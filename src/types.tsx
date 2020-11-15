@@ -39,14 +39,28 @@ export type GameFormType = {
   player2Id: string;
 }  
 
+export type TurnType = {
+  [id: string]: any; 
+  player: 1|2;
+  result: 0|1|2;
+  statKey: string;
+  p1Cards: string[];
+  p2Cards: string[];  
+  drawCards: string[];  
+}
+
+export type TurnsType = {
+  [id: string]: TurnType; 
+}
+
 export type GameType = {
+  [id: string]: any;
   pack: CategoryType;
   p1Id: string;
   p2Id: string;
   p1InitialCards: string[];
   p2InitialCards: string[];
-  p1Cards: string[];
-  p2Cards: string[];
+  turns: TurnsType;
   turnCount: number;
   p1TurnIndex: number;
   p2TurnIndex: number;
