@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback } from "react";
 import {getUsers} from '../services/firestore';
 import {useParams} from 'react-router-dom';
 import {db} from '../services/firestore';
@@ -6,6 +6,7 @@ import useCollection from '../hooks/useCollection';
 import useDocument from '../hooks/useDocument';
 import {CardsType, GameType} from '../types';
 import Card from '../components/Card';
+import { useAuthContext } from '../components/AuthProvider';
 
   /*
     if there are no p1InitCards and p2InitCards
@@ -24,7 +25,7 @@ import Card from '../components/Card';
       - 
   */
 
-function shuffleAndDeal(items: CardsType) {
+function deal(items: CardsType) {
   let hand1 = [];
   let hand2 = [];
   const cards = Object.keys(items);
@@ -39,46 +40,118 @@ function shuffleAndDeal(items: CardsType) {
   return [hand1, hand2];
 }
 
-function useGame(id: string) {
-  const game = useDocument<GameType>('games', id);
+function useGame(gameId: string) {
+  const game = useDocument<GameType>('games', gameId, true);
+
+  const {currentUser} = useAuthContext();
+  const uid = currentUser?.uid;
+  let currentPlayer: 1|2;
+  if (game?.p1Id === uid) {
+    currentPlayer = 1;
+  } else if (game?.p2Id === uid) {
+    currentPlayer = 2;
+  } else {
+    console.error('PLAYER NOT FOUND');
+  }
+  
+  const turnCount = game?.turnCount;
+  const p1Card = game?.p1Cards ? game.pack.cards[game.p1Cards[0]] : null; // @TODO add check length
+  const p2Card = game?.p2Cards ? game.pack.cards[game.p2Cards[0]] : null;
+
+  console.log('CARDS', p1Card, p2Card);
 
   // Shuffle and deal cards - should be a serverless cloud function but that requires a Blaze payment plan :(
   useEffect(() => {
+    console.log('DEAL CARDS?');
     const cards = game?.pack?.cards;
     const {p1InitialCards, p2InitialCards} = game || {} ;
     if (!cards || (p1InitialCards && p2InitialCards)) return;
-    const [hand1, hand2] = shuffleAndDeal(cards);
+    console.log('DEALING...');
+    const [hand1, hand2] = deal(cards);
 
-    async function updateData() {
-      await db.collection('games').doc(id).update({
+    async function updateCards() {
+      await db.collection('games').doc(gameId).update({
         p1InitialCards: hand1, 
         p2InitialCards: hand2,
         p1Cards: hand1, 
         p2Cards: hand2
       });
     }
-    updateData();    
+    updateCards();    
     
-  }, [id, game]);
+  }, [gameId, game]);  // @TODO change game to cards
 
-  return game;
+  const handleSelectStat = useCallback((statKey: string) => {
+
+    let result;
+    const p1Value = p1Card && p1Card[statKey];
+    const p12Value = p2Card && p2Card[statKey];
+
+    if (!p1Value || !p12Value) {
+      return null;
+    }
+
+    if (p1Value > p12Value) {
+      console.log('P1 WINS');
+      result = 1;
+    } else if (p1Value < p12Value) {
+      result = 2;
+      console.log('P2 WINS');
+    } else {
+      result = 0;
+      console.log('DRAW!');
+    }
+
+    let turn = {
+      player: currentPlayer,
+      statKey: statKey,
+      result,
+    };
+
+    console.log('TURN', turn);
+
+    async function updateTurn() {
+      if (turnCount == undefined) {
+        return null;
+      }
+      await db.collection('games').doc(gameId).update({
+        [`turns.turn${turnCount}`]: turn,
+        turnCount: turnCount + 1,
+      });
+    }
+    updateTurn();      
+
+  } , [p1Card, p2Card, turnCount]);
+
+  if (!game || !uid) {
+    return {game, cards: null, handleSelectStat}
+  }
+
+  let cards = null;
+
+  if (game.p1Id === uid) {
+    cards = game.p1Cards;
+  } else if (game.p2Id === uid) {
+    cards = game.p2Cards;
+  }
+
+  return {game, cards, handleSelectStat};
 }
 
 function GamePage() {
 
-  // const {gameId} = useParams<{gameId:string}>();
-  const gameId = 'I53rrdNMAf4iTz5yTZpV';
+  const {gameId} = useParams<{gameId:string}>();
+  // const gameId = 'wB0ZnPS016xrqQwng7EV';
 
-  const game = useGame(gameId);
+  const {game, cards, handleSelectStat} = useGame(gameId);
 
-  if (!game) return (
+  if (!game || !cards) return (
     <div>Loading...</div>
   );
 
-  const {p1InitialCards} = game;
-  console.log('GAME', gameId, game);
+  console.log('GAME', gameId, cards);
 
-  const [firstCard] = p1InitialCards;
+  const [firstCard] = cards
   const showCard = game.pack.cards[firstCard];
 
   return (
@@ -88,7 +161,7 @@ function GamePage() {
       card={showCard} 
       stats={game.pack.stats}
       selectedStatKey={null}
-      onSelectStat={()=>{}}
+      onSelectStat={handleSelectStat}
      />
     </>
   )

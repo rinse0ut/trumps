@@ -51,7 +51,7 @@ function Card(props: CardPropType) {
                 value={card[statKey]}
                 // result={result}
                 // player={player}
-                // onSelectCatgory={() => onSelectCatgory(i)}
+                onSelectStat={() => props.onSelectStat(statKey)}
               />
             )  
           })
@@ -88,7 +88,7 @@ type RowPropType = {
   player: PlayerType;
   result: number | null;
   img: any;
-  onSelectCatgory: (categoryIndex: number) => void;
+  onSelectStat: (statKey: number) => void;
 }
 
 function Row(props: any) {
@@ -106,8 +106,7 @@ function Row(props: any) {
   //   iconName = 'close';
   // }  
     return (
-    // <Table.Row key={title} onClick={onSelectCatgory}>
-    <Table.Row key={props.title}>
+    <Table.Row key={props.key} onClick={props.onSelectStat}>
       {/* {rowIndex === 0 ? (
         <Table.Cell rowSpan='4'>
           <Image src={img} size='tiny' fluid />

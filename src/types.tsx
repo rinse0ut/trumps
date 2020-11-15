@@ -41,8 +41,13 @@ export type GameFormType = {
 
 export type GameType = {
   pack: CategoryType;
-  player1: string;
-  player2: string;
+  p1Id: string;
+  p2Id: string;
   p1InitialCards: string[];
   p2InitialCards: string[];
+  p1Cards: string[];
+  p2Cards: string[];
+  turnCount: number;
+  p1TurnIndex: number;
+  p2TurnIndex: number;
 }

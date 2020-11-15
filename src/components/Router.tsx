@@ -40,7 +40,7 @@ const HomePage = () => (
 // };
 
 function Router() {
-  return <GamePage/>
+  // return <GamePage/>
   return (
     <Switch>
 

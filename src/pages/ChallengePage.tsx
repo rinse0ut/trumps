@@ -27,8 +27,15 @@ function ChallengePage() {
   async function handleCreate() {
     const category = categories && Object.values(categories).find(x => x.id = form.categoryId);
     if (category && currentUser) {
-      // const doc = await db.collection('games').add({stats: category.stats, cards: category.cards, player1Id: currentUser.uid, player2Id: form.player2Id});
-      const doc = await db.collection('games').add({pack: category, player1Id: currentUser.uid, player2Id: form.player2Id});
+      // const doc = await db.collection('games').add({pack: category, player1Id: currentUser.uid, player2Id: form.player2Id});
+      const doc = await db.collection('games').add({
+        pack: category, 
+        p1Id: currentUser.uid, 
+        p2Id: form.player2Id,
+        turnCount: 0,
+        p1TurnIndex: 0,
+        p2TurnIndex: 0,
+      });
       // alert('CREATED GAME', doc));
     }
     // db.collection('forms').doc(categoryId).update(updatedCard);
