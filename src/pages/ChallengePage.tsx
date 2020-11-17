@@ -32,9 +32,9 @@ function ChallengePage() {
         pack: category, 
         p1Id: currentUser.uid, 
         p2Id: form.player2Id,
-        p1TurnIndex: 0,
-        p2TurnIndex: 0,
-        turnCount: 0,
+        p1TurnNumber: 0,
+        p2TurnNumber: 0,
+        turnNumber: 0,
       });
       // alert('CREATED GAME', doc));
     }

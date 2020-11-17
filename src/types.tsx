@@ -47,12 +47,12 @@ export type GameFormType = {
 
 export type TurnType = {
   [id: string]: any; 
-  player: 1|2;
-  result: 0|1|2;
-  statKey: string;
   p1Cards: string[];
   p2Cards: string[];  
   drawCards: string[];  
+  player: 1|2;
+  statKey?: string;
+  result?: 0|1|2;
 }
 
 export type TurnsType = {
