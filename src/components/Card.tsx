@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Image, Flag, Icon, SemanticICONS } from 'semantic-ui-react';
-import { CardType, StatsType } from '../types';
+import { CardType, StatsType, StatParamType } from '../types';
 
 type PlayerType = 1 | 2;
 
@@ -10,7 +10,7 @@ type CardPropType = {
   selectedStatKey: string | null;
   // player: PlayerType;
   // result: number | null;
-  onSelectStat: (statKey: string) => void;
+  onSelectStat: (params: StatParamType) => void;
 }
 
 function Card(props: CardPropType) {
@@ -40,6 +40,8 @@ function Card(props: CardPropType) {
         {
           Object.entries(stats).map(([statKey, stat]) => {
             console.log(stat, statKey)
+            const {title} = stat;
+            const value = card[statKey];
             // return <div>{stat.title}: {card[statKey]}</div>
             return (
               <Row 
@@ -47,11 +49,11 @@ function Card(props: CardPropType) {
                 // rowIndex={statKey}
                 // categoryIndex={categoryIndex} // @todo change to selectedCategoryIndex
                 img={card.img}
-                title={stat.title}
-                value={card[statKey]}
+                title={title}
+                value={value}
                 // result={result}
                 // player={player}
-                onSelectStat={() => props.onSelectStat(statKey)}
+                onSelectStat={() => props.onSelectStat({statKey, title, value})}
               />
             )  
           })

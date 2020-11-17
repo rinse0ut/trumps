@@ -13,7 +13,13 @@ export type StatsType = {
 }
 
 export type StatValueType = {
-  [id: string]: number | string;
+  [id: string]: string;
+}
+
+export type StatParamType = {
+  statKey: string;
+  title: string;
+  value: string;
 }
 
 export type CardType = {

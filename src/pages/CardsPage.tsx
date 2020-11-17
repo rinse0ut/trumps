@@ -9,7 +9,7 @@ const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan'
 function CardsPage() {
 
   const {categoryId} = useParams<{categoryId:string}>();
-  const category = useDocument<CategoryType>('categories', categoryId);
+  const category = useDocument<CategoryType>('categories', categoryId, true);
   console.log('USE DOC RESULT', category);
 
   if (!category) {
@@ -44,7 +44,7 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
 
   function handleUpdate() {
     const updatedCard: {[id: string]: CardType} = {}; 
-    updatedCard[`card.${cardKey}`] = card;
+    updatedCard[`cards.${cardKey}`] = card;
     db.collection('categories').doc(categoryId).update(updatedCard);
   }
 

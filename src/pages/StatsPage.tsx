@@ -7,7 +7,7 @@ import {CategoryType, StatType} from '../types';
 function StatsPage() {
 
   const {categoryId} = useParams<{categoryId:string}>();
-  const category = useDocument<CategoryType>('categories', categoryId);
+  const category = useDocument<CategoryType>('categories', categoryId, true);
   console.log('USE DOC RESULT', category);
 
   if (!category) {
