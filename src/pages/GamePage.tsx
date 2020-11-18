@@ -13,7 +13,7 @@ function useGame(gameId: string) {
   const game = useDocument<GameType>('games', gameId, true);
   const stats = game?.pack.stats;
 
-  console.log('GAME', gameId, game);
+  // console.log('GAME', gameId, game);
 
   // CURRENT PLAYER
   const {currentUser} = useAuthContext();
@@ -29,38 +29,44 @@ function useGame(gameId: string) {
   useEffect(() => {
     const cards = game?.pack?.cards;
     const turns = game?.turns;
-    console.log('DEALING...?', cards, turns, (!cards || turns));
     if (!cards || turns) return;
-    console.log('DEALING...');
     const [p1Cards, p2Cards] = deal(cards);
     async function updateCards() {
       await db.collection('games').doc(gameId).update({
         turnNumber: 1,
         p1TurnNumber: 1,
+        p2TurnNumber: 1,
         "turns.turn1":  {
+          id: 1,
           player: currentPlayer,
           p1Cards, 
-          p2Cards},
+          p2Cards,
+          statKey: null,
+          result: null,
+        }  
       });
     }
     updateCards();    
   }, [gameId, game]);  // @TODO change game to cards
 
   // TURN
-  let turnNumber = game?.turnNumber;  // DELETE
+  let turnNumber = game?.turnNumber;
   const playerTurnNumber: number = game ? game[`p${currentPlayer}TurnNumber`] : 1;
-  console.log('PLAYER TURN NUMBER', playerTurnNumber);
+  console.log('GAME PLAYER TURN NUMBER', playerTurnNumber);
 
-  let [currentTurn, setCurrentTurn] = useState<number>(playerTurnNumber);
+  let [currentTurn, setCurrentTurn] = useState<number>(playerTurnNumber); // rename to playerTurn
   if (currentTurn !== playerTurnNumber) {
     setCurrentTurn(playerTurnNumber);
   }
 
-  console.log('CURRENT TURN NUMBER', currentTurn);
+  console.log('GAME CURRENT TURN NUMBER', currentTurn);
 
   const handleNextTurn = useCallback(() => {
     const nextTurn = currentTurn+1;
-    if (nextTurn > turnNumber) return null;
+    if (nextTurn > turnNumber) {
+      console.log('HANDLE NEXT TURN STOP?', nextTurn, turnNumber);
+      // return null;
+    }
     async function updateTurn() {
       await db.collection('games').doc(gameId).update({
         [`p${currentPlayer}TurnNumber`]: nextTurn,
@@ -74,18 +80,23 @@ function useGame(gameId: string) {
     console.error('PLAYER NOT FOUND');
   }
 
+  console.log('CURRENT TURN DUMP', currentTurn);
   const turn = game && getTurn(game, currentTurn);
+  const turnPlayer = turn?.player;
   const p1Cards = game && getTurnCards(game, currentTurn, 1);
   const p2Cards = game && getTurnCards(game, currentTurn, 2);
 
   console.log('CARDS', p1Cards, p2Cards);
+  console.log('GAME TURNS', currentTurn, turnNumber);
   // STATS
 
-  const [selectedStat, setSelectedStat] = useState<StatParamType>();
+  const [selectedStat, setSelectedStat] = useState<StatParamType|null>(null);
 
   const handleSelectStat = useCallback((params: StatParamType) => {
-    setSelectedStat(params); 
-  }, []);
+    if (turnPlayer === currentPlayer) {
+      setSelectedStat(params); 
+    }
+  }, [turnPlayer, currentPlayer]);
 
   const handleTurn = useCallback(() => {
     if (!selectedStat || p1Cards.length === 0 || p2Cards.length === 0) {
@@ -113,18 +124,18 @@ function useGame(gameId: string) {
     if (p1Value > p2Value) {
       console.log('P1 WINS');
       result = 1;
-      p1UpdatedCards = [...p1HandCards, p2TopCard, p1TopCard];
+      p1UpdatedCards = [...p1HandCards, p2TopCard, ...drawCards, p1TopCard];
       p2UpdatedCards = [...p2HandCards]
     } else if (p1Value < p2Value) {
       result = 2;
       console.log('P2 WINS');
       p1UpdatedCards = [...p1HandCards];
-      p2UpdatedCards = [...p2HandCards, p1TopCard, p2TopCard]
+      p2UpdatedCards = [...p2HandCards, p1TopCard, ...drawCards, p2TopCard]
     } else { // @TODO make first condition ===
       result = 0;
       p1UpdatedCards = [...p1HandCards];
       p2UpdatedCards = [...p2HandCards]; 
-      drawCards = [p1TopCard, p2TopCard];
+      drawCards = [...drawCards, p1TopCard, p2TopCard,];
       console.log('DRAW!');
     }
 
@@ -141,27 +152,53 @@ function useGame(gameId: string) {
         [`turns.turn${currentTurn}.statKey`]: statKey,
         [`turns.turn${currentTurn}.result`]: result,
         [`turns.turn${nextTurn}`]: {
+          id: nextTurn,
           player: nextPlayer, 
           p1Cards: p1UpdatedCards,
           p2Cards: p2UpdatedCards,
           drawCards,
+          statKey: null,
+          result: null,
         },
         turnNumber: nextTurn,
         // [`p${currentPlayer}TurnIndex`]: turnCount,
       });
     }
-    updateTurn();      
+    updateTurn();
+    
+    setSelectedStat(null);
 
   }, [selectedStat, game, p1Cards, p2Cards, currentTurn]);
 
-  if (!game || !p1Cards || !p2Cards) return {game, turn, currentPlayer, topCards: [], handleSelectStat};
+  if (!game || !p1Cards || !p2Cards) return {game, turn, currentTurn, currentPlayer, topCards: [], handleSelectStat};
   const [p1TopCardKey] = p1Cards; 
   const p1TopCard = game?.pack.cards[p1TopCardKey];
   const [p2TopCardKey] = p2Cards; 
   const p2TopCard = game?.pack.cards[p2TopCardKey];
-  const topCards = [p1TopCard, p2TopCard]
+  const topCards = [p1TopCard, p2TopCard];
 
-  return {game, turn, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn};
+  const debug = {
+    turnId: turn?.id, 
+    turnNo: game.turnNumber,
+    p1TurnNo: game.p1TurnNumber,
+    p2TurnNo: game.p2TurnNumber,
+    currentPlayer, 
+    turnPlayer, 
+    turn
+  };
+
+  console.table({turnId: turn?.id, 
+    turnNo: game.turnNumber,
+    p1TurnNo: game.p1TurnNumber,
+    p2TurnNo: game.p2TurnNumber,
+    currentPlayer, 
+    turnPlayer,
+  });
+  console.table(game?.turns);
+  
+  console.log(debug);
+
+  return {game, turn, currentTurn, turnPlayer, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug};
 }
 
 function deal(items: CardsType) {
@@ -180,13 +217,14 @@ function deal(items: CardsType) {
 }
 
 function getTurn(game: GameType, turn: number) {
-  if (turn === 0) return null;
+  if (!game.turns || turn === 0) return null;
   const turnKey = `turn${turn}`;
   return turnKey in game.turns ? game.turns[turnKey] : null;
 }
 
 function getTurnCards(game: GameType, turn: number, playerNum: null|1|2) {
   if (!game.turns || turn === 0) return [];
+  console.log('TURN DUMP', turn);
   return game.turns[`turn${turn}`][`p${playerNum}Cards`];
 }
 
@@ -195,17 +233,31 @@ function GamePage() {
   const {gameId} = useParams<{gameId:string}>();
   // const gameId = 'HBqQxN5sDoLwqiGkABRu';
 
-  const {game, turn, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn} = useGame(gameId);
+  const {game, turn, currentTurn, turnPlayer, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug} = useGame(gameId);
   // console.log('TURN', turn);
-  console.log('SELECTED STAT', selectedStat);
-  console.log('RENDER', topCards);
+  console.log('GAME SELECTED STAT', selectedStat);
+  console.log('GAME TOP CARDS', topCards);
+  console.log('GAME TURN', turn);
+  console.log('GAME TURN RESULT', turn?.result);
   const [p1TopCard, p2TopCard] = topCards;
 
   const showCard = currentPlayer === 1 ? p1TopCard : p2TopCard;
 
+  let resultMsg;
+
+  if (turn?.result === currentPlayer) {
+    resultMsg = 'You win the round!';
+  } else if (turn?.result === 0) {
+    resultMsg = 'You draw the round!';
+  } else if (turn?.result) {
+    resultMsg = 'You lose the round!';
+  }
+
   if (!game) return (
     <div>Loading...</div>
   );
+
+  // if (currentPlayer !== turnPlayer)
 
   // if (!p1TopCard) return (
   //   <div>Player 2 Wins!</div>
@@ -227,9 +279,21 @@ function GamePage() {
         <button onClick={handleTurn}>Play Card</button>
       </>
     )}
-    <button onClick={handleNextTurn}>
-      Next Turn
-    </button>
+    {resultMsg && (
+      <div>{resultMsg}</div>
+    )}
+    {currentPlayer === turnPlayer ? (
+      <div>Games Master: Your turn</div>
+    ) : (
+      <div>Games Master: Please wait for their turn</div>
+    )}
+    {/* {(turn?.result != null && turn?.result !== currentPlayer) && ( */}
+    {/* {(turn?.result != null && turn?.result !== currentPlayer) && ( */}
+    {(currentTurn < game.turnNumber && turn?.result != null) && ( 
+      <button onClick={handleNextTurn}>
+        Next Turn {currentTurn + 1}
+      </button>
+    )}
     {/* { disabled && (<div>DISABLED</div>)} */}
     { showCard && 
       <Card 
@@ -239,6 +303,9 @@ function GamePage() {
         onSelectStat={handleSelectStat}
       />
      }
+     <pre>
+       {JSON.stringify(debug, null, 2)}
+     </pre>
     </>
   )
 }

@@ -67,7 +67,7 @@ export type GameType = {
   p1InitialCards: string[];
   p2InitialCards: string[];
   turns: TurnsType;
-  turnCount: number;
-  p1TurnIndex: number;
+  turnCount: number; // rename to currentTurn OR gameTurn
+  p1TurnIndex: number; // rename to p1CurrentTurn
   p2TurnIndex: number;
 }
