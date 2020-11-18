@@ -37,29 +37,44 @@ function useGame(gameId: string) {
       await db.collection('games').doc(gameId).update({
         turnNumber: 1,
         p1TurnNumber: 1,
-        "turns.turn1":  {p1Cards, p2Cards},
+        "turns.turn1":  {
+          player: currentPlayer,
+          p1Cards, 
+          p2Cards},
       });
     }
     updateCards();    
   }, [gameId, game]);  // @TODO change game to cards
 
   // TURN
-  let turnNumber = game?.turnNumber;
-  const playerTurnNumber = game && game[`p${currentPlayer}TurnNumber`];
+  let turnNumber = game?.turnNumber;  // DELETE
+  const playerTurnNumber: number = game ? game[`p${currentPlayer}TurnNumber`] : 1;
+  console.log('PLAYER TURN NUMBER', playerTurnNumber);
 
-  let [currentTurn, setCurrentTurn] = useState<number>(playerTurnNumber || 1);
+  let [currentTurn, setCurrentTurn] = useState<number>(playerTurnNumber);
+  if (currentTurn !== playerTurnNumber) {
+    setCurrentTurn(playerTurnNumber);
+  }
+
   console.log('CURRENT TURN NUMBER', currentTurn);
 
   const handleNextTurn = useCallback(() => {
-    currentTurn++;
-    setCurrentTurn(currentTurn)
-  } , [currentTurn]);
+    const nextTurn = currentTurn+1;
+    if (nextTurn > turnNumber) return null;
+    async function updateTurn() {
+      await db.collection('games').doc(gameId).update({
+        [`p${currentPlayer}TurnNumber`]: nextTurn,
+      });
+    }
+    updateTurn();   
+    setCurrentTurn(nextTurn);
+  } , [currentTurn, currentPlayer]);
   
   if (!currentPlayer) {
     console.error('PLAYER NOT FOUND');
   }
 
-  const turn = game && getTurn(game, currentTurn);;
+  const turn = game && getTurn(game, currentTurn);
   const p1Cards = game && getTurnCards(game, currentTurn, 1);
   const p2Cards = game && getTurnCards(game, currentTurn, 2);
 
@@ -73,15 +88,13 @@ function useGame(gameId: string) {
   }, []);
 
   const handleTurn = useCallback(() => {
-
-    if (!selectedStat || !p1Cards || !p2Cards) {
+    if (!selectedStat || p1Cards.length === 0 || p2Cards.length === 0) {
       return null;
     }
-
-    let result;
-    let p1UpdatedCards;
-    let p2UpdatedCards;
-    let drawnCards;
+    let result: number;
+    let p1UpdatedCards: string[];
+    let p2UpdatedCards: string[];
+    let drawCards: string[] = [];
 
     const {statKey} = selectedStat;
     const [p1TopCard, ...p1HandCards] = p1Cards;
@@ -92,36 +105,28 @@ function useGame(gameId: string) {
     if (!p1Value || !p2Value) {
       return null;
     }
-    console.log('CARD DUMP', p1TopCard)
+    console.log('TOP CARDS', p1TopCard, p2TopCard);
+    console.log('CARD VALS', p1Value, p2Value);
 
     console.log(`You said: ${game?.pack.stats[statKey].title} ${p1Value}`);
 
     if (p1Value > p2Value) {
       console.log('P1 WINS');
       result = 1;
-      // p1UpdatedCards = [...p1HandCards, p2TopCard, p1TopCard];
-      // p2UpdatedCards = [...p2HandCards]
+      p1UpdatedCards = [...p1HandCards, p2TopCard, p1TopCard];
+      p2UpdatedCards = [...p2HandCards]
     } else if (p1Value < p2Value) {
       result = 2;
       console.log('P2 WINS');
-      // p1UpdatedCards = [...p1HandCards];
-      // p2UpdatedCards = [...p2HandCards, p1TopCard, p2TopCard]
+      p1UpdatedCards = [...p1HandCards];
+      p2UpdatedCards = [...p2HandCards, p1TopCard, p2TopCard]
     } else { // @TODO make first condition ===
       result = 0;
+      p1UpdatedCards = [...p1HandCards];
+      p2UpdatedCards = [...p2HandCards]; 
+      drawCards = [p1TopCard, p2TopCard];
       console.log('DRAW!');
     }
-
-    let turn = {
-      player: currentPlayer,
-      result,
-      statKey: statKey,
-      // p1Cards: p1UpdatedCards,
-      // p2Cards: p2UpdatedCards,
-      p1Value,
-      p2Value,
-    };
-
-    console.log('TURN', turn);
 
     async function updateTurn() {
       if (currentTurn == undefined) {
@@ -129,24 +134,34 @@ function useGame(gameId: string) {
         return null;
       }
       console.log('UPDATE TURN');
-      currentTurn++;
+      console.log('UPDATED CARDS', p1UpdatedCards, p2UpdatedCards);
+      const nextTurn = currentTurn + 1;
+      const nextPlayer = result === 0 ? currentPlayer : result;
       await db.collection('games').doc(gameId).update({
-        [`turns.turn${currentTurn}`]: turn,
-        currentTurn,
+        [`turns.turn${currentTurn}.statKey`]: statKey,
+        [`turns.turn${currentTurn}.result`]: result,
+        [`turns.turn${nextTurn}`]: {
+          player: nextPlayer, 
+          p1Cards: p1UpdatedCards,
+          p2Cards: p2UpdatedCards,
+          drawCards,
+        },
+        turnNumber: nextTurn,
         // [`p${currentPlayer}TurnIndex`]: turnCount,
       });
     }
     updateTurn();      
 
-  } , [selectedStat, game, p1Cards, p2Cards, currentTurn]);
+  }, [selectedStat, game, p1Cards, p2Cards, currentTurn]);
 
-  if (!game || !p1Cards || !p2Cards) return {game, cards: [], handleSelectStat};
+  if (!game || !p1Cards || !p2Cards) return {game, turn, currentPlayer, topCards: [], handleSelectStat};
   const [p1TopCardKey] = p1Cards; 
-  const p1TopCard = game.pack.cards[p1TopCardKey];
+  const p1TopCard = game?.pack.cards[p1TopCardKey];
   const [p2TopCardKey] = p2Cards; 
-  const p2TopCard = game.pack.cards[p2TopCardKey];
+  const p2TopCard = game?.pack.cards[p2TopCardKey];
+  const topCards = [p1TopCard, p2TopCard]
 
-  return {game, turn, p1TopCard, p2TopCard, selectedStat, handleSelectStat, handleTurn, handleNextTurn};
+  return {game, turn, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn};
 }
 
 function deal(items: CardsType) {
@@ -171,7 +186,7 @@ function getTurn(game: GameType, turn: number) {
 }
 
 function getTurnCards(game: GameType, turn: number, playerNum: null|1|2) {
-  if (turn === 0) return [];
+  if (!game.turns || turn === 0) return [];
   return game.turns[`turn${turn}`][`p${playerNum}Cards`];
 }
 
@@ -180,17 +195,32 @@ function GamePage() {
   const {gameId} = useParams<{gameId:string}>();
   // const gameId = 'HBqQxN5sDoLwqiGkABRu';
 
-  const {game, turn, p1TopCard, p2TopCard, selectedStat, handleSelectStat, handleTurn, handleNextTurn} = useGame(gameId);
-  console.log('TURN', turn);
+  const {game, turn, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn} = useGame(gameId);
+  // console.log('TURN', turn);
   console.log('SELECTED STAT', selectedStat);
+  console.log('RENDER', topCards);
+  const [p1TopCard, p2TopCard] = topCards;
 
-  if (!game || !p1TopCard) return (
+  const showCard = currentPlayer === 1 ? p1TopCard : p2TopCard;
+
+  if (!game) return (
     <div>Loading...</div>
   );
+
+  // if (!p1TopCard) return (
+  //   <div>Player 2 Wins!</div>
+  // )
+
+  // if (!p2TopCard) return (
+  //   <div>Player 1 Wins!</div>
+  // )  
+  // const disabled = 
 
   return (
     <>
     <div>GAME PAGE</div>
+    { !p1TopCard && <div>Player 2 Wins</div> }
+    { !p2TopCard && <div>Player 1 Wins</div> }
     {selectedStat && (
       <>
         <div>You selected: {selectedStat.title} {selectedStat.value}</div>
@@ -200,12 +230,15 @@ function GamePage() {
     <button onClick={handleNextTurn}>
       Next Turn
     </button>
-    <Card 
-      card={p1TopCard} 
-      stats={game.pack.stats}
-      selectedStatKey={null}
-      onSelectStat={handleSelectStat}
-     />
+    {/* { disabled && (<div>DISABLED</div>)} */}
+    { showCard && 
+      <Card 
+        card={showCard} 
+        stats={game.pack.stats}
+        selectedStatKey={null}
+        onSelectStat={handleSelectStat}
+      />
+     }
     </>
   )
 }
