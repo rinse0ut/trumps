@@ -26,11 +26,18 @@ function useGame(gameId: string) {
   const {currentUser} = useAuthContext();
   const uid = currentUser?.uid;
   let currentPlayer: null|1|2 = null;
+  let currentUsername;
+  let opponentUsername;
   if (game?.p1Id === uid) {
     currentPlayer = 1;
+    currentUsername = game?.p1Username;
+    opponentUsername = game?.p2Username;
   } else if (game?.p2Id === uid) {
     currentPlayer = 2;
+    currentUsername = game?.p2Username;
+    opponentUsername = game?.p1Username;
   }
+  const startingPlayer = Math.floor(Math.random() * 2) + 1;
 
   // Shuffle and deal cards - should be a serverless cloud function but that requires a Blaze payment plan :(
   useEffect(() => {
@@ -45,7 +52,7 @@ function useGame(gameId: string) {
         p2TurnNumber: 1,
         "turns.turn1":  {
           id: 1,
-          player: currentPlayer,
+          player: startingPlayer,
           p1Cards, 
           p2Cards,
           statKey: null,
@@ -189,7 +196,7 @@ function useGame(gameId: string) {
   
   console.log(debug);
 
-  return {game, turn, currentTurn, turnPlayer, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug};
+  return {game, turn, currentTurn, turnPlayer, currentPlayer, currentUsername, opponentUsername, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug};
 }
 
 function deal(items: CardsType) {
@@ -224,7 +231,7 @@ function GamePage() {
   const {gameId} = useParams<{gameId:string}>();
   // const gameId = 'HBqQxN5sDoLwqiGkABRu';
 
-  const {game, turn, currentTurn, turnPlayer, currentPlayer, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug} = useGame(gameId);
+  const {game, turn, currentTurn, turnPlayer, currentPlayer, currentUsername, opponentUsername, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug} = useGame(gameId);
   const [p1TopCard, p2TopCard] = topCards;
 
   const currentCard = currentPlayer === 1 ? p1TopCard : p2TopCard;
@@ -252,21 +259,21 @@ function GamePage() {
     { !p2TopCard && <div>Player 1 Wins</div> }
 
     {currentPlayer === turnPlayer ? (
-      <Message username="Games Master">Round {currentTurn}. Your turn. Tap that stat!</Message>
+      <Message username="Games Master">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
     ) : (
-      <Message username="Games Master">Round {currentTurn}. {turn?.result ? 'Their go' : 'Please wait for them to choose'}</Message>
+      <Message username="Games Master">Round {currentTurn}. {turn?.result ? 'Their go' : `Hurry up ${currentUsername}`}</Message>
     )}
     {statKey && (
       <>
         {currentPlayer === turnPlayer ? (
           <>
-            <Message username="You" align="right">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
-            <Message username="Them">{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
+            <Message username={currentUsername} align="right">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
+            <Message username={opponentUsername}>{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
           </>
         ) : (
           <>
-            <Message username="Them">{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
-            <Message username="You" align="right">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
+            <Message username={opponentUsername}>{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
+            <Message username={currentUsername} align="right">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
           </>
         )}        
       </>

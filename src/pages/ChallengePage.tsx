@@ -14,6 +14,7 @@ function ChallengePage() {
   console.log({currentUser});
   const categories = useCollection<CategoryType>('categories');
   const users = useCollection<any>('users');
+  console.log('USERS', users);
 
   const [form, setForm] = useState<GameFormType>({categoryId: '', player2Id: ''});
 
@@ -27,11 +28,14 @@ function ChallengePage() {
   async function handleCreate() {
     const category = categories && Object.values(categories).find(x => x.id = form.categoryId);
     if (category && currentUser) {
-      // const doc = await db.collection('games').add({pack: category, player1Id: currentUser.uid, player2Id: form.player2Id});
+      const p2User = users?.find(u => u.id === form.player2Id);
+      console.log('P2 User', p2User);
       const doc = await db.collection('games').add({
         pack: category, 
         p1Id: currentUser.uid, 
+        p1Username: currentUser.displayName, 
         p2Id: form.player2Id,
+        p2Username: p2User.username,
         p1TurnNumber: 0,
         p2TurnNumber: 0,
         turnNumber: 0,
