@@ -6,7 +6,9 @@ export type UserType = {
   email: string;
 };
 
-export type StatType = {title: string};
+export type StatType = {
+  title: string;
+}
 
 export type StatsType = {
   [id: string]: StatType;
