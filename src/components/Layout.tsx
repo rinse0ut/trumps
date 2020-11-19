@@ -11,8 +11,19 @@ function Layout(props: PropsType) {
 
   return (
     <>
-    <div>
+    <div style={{
+      position: 'fixed',
+      height: 50,
+      backgroundColor: 'blue',
+      top: 0,
+      left: 0,
+      right: 0,
+    }}>
       {currentUser?.displayName}
+    </div>
+    <div style={{
+      height: 50,
+    }}>
     </div>
     {children}
     </>

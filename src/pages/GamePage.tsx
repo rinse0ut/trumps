@@ -252,16 +252,26 @@ function GamePage() {
     <div>Loading...</div>
   );
 
+  if (!currentCard && !opponentCard) {
+    return (
+      <Message username="Games Master">It's a draw!</Message>
+    )
+    } else if (!opponentCard) {
+    return (
+      <Message username="Games Master">{currentUsername} wins!</Message>
+    )
+  } else if (!currentCard) {
+    return (
+      <Message username="Games Master">{opponentUsername} wins!</Message>
+    )
+  }
+
   return (
     <>
-    <div>GAME PAGE</div>
-    { !p1TopCard && <div>Player 2 Wins</div> }
-    { !p2TopCard && <div>Player 1 Wins</div> }
-
     {currentPlayer === turnPlayer ? (
       <Message username="Games Master">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
     ) : (
-      <Message username="Games Master">Round {currentTurn}. {turn?.result ? 'Their go' : `Hurry up ${currentUsername}`}</Message>
+      <Message username="Games Master">Round {currentTurn}. ${opponentUsername}'s turn.</Message>
     )}
     {statKey && (
       <>
@@ -289,21 +299,40 @@ function GamePage() {
         onSelectStat={handleSelectStat}
       />
      }
-    {selectedStat && (
-      <>
-        <button onClick={handleTurn}>Play Card?</button>
-      </>
-    )}     
-    {(currentTurn < game.turnNumber && turn?.result != null) && ( 
-      <button onClick={handleNextTurn}>
-        Next Card {currentTurn + 1}
-      </button>
-    )}    
      <pre>
        {JSON.stringify(debug, null, 2)}
-     </pre>
+     </pre>     
+     <Footer>
+      {selectedStat && (
+        <>
+          <button onClick={handleTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
+            Play Card
+          </button>
+        </>
+      )}     
+      {(currentTurn < game.turnNumber && turn?.result != null) && ( 
+        <button onClick={handleNextTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
+          Next Round
+        </button>
+      )}    
+     </Footer>
     </>
   )
+}
+
+function Footer({children}: any) {
+  return (
+    <div style={{
+      position: 'fixed',
+      height: 50,
+      backgroundColor: 'blue',
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }}>
+      {children}
+    </div>
+  )  
 }
 
 function Message({username, children, align = 'left'}: {username: string, children: any; align?: 'left'|'right'}) {
