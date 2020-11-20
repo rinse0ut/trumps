@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Image, Flag, Icon, SemanticICONS } from 'semantic-ui-react';
 import { CardType, StatsType, StatParamType } from '../types';
+import will from '../img/will.jpeg';
 
 type PlayerType = 1 | 2;
 
@@ -22,10 +23,10 @@ function Card(props: CardPropType) {
   // const { name, countryCode, img, values, player, categories, categoryIndex, result, onSelectCatgory } = props;
   // return <div>CARD</div>;
   return (
-    <Table celled selectable unstackable size="small">
+    <Table celled selectable unstackable size="small" style={{width:'70%', marginLeft: 5}}>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell colSpan='2'>{card.title.toUpperCase()}</Table.HeaderCell>
+          <Table.HeaderCell>{card.title.toUpperCase()}</Table.HeaderCell>
           <Table.HeaderCell textAlign='center'>
             { card.countryCode && <Flag name={card.countryCode} /> }
           </Table.HeaderCell>
@@ -33,8 +34,8 @@ function Card(props: CardPropType) {
       </Table.Header>
       <Table.Body>
         <Table.Row>
-          <Table.Cell colSpan='3'>
-            <Image src={card.img} fluid />
+          <Table.Cell colSpan='2'>
+            <Image src={will} fluid />
           </Table.Cell>
         </Table.Row>
         {
@@ -119,9 +120,6 @@ function Row(props: any) {
       </Cell>
       <Cell status={status}>
         {props.value}
-      </Cell>
-      <Cell status={status}>
-        {/* { iconName && <Icon name={iconName} /> } */}
       </Cell>
     </Table.Row>    
   )

@@ -241,11 +241,11 @@ function GamePage() {
   let resultMsg;
 
   if (turn?.result === currentPlayer) {
-    resultMsg = 'Yay! You won the round! :)';
+    resultMsg = 'Yay! You won the round! 😀';
   } else if (turn?.result === 0) {
-    resultMsg = 'Ok! You drew the round! :)';
+    resultMsg = 'Ok! You drew the round! 😲';
   } else if (turn?.result) {
-    resultMsg = 'Oh noes! You lost the round! :(';
+    resultMsg = 'Oh noes! You lost the round! 😢';
   }
 
   if (!game) return (
@@ -271,7 +271,7 @@ function GamePage() {
     {currentPlayer === turnPlayer ? (
       <Message username="Games Master">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
     ) : (
-      <Message username="Games Master">Round {currentTurn}. ${opponentUsername}'s turn.</Message>
+      <Message username="Games Master">Round {currentTurn}. {opponentUsername}'s turn.</Message>
     )}
     {statKey && (
       <>
@@ -303,6 +303,7 @@ function GamePage() {
        {JSON.stringify(debug, null, 2)}
      </pre>     
      <Footer>
+      {/* {(!selectedStat || !turn?.result) && 'You have X Cards in your hand'}  */}
       {selectedStat && (
         <>
           <button onClick={handleTurn} style={{width: '90%', height: '40%', margin: '5%'}}>

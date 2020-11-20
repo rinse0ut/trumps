@@ -13,31 +13,24 @@ import CardsPage from '../pages/CardsPage';
 import ChallengePage from '../pages/ChallengePage';
 import GameListPage from '../pages/GamesPage';
 import GamePage from '../pages/GamePage';
+import List from '../components/List';
+import {TitleBar} from '../components/Layout';
 
-const HomePage = () => (
-  <> 
-    <div>HOME</div>
-    <ul>
-      <li><Link to="/friends">Friends</Link></li>
-      <li><Link to="/categories">Categories</Link></li>
-      <li><Link to="/challenge">New Game</Link></li>
-      <li><Link to="/games">Games</Link></li>
-    </ul>
-    <SignOut/>
-  </> 
-);  
-
-// const GamePage = () => {
-//   const {currentUser} = useAuthContext();
-//   console.log('GAME CURR USER', currentUser);
-//   return (
-//     <> 
-//       <div>GAME</div>
-//       <Link to="/home">Home</Link>
-//       <SignOut/>
-//     </> 
-//   )  
-// };
+function HomePage() {
+  const listItems = [
+    {title: 'Friends', url: '/friends'},
+    {title: 'Packs', url: '/categories'},
+    {title: 'Games', url: '/games'},
+    {title: 'New Game', url: '/challenge'},
+  ]
+  return (
+    <> 
+      <TitleBar.Source>Top Trumps 🛋️</TitleBar.Source>
+      <List items={listItems}/>
+      <SignOut/>
+    </> 
+  )
+}    
 
 function Router() {
   // return <GamePage/>
