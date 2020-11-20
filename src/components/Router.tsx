@@ -33,7 +33,7 @@ function HomePage() {
 }    
 
 function Router() {
-  // return <GamePage/>
+  // return <FriendsPage/>
   return (
     <Switch>
 

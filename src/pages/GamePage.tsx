@@ -7,13 +7,10 @@ import useDocument from '../hooks/useDocument';
 import {CardsType, GameType, StatParamType} from '../types';
 import Card from '../components/Card';
 import { useAuthContext } from '../components/AuthProvider';
+import {TitleBar, Footer} from '../components/Layout';
+import { Button } from 'semantic-ui-react';
+import Loading from '../components/Loading';
 
-/*
-Pack class
-  init(cards)
-  deal(hands)
-  getCard()
-*/
 
 function useGame(gameId: string) {
 
@@ -249,7 +246,7 @@ function GamePage() {
   }
 
   if (!game) return (
-    <div>Loading...</div>
+    <Loading/> 
   );
 
   if (!currentCard && !opponentCard) {
@@ -268,6 +265,7 @@ function GamePage() {
 
   return (
     <>
+    <TitleBar.Source>Game On!</TitleBar.Source>
     {currentPlayer === turnPlayer ? (
       <Message username="Games Master">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
     ) : (
@@ -306,34 +304,19 @@ function GamePage() {
       {/* {(!selectedStat || !turn?.result) && 'You have X Cards in your hand'}  */}
       {selectedStat && (
         <>
-          <button onClick={handleTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
+          <Button color='violet' onClick={handleTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
             Play Card
-          </button>
+          </Button>
         </>
       )}     
       {(currentTurn < game.turnNumber && turn?.result != null) && ( 
-        <button onClick={handleNextTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
+        <Button color='violet' onClick={handleNextTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
           Next Round
-        </button>
+        </Button>
       )}    
      </Footer>
     </>
   )
-}
-
-function Footer({children}: any) {
-  return (
-    <div style={{
-      position: 'fixed',
-      height: 50,
-      backgroundColor: 'blue',
-      bottom: 0,
-      left: 0,
-      right: 0,
-    }}>
-      {children}
-    </div>
-  )  
 }
 
 function Message({username, children, align = 'left'}: {username: string, children: any; align?: 'left'|'right'}) {

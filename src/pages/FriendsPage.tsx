@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {getUsers} from '../services/firestore';
 import useCollection from '../hooks/useCollection';
 import List from '../components/List';
+import Loading from '../components/Loading';
 import {TitleBar} from '../components/Layout';
 
 function FriendsPage() {
@@ -13,9 +14,9 @@ function FriendsPage() {
     description: `${user.email}`,
   }));
 
-  if (users && !users.length) {
+  if (!users) {
     return (
-      <div>Loading...</div>
+      <Loading/> 
     )
   }
 

@@ -29,6 +29,19 @@ const LeftAction = styled.div`
   margin-left: 5px;
 `;
 
+const ContentContainer = styled.div`
+  padding-top: 70px;
+`;
+
+export const Footer = styled.div`
+  position: fixed;
+  height: 50;
+  background: #1b9a59;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
+
 type PropsType = {
   children: ReactChild;
 }
@@ -60,11 +73,9 @@ function Layout(props: PropsType) {
     <div style={{height: '100vh', backgroundColor: 'WhiteSmoke'}}>
       <Container>
         <Header/>
-        <div style={{
-          height: 50,
-        }}>
-        </div>
-        {children}
+        <ContentContainer>
+          {children}
+        </ContentContainer>
       </Container>
     </div>
   )

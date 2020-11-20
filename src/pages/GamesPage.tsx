@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import useCollection from '../hooks/useCollection';
 import {GameType} from '../types';
 import List from '../components/List';
+import Loading from '../components/Loading';
+import {TitleBar} from '../components/Layout';
 
 function GamesPage() {
 
@@ -17,7 +19,7 @@ function GamesPage() {
 
   if (!games) {
     return (
-      <div>Loading...</div>
+      <Loading/> 
     )
   }
 
@@ -29,7 +31,7 @@ function GamesPage() {
 
   return (
     <>
-      <div>GAME LIST</div>
+      <TitleBar.Source>Games</TitleBar.Source>
       <List items={listItems}/>
     </>
   )
