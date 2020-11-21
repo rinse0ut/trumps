@@ -3,37 +3,31 @@ import { Table, Image, Flag, Icon, SemanticICONS } from 'semantic-ui-react';
 import { CardType, StatsType, StatParamType } from '../types';
 import will from '../img/will.jpeg';
 
-type PlayerType = 1 | 2;
+type PlayerType = null | 1 | 2;
 
 type CardPropType = {
   card: CardType;
   stats: StatsType;
-  selectedStatKey: string | null;
+  selectedStatKey: string | null | undefined;
   disabled: boolean;
-  // player: PlayerType;
-  // result: number | null;
+  player: PlayerType;
+  result: undefined | null | 0 | 1 | 2;
   onSelectStat: (params: StatParamType) => void;
 }
 
 function Card(props: CardPropType) {
-  console.log('CARD PROPS', props);
-  const {card, stats, disabled} = props;
-  // if (!props.name) {
-    // return null
-  // }
-  // const { name, countryCode, img, values, player, categories, categoryIndex, result, onSelectCatgory } = props;
-  // return <div>CARD</div>;
+  const { card, stats, selectedStatKey, player, result, disabled } = props;
   return (
-    <Table celled unstackable 
-      size="small" 
+    <Table celled unstackable
+      size="small"
       selectable={!disabled}
-      style={{width:'70%', marginLeft: 5}
-    }>
+      style={{ width: '70%', marginLeft: 5 }
+      }>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>{card.title.toUpperCase()}</Table.HeaderCell>
           <Table.HeaderCell textAlign='center'>
-            { card.countryCode && <Flag name={card.countryCode} /> }
+            {card.countryCode && <Flag name={card.countryCode} />}
           </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -44,89 +38,62 @@ function Card(props: CardPropType) {
           </Table.Cell>
         </Table.Row>
         {
-          Object.entries(stats).map(([statKey, stat]) => {
-            console.log(stat, statKey)
-            const {title} = stat;
+          Object.entries(stats)
+          .sort((a, b) => b[0].localeCompare(a[0]))
+          .reverse()
+          .map(([statKey, stat]) => { // @TODO sort by key
+            const { title } = stat;
             const value = card[statKey];
-            // return <div>{stat.title}: {card[statKey]}</div>
             return (
-              <Row 
-                key={statKey} 
-                // rowIndex={statKey}
-                // categoryIndex={categoryIndex} // @todo change to selectedCategoryIndex
-                img={card.img}
+              <Row
+                key={statKey}
+                statKey={statKey}
+                selectedKey={selectedStatKey}
                 title={title}
                 value={value}
-                // result={result}
-                // player={player}
-                onSelectStat={() => props.onSelectStat({statKey, title, value})}
-              />
-            )  
-          })
-        }
-        {/* {stats.map((stats, key) => {
-          const { title } = category;
-          const stat = values[i];
-          return (
-              <Row 
-                key={title} 
-                rowIndex={i}
-                categoryIndex={categoryIndex} // @todo change to selectedCategoryIndex
-                img={img}
-                title={title}
-                value={stat}
                 result={result}
                 player={player}
-                onSelectCatgory={() => onSelectCatgory(i)}
+                onSelectStat={() => props.onSelectStat({ statKey, title, value })}
               />
-          )  
-        })} */}
+            )
+          })
+        }
       </Table.Body>
     </Table>
   );
 }
 
-type StatusType = 'positive' | 'negative' | 'warning'; 
+type StatusType = 'positive' | 'negative' | 'warning';
 
 type RowPropType = {
-  rowIndex: number;
   title: string;
-  value: string|number;  
-  categoryIndex: number | null;
+  value: string | number;
+  statKey: string;
+  selectedKey: string | null | undefined;
   player: PlayerType;
-  result: number | null;
-  img: any;
+  result: undefined | null | 0 | 1 | 2;
   onSelectStat: (statKey: number) => void;
 }
 
-function Row(props: any) {
-  // const {title, value, rowIndex, img, categoryIndex, result, player, onSelectCatgory} = props;
+function Row(props: RowPropType) {
+  const {title, value, statKey, selectedKey, onSelectStat, result, player} = props;
   let status: StatusType | undefined;
-  let iconName: SemanticICONS|null = null;
-  // if (categoryIndex === rowIndex && result === 0) {
-  //   status = 'warning';
-  //   iconName = 'checkmark';
-  // } else if (categoryIndex === rowIndex && result === player) {
-  //   status = 'positive';
-  //   iconName = 'checkmark';
-  // } else if (categoryIndex === rowIndex && result !== player) {
-  //   status = 'negative';
-  //   iconName = 'close';
-  // }  
-    return (
-    <Table.Row key={props.key} onClick={props.onSelectStat}>
-      {/* {rowIndex === 0 ? (
-        <Table.Cell rowSpan='4'>
-          <Image src={img} size='tiny' fluid />
-        </Table.Cell>        
-      ) : null} */}
+  if (statKey === selectedKey && result === 0) {
+    status = 'warning';
+  } else if (statKey === selectedKey && result === player) {
+    status = 'positive';
+  } else if (statKey === selectedKey && result !== player) {
+    status = 'negative';
+  }
+  return (
+    <Table.Row key={statKey} onClick={onSelectStat}>
       <Cell status={status}>
-        {props.title}
+        {title}
       </Cell>
       <Cell status={status}>
-        {props.value}
+        {value}
       </Cell>
-    </Table.Row>    
+    </Table.Row>
   )
 }
 
@@ -136,15 +103,15 @@ type CellPropType = {
 }
 
 function Cell(props: CellPropType) {
-  const {status, children} = props;
+  const { status, children } = props;
   return (
     <Table.Cell
-      positive={status === 'positive'} 
-      negative={status === 'negative'} 
-      warning={status === 'warning'} 
+      positive={status === 'positive'}
+      negative={status === 'negative'}
+      warning={status === 'warning'}
     >
       {children}
-    </Table.Cell> 
+    </Table.Cell>
   );
 }
 

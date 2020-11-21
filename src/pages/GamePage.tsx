@@ -54,7 +54,8 @@ function useGame(gameId: string) {
         p2TurnNumber: 1,
         "turns.turn1":  {
           id: 1,
-          player: startingPlayer,
+          player: 1,
+          // player: startingPlayer,
           p1Cards, 
           p2Cards,
           statKey: null,
@@ -310,22 +311,24 @@ function GamePage() {
       <Card 
         card={currentCard} 
         stats={game.pack.stats}
-        selectedStatKey={null}
+        selectedStatKey={turn?.statKey}
+        player={currentPlayer}
+        result={turn?.result && turn.result} // TODO fix
         onSelectStat={handleSelectStat}
         disabled={(turn?.result != null || turnPlayer !== currentPlayer)}
       />
      }
-     <pre>
+     {/* <pre>
        {JSON.stringify(debug, null, 2)}
-     </pre>     
+     </pre>      */}
      <Footer>
       {/* {(!selectedStat || !turn?.result) && 'You have X Cards in your hand'}  */}
       {/* {(selectedStat || turn?.result === null) && ( */}
-      {(selectedStat || turn?.result === null) && (
-        <Button circular color='green' icon='play' onClick={handleTurn} />
+      {(selectedStat && currentTurn === game.turnNumber && currentPlayer === turnPlayer) && (
+        <Button circular color='green' icon='play' size='huge' onClick={handleTurn} />
       )}     
       {(currentTurn < game.turnNumber && turn?.result != null) && ( 
-        <Button circular color='green' icon='fast forward' onClick={handleNextTurn} />
+        <Button circular color='green' icon='fast forward' size='huge' onClick={handleNextTurn} />
       )}    
      </Footer>
     </>
@@ -337,9 +340,9 @@ const StyledMessage = styled.div<{align: 'left'|'right', color: string}>`
   width: 90%;
   margin: 5px;
   padding: 5px;
-  border: 1px solid grey;
-  border-radius: ${props => props.align === 'right' ? '5px 0px 5px 5px' : '0px 5px 5px 5px' };
+  border-radius: ${props => props.align === 'right' ? '10px 0px 10px 10px' : '0px 10px 10px 10px' };
   background: ${props => props.align === 'right' ? '#dcf8c6' : 'white' };
+  border: 1px solid grey;
   color: ${props => props.color};
 `;
 
