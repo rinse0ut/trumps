@@ -28,7 +28,7 @@ function ListItem({title, description, url}: ListItem) {
 function ListComponent({items}: PropsType) {
   return (
     <Segment>
-      <List divided relaxed>
+      <List divided relaxed="very" size="large">
         {items.map(ListItem)}
       </List>
     </Segment>

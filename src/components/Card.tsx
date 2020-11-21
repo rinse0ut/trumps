@@ -9,6 +9,7 @@ type CardPropType = {
   card: CardType;
   stats: StatsType;
   selectedStatKey: string | null;
+  disabled: boolean;
   // player: PlayerType;
   // result: number | null;
   onSelectStat: (params: StatParamType) => void;
@@ -16,14 +17,18 @@ type CardPropType = {
 
 function Card(props: CardPropType) {
   console.log('CARD PROPS', props);
-  const {card, stats} = props;
+  const {card, stats, disabled} = props;
   // if (!props.name) {
     // return null
   // }
   // const { name, countryCode, img, values, player, categories, categoryIndex, result, onSelectCatgory } = props;
   // return <div>CARD</div>;
   return (
-    <Table celled selectable unstackable size="small" style={{width:'70%', marginLeft: 5}}>
+    <Table celled unstackable 
+      size="small" 
+      selectable={!disabled}
+      style={{width:'70%', marginLeft: 5}
+    }>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>{card.title.toUpperCase()}</Table.HeaderCell>

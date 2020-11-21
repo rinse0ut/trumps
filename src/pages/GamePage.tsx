@@ -10,12 +10,13 @@ import { useAuthContext } from '../components/AuthProvider';
 import {TitleBar, Footer} from '../components/Layout';
 import { Button } from 'semantic-ui-react';
 import Loading from '../components/Loading';
-
+import styled from 'styled-components';
 
 function useGame(gameId: string) {
 
   const game = useDocument<GameType>('games', gameId, true);
   const stats = game?.pack.stats;
+  const [error, setError] = useState<string>();
 
   // console.log('GAME', gameId, game);
 
@@ -34,6 +35,10 @@ function useGame(gameId: string) {
     currentUsername = game?.p2Username;
     opponentUsername = game?.p1Username;
   }
+  //  else {
+  //   currentPlayer = 1;
+  //   game && setError('You are not a player in this game!')
+  // }
   const startingPlayer = Math.floor(Math.random() * 2) + 1;
 
   // Shuffle and deal cards - should be a serverless cloud function but that requires a Blaze payment plan :(
@@ -69,7 +74,6 @@ function useGame(gameId: string) {
     setCurrentTurn(playerTurnNumber);
   }
 
-
   const handleNextTurn = useCallback(() => {
     const nextTurn = currentTurn+1;
     if (nextTurn > turnNumber) {
@@ -100,7 +104,7 @@ function useGame(gameId: string) {
   const handleSelectStat = useCallback((params: StatParamType) => {
     if (turnPlayer === currentPlayer) {
       setSelectedStat(params); 
-    }
+    } 
   }, [turnPlayer, currentPlayer]);
 
   const handleTurn = useCallback(() => {
@@ -193,7 +197,9 @@ function useGame(gameId: string) {
   
   console.log(debug);
 
-  return {game, turn, currentTurn, turnPlayer, currentPlayer, currentUsername, opponentUsername, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug};
+  console.log((selectedStat && !turn?.result), selectedStat, !turn?.result);
+
+  return {game, error, turn, currentTurn, turnPlayer, currentPlayer, currentUsername, opponentUsername, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug};
 }
 
 function deal(items: CardsType) {
@@ -228,7 +234,7 @@ function GamePage() {
   const {gameId} = useParams<{gameId:string}>();
   // const gameId = 'HBqQxN5sDoLwqiGkABRu';
 
-  const {game, turn, currentTurn, turnPlayer, currentPlayer, currentUsername, opponentUsername, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug} = useGame(gameId);
+  const {game, error, turn, currentTurn, turnPlayer, currentPlayer, currentUsername, opponentUsername, topCards, selectedStat, handleSelectStat, handleTurn, handleNextTurn, debug} = useGame(gameId);
   const [p1TopCard, p2TopCard] = topCards;
 
   const currentCard = currentPlayer === 1 ? p1TopCard : p2TopCard;
@@ -236,58 +242,69 @@ function GamePage() {
   const statKey = turn?.statKey;
 
   let resultMsg;
+  let currentEmoji;
+  let opponentEmoji;
 
   if (turn?.result === currentPlayer) {
-    resultMsg = 'Yay! You won the round! 😀';
+    resultMsg = 'Yay! You won the round! ✅';
+    currentEmoji = '😃';
+    opponentEmoji = '😢';
   } else if (turn?.result === 0) {
-    resultMsg = 'Ok! You drew the round! 😲';
+    resultMsg = 'Ok! You drew the round! ↔️';
+    currentEmoji = '😮';
+    opponentEmoji = '😮';
   } else if (turn?.result) {
-    resultMsg = 'Oh noes! You lost the round! 😢';
+    resultMsg = 'Oh noes! You lost the round! ❌';
+    currentEmoji = '😢';
+    opponentEmoji = '😃';
   }
 
   if (!game) return (
     <Loading/> 
   );
 
+  // if (error) return (
+  //   <Message username="Games Master">{error}</Message>
+  // );  
+
   if (!currentCard && !opponentCard) {
     return (
-      <Message username="Games Master">It's a draw!</Message>
+      <Message username="Games Master" color="green">Good game! It's a draw! 🤷‍♂️</Message>
     )
     } else if (!opponentCard) {
     return (
-      <Message username="Games Master">{currentUsername} wins!</Message>
+      <Message username="Games Master" color="green">Good game! {currentUsername} wins! 🎉</Message>
     )
   } else if (!currentCard) {
     return (
-      <Message username="Games Master">{opponentUsername} wins!</Message>
+      <Message username="Games Master" color="green">Good game! {opponentUsername} wins! ☠️</Message>
     )
   }
-
   return (
     <>
     <TitleBar.Source>Game On!</TitleBar.Source>
     {currentPlayer === turnPlayer ? (
-      <Message username="Games Master">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
+      <Message username="Games Master" color="green">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
     ) : (
-      <Message username="Games Master">Round {currentTurn}. {opponentUsername}'s turn.</Message>
+      <Message username="Games Master" color="green">Round {currentTurn}. {opponentUsername}'s turn.</Message>
     )}
     {statKey && (
       <>
         {currentPlayer === turnPlayer ? (
           <>
-            <Message username={currentUsername} align="right">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
-            <Message username={opponentUsername}>{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
+            <Message username={currentUsername} align="right" color="CornflowerBlue">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
+            <Message username={opponentUsername} color="orange">{game.pack.stats[statKey].title}: {opponentCard[statKey]} {opponentEmoji}</Message>
           </>
         ) : (
           <>
-            <Message username={opponentUsername}>{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
-            <Message username={currentUsername} align="right">{game.pack.stats[statKey].title}: {currentCard[statKey]}</Message>
+            <Message username={opponentUsername} color="orange">{game.pack.stats[statKey].title}: {opponentCard[statKey]}</Message>
+            <Message username={currentUsername} align="right" color="CornflowerBlue">{game.pack.stats[statKey].title}: {currentCard[statKey]} {currentEmoji}</Message>
           </>
         )}        
       </>
     )}         
     {resultMsg && (
-      <Message username="Games Master">{resultMsg}</Message>
+      <Message username="Games Master" color="green">{resultMsg}</Message>
     )}
     { currentCard && 
       <Card 
@@ -295,6 +312,7 @@ function GamePage() {
         stats={game.pack.stats}
         selectedStatKey={null}
         onSelectStat={handleSelectStat}
+        disabled={(turn?.result != null || turnPlayer !== currentPlayer)}
       />
      }
      <pre>
@@ -302,36 +320,35 @@ function GamePage() {
      </pre>     
      <Footer>
       {/* {(!selectedStat || !turn?.result) && 'You have X Cards in your hand'}  */}
-      {selectedStat && (
-        <>
-          <Button color='violet' onClick={handleTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
-            Play Card
-          </Button>
-        </>
+      {/* {(selectedStat || turn?.result === null) && ( */}
+      {(selectedStat || turn?.result === null) && (
+        <Button circular color='green' icon='play' onClick={handleTurn} />
       )}     
       {(currentTurn < game.turnNumber && turn?.result != null) && ( 
-        <Button color='violet' onClick={handleNextTurn} style={{width: '90%', height: '40%', margin: '5%'}}>
-          Next Round
-        </Button>
+        <Button circular color='green' icon='fast forward' onClick={handleNextTurn} />
       )}    
      </Footer>
     </>
   )
 }
 
-function Message({username, children, align = 'left'}: {username: string, children: any; align?: 'left'|'right'}) {
+const StyledMessage = styled.div<{align: 'left'|'right', color: string}>`
+  float: ${props => props.align === 'right' ? 'right' : 'left' };
+  width: 90%;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: ${props => props.align === 'right' ? '5px 0px 5px 5px' : '0px 5px 5px 5px' };
+  background: ${props => props.align === 'right' ? '#dcf8c6' : 'white' };
+  color: ${props => props.color};
+`;
+
+function Message({username, children, align = 'left', color}: {username: string, children: any; align?: 'left'|'right', color: string}) {
   return (
-    <div style={{
-      float: align,
-      width: '90%',
-      margin: 5,
-      padding: 5,
-      border: '1px solid grey',
-      borderRadius: 5,
-    }}>
+    <StyledMessage align={align} color={color}>
       <b>{username}:</b><br/>
-      {children}
-    </div>
+      <span style={{color: 'black'}}>{children}</span>
+    </StyledMessage>
   )  
 }
 

@@ -29,17 +29,21 @@ const LeftAction = styled.div`
   margin-left: 5px;
 `;
 
+const MainContainer = styled.div`
+  background: WhiteSmoke;
+  height: 100vh;
+`;
+
 const ContentContainer = styled.div`
-  padding-top: 70px;
+  padding-top: 50px;
 `;
 
 export const Footer = styled.div`
   position: fixed;
   height: 50;
-  background: #1b9a59;
   bottom: 0;
-  left: 0;
   right: 0;
+  padding: 10px;
 `;
 
 type PropsType = {
@@ -70,14 +74,12 @@ function Layout(props: PropsType) {
   const {currentUser} = useAuthContext();
 
   return (
-    <div style={{height: '100vh', backgroundColor: 'WhiteSmoke'}}>
-      <Container>
-        <Header/>
-        <ContentContainer>
-          {children}
-        </ContentContainer>
-      </Container>
-    </div>
+    <MainContainer>
+      <Header/>
+      <ContentContainer>
+        {children}
+      </ContentContainer>
+    </MainContainer>
   )
 }
 
