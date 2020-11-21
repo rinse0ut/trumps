@@ -5,6 +5,8 @@ import useDocument from '../hooks/useDocument';
 import useCollection from '../hooks/useCollection';
 import {useParams} from 'react-router-dom';
 import {CategoryType, UserType, GameFormType} from '../types';
+import Loading from '../components/Loading';
+import {TitleBar} from '../components/Layout';
 
 const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny'];
 
@@ -49,13 +51,13 @@ function ChallengePage() {
 
   if (!categories || !users) {
     return (
-      <div>Loading...</div>
+      <Loading/> 
     )
   }
 
   return (
     <>
-      <div>NEW GAME</div>
+      <TitleBar.Source>Challenge</TitleBar.Source>
       <div>
         <label htmlFor="categoryId">Category</label>   
         <select

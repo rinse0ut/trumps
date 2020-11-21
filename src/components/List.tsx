@@ -1,23 +1,50 @@
 import React from 'react'
 import { List, Segment } from 'semantic-ui-react';
 import { Link } from "react-router-dom";
+import Loading from '../components/Loading';
+import {TitleBar} from '../components/Layout';
 
-type ListItem = {
+type PropsType = {
   title: string;
+  items?: any[];  // @TODO type
+  renderItem?: (item: any) => JSX.Element;
+}
+
+function ListComponent({title, items, renderItem}: PropsType) {
+
+  if (!items) {
+    return (
+      <Loading/> 
+    )
+  }
+
+  return (
+    <>
+      <TitleBar.Source>{title}</TitleBar.Source>
+      <Segment>
+        <List divided relaxed="very" size="large">
+          {items.length > 0 
+            ? items.map(renderItem ? renderItem : DefaultListItem)
+            : <ListItem>No items</ListItem>
+          }
+        </List>
+      </Segment>
+    </>
+  )
+}
+
+type ListItemPropsType = {
+  title?: string;
   description?: string;
   url?: string;
 }
 
-type PropsType = {
-  items: ListItem[];
-}
-
-function ListItem({title, description, url}: ListItem) {
+function DefaultListItem({title, description, url}: ListItemPropsType) {
   return (
     <List.Item>
       <List.Content>
         <List.Header>
-          {url ? <Link to={url}>{title}</Link> : title }
+          {url ? <Link to={url}>{title}</Link> : title}
         </List.Header>
          {description}
       </List.Content>
@@ -25,13 +52,15 @@ function ListItem({title, description, url}: ListItem) {
   )
 }
 
-function ListComponent({items}: PropsType) {
+export function ListItem({children}: any) {
   return (
-    <Segment>
-      <List divided relaxed="very" size="large">
-        {items.map(ListItem)}
-      </List>
-    </Segment>
+    <List.Item>
+      <List.Content>
+        <List.Header>
+          {children} 
+        </List.Header>
+      </List.Content>
+    </List.Item>
   )
 }
 

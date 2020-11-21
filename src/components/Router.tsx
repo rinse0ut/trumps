@@ -25,8 +25,7 @@ function HomePage() {
   ]
   return (
     <> 
-      <TitleBar.Source>Top Trumps 🛋️</TitleBar.Source>
-      <List items={listItems}/>
+      <List title="Top Trumps 🛋️" items={listItems}/>
       <SignOut/>
     </> 
   )
