@@ -14,19 +14,31 @@ import ChallengePage from '../pages/ChallengePage';
 import GameListPage from '../pages/GamesPage';
 import GamePage from '../pages/GamePage';
 import List from '../components/List';
-import {TitleBar} from '../components/Layout';
+import {Footer} from '../components/Layout';
+import { useHistory } from "react-router-dom";
+import { Button } from 'semantic-ui-react';
+
 
 function HomePage() {
   const listItems = [
     {title: 'Friends', url: '/friends'},
     {title: 'Packs', url: '/categories'},
     {title: 'Games', url: '/games'},
-    {title: 'New Game', url: '/challenge'},
-  ]
+  ];
+  const history = useHistory();
+
   return (
     <> 
       <List title="Top Trumps 🛋️" items={listItems}/>
       <SignOut/>
+      <Footer>
+        <Button circular 
+          color='green' 
+          icon='add' 
+          size='huge' 
+          onClick={() => history.push(`/challenge`)} 
+        />
+     </Footer>      
     </> 
   )
 }    

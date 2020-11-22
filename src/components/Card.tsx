@@ -1,7 +1,30 @@
 import React from 'react';
-import { Table, Image, Flag, Icon, SemanticICONS } from 'semantic-ui-react';
+import { Table, Image, Flag} from 'semantic-ui-react';
 import { CardType, StatsType, StatParamType } from '../types';
+import ant from '../img/ant.jpeg';
+import ben from '../img/ben.jpeg';
+import dan from '../img/dan.jpeg';
+import dt from '../img/dt.jpeg';
+import didun from '../img/didun.jpeg';
+import grant from '../img/grant.jpeg';
+import mike from '../img/mike.jpeg';
+import morgan from '../img/morgan.jpeg';
+import nick from '../img/nick.jpeg';
+import pearce from '../img/pearce.jpeg';
+import rob from '../img/rob.jpeg';
+import scouse from '../img/scouse.jpeg';
+import stevooo from '../img/stevooo.jpeg';
+import sunny from '../img/sunny.jpeg';
 import will from '../img/will.jpeg';
+import vinnie from '../img/vinnie.jpeg';
+
+export type ImagesType = {
+  [id: string]: any;
+}
+
+const images: ImagesType = {
+  ant, ben, dan, didun, dt, grant, mike, morgan, nick, pearce, rob, scouse, stevooo, sunny, will, vinnie
+}
 
 type PlayerType = null | 1 | 2;
 
@@ -34,7 +57,7 @@ function Card(props: CardPropType) {
       <Table.Body>
         <Table.Row>
           <Table.Cell colSpan='2'>
-            <Image src={will} fluid />
+            <Image src={images[card.img]} fluid />
           </Table.Cell>
         </Table.Row>
         {

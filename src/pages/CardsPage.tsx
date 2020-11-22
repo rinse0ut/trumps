@@ -4,7 +4,7 @@ import useDocument from '../hooks/useDocument';
 import {useParams} from 'react-router-dom';
 import {CategoryType, CardType} from '../types';
 
-const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny'];
+const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny', 'will', 'vinnie'];
 
 function CardsPage() {
 
@@ -73,8 +73,13 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
           value={card.countryCode}
           onChange={handleChange}
         >
+          <option value="bb">Barbados</option>
+          <option value="fr">France</option>
+          <option value="ru">Russia</option>
+          <option value="gb sct">Scotland</option>
           <option value="uk">UK</option>
-          <option value="us">US</option>
+          <option value="us">USA</option>
+          <option value="gb wls">Wales</option>
         </select>
       </div>
         { Object.entries(category.stats).map(([statKey, stat])  => (
@@ -134,8 +139,13 @@ function InputCreate({categoryId, category}: {categoryId: string; category: Cate
           value={card.countryCode}
           onChange={handleChange}
         >
+          <option value="bb">Barbados</option>
+          <option value="fr">France</option>
+          <option value="ru">Russia</option>
+          <option value="gb sct">Scotland</option>
           <option value="uk">UK</option>
-          <option value="us">US</option>
+          <option value="us">USA</option>
+          <option value="gb wls">Wales</option>
         </select>
       </div>
       <br/>  
@@ -146,10 +156,10 @@ function InputCreate({categoryId, category}: {categoryId: string; category: Cate
           value={card.img}
           onChange={handleChange}
         >
+          <option value="">Select...</option>
           {IMG_NAMES.map(img => (
             <option value={img}>{img}</option>
           ))}
-          <option value="us">US</option>
         </select>
       </div>
       <br/>        

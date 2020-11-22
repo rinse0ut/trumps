@@ -5,17 +5,16 @@ import useCollection from '../hooks/useCollection';
 import {CategoryType, UserType, GameFormType} from '../types';
 import Loading from '../components/Loading';
 import {TitleBar} from '../components/Layout';
+import { useHistory } from "react-router-dom";
 
 const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny'];
 
 function ChallengePage() {
 
   const {currentUser} = useAuthContext();
-  console.log({currentUser});
+  const history = useHistory();
   const categories = useCollection<CategoryType>('categories');
-  console.log('LOADED CATS', categories);
   const users = useCollection<any>('users');
-  console.log('USERS', users);
 
   const [form, setForm] = useState<GameFormType>({categoryId: '', player2Id: ''});
 
@@ -30,7 +29,6 @@ function ChallengePage() {
     const category = categories && Object.values(categories).find(x => x.id === form.categoryId);
     if (category && currentUser) {
       const p2User = users?.find(u => u.id === form.player2Id);
-      console.log('CREATE GAME WITH', form.categoryId, category);
       const doc = await db.collection('games').add({
         pack: category, 
         p1Id: currentUser.uid, 
@@ -41,6 +39,7 @@ function ChallengePage() {
         p2TurnNumber: 0,
         turnNumber: 0,
       });
+      history.push(`/game/${doc.id}`);
       // alert('CREATED GAME', doc));
     }
     // db.collection('forms').doc(categoryId).update(updatedCard);

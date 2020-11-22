@@ -247,15 +247,15 @@ function GamePage() {
   let opponentEmoji;
 
   if (turn?.result === currentPlayer) {
-    resultMsg = 'Yay! You won the round! ✅';
+    resultMsg = 'You won the round! ✅';
     currentEmoji = '😃';
     opponentEmoji = '😢';
   } else if (turn?.result === 0) {
-    resultMsg = 'Ok! You drew the round! ↔️';
+    resultMsg = 'You drew the round! ↔️';
     currentEmoji = '😮';
     opponentEmoji = '😮';
   } else if (turn?.result) {
-    resultMsg = 'Oh noes! You lost the round! ❌';
+    resultMsg = 'You lost the round! ❌';
     currentEmoji = '😢';
     opponentEmoji = '😃';
   }
