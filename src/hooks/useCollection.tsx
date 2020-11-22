@@ -18,7 +18,13 @@ function useCollection<T>(path: string) {
   
     async function fetchData() {
       const snapshot = await getCollection(path).get();         
-      const data = snapshot.docs.map(doc => ({...doc.data(), id: doc.id }));
+      const data = snapshot.docs.map(doc => {
+        console.log('DOC', doc.id, doc.data());
+        const {id} = doc;
+        const data = doc.data();
+        return {id, ...data}
+      });
+      console.log('DATA', data);
       // @ts-ignore
       setData(data);
     }

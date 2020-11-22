@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {db} from '../services/firestore';
 import { useAuthContext } from '../components/AuthProvider';
-import useDocument from '../hooks/useDocument';
 import useCollection from '../hooks/useCollection';
-import {useParams} from 'react-router-dom';
 import {CategoryType, UserType, GameFormType} from '../types';
 import Loading from '../components/Loading';
 import {TitleBar} from '../components/Layout';
@@ -15,6 +13,7 @@ function ChallengePage() {
   const {currentUser} = useAuthContext();
   console.log({currentUser});
   const categories = useCollection<CategoryType>('categories');
+  console.log('LOADED CATS', categories);
   const users = useCollection<any>('users');
   console.log('USERS', users);
 
@@ -28,10 +27,10 @@ function ChallengePage() {
   };
 
   async function handleCreate() {
-    const category = categories && Object.values(categories).find(x => x.id = form.categoryId);
+    const category = categories && Object.values(categories).find(x => x.id === form.categoryId);
     if (category && currentUser) {
       const p2User = users?.find(u => u.id === form.player2Id);
-      console.log('P2 User', p2User);
+      console.log('CREATE GAME WITH', form.categoryId, category);
       const doc = await db.collection('games').add({
         pack: category, 
         p1Id: currentUser.uid, 
@@ -47,7 +46,8 @@ function ChallengePage() {
     // db.collection('forms').doc(categoryId).update(updatedCard);
   }
 
-  console.log('CHALLENGE DATA', form, categories, users);
+  console.log('CHALLENGE FORM', form);
+  console.log('CHALLENGE DATA', categories, users);
 
   if (!categories || !users) {
     return (
