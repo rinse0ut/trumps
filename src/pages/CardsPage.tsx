@@ -1,38 +1,58 @@
 import React, { useEffect, useState } from "react";
-import {db} from '../services/firestore';
+import { db } from '../services/firestore';
 import useDocument from '../hooks/useDocument';
-import {useParams} from 'react-router-dom';
-import {CategoryType, CardType} from '../types';
+import { useParams } from 'react-router-dom';
+import { CategoryType, CardType } from '../types';
+import { Form, Button, Container, Tab } from 'semantic-ui-react'
+import { TitleBar } from '../components/Layout';
+import Loading from '../components/Loading';
 
 const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny', 'will', 'vinnie'];
 
 function CardsPage() {
 
-  const {categoryId} = useParams<{categoryId:string}>();
+  const { categoryId } = useParams<{ categoryId: string }>();
   const category = useDocument<CategoryType>('categories', categoryId, true);
   console.log('USE DOC RESULT', category);
 
   if (!category) {
     return (
-      <div>Loading...</div>
+      <Loading />
     )
   }
 
+  const panes = [
+    {
+      menuItem: 'Create', render: () => (
+        <Container>
+          <Form>
+            <InputCreate categoryId={categoryId} category={category} />
+          </Form>
+        </Container>
+      )
+    },
+    {
+      menuItem: `Edit (${Object.keys(category.cards).length})`, render: () => (
+        <Container>
+          <Form>
+            {Object.entries(category.cards).map(([cardKey, card]) => (
+              <InputEdit categoryId={categoryId} category={category} cardKey={cardKey} cardItem={card} />
+            ))}
+          </Form>
+        </Container>
+      )
+    },
+  ];
+
   return (
     <>
-      <div>CARD LIST</div>
-      <ul>
-        { Object.entries(category.cards).map(([cardKey, card])  => (
-          <InputEdit categoryId={categoryId} category={category} cardKey={cardKey} cardItem={card}/>
-        ))}
-        <hr/>
-        <InputCreate categoryId={categoryId} category={category} />
-      </ul>
+      <TitleBar.Source>Cards</TitleBar.Source>
+      <Tab panes={panes} />;
     </>
-  )
+  );
 }
 
-function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: string; category: CategoryType, cardKey: string, cardItem: CardType}) {
+function InputEdit({ categoryId, category, cardKey, cardItem }: { categoryId: string; category: CategoryType, cardKey: string, cardItem: CardType }) {
   const [card, setCard] = useState<CardType>(cardItem);
 
   const handleChange = (e: any) => {
@@ -43,7 +63,7 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
   };
 
   function handleUpdate() {
-    const updatedCard: {[id: string]: CardType} = {}; 
+    const updatedCard: { [id: string]: CardType } = {};
     updatedCard[`cards.${cardKey}`] = card;
     db.collection('categories').doc(categoryId).update(updatedCard);
   }
@@ -57,17 +77,18 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
 
   return (
     <>
-      <div>
-        <label htmlFor="title">Title</label>   
-        <input 
+      <br />
+      <Form.Field>
+        <label htmlFor="title">Title</label>
+        <input
           name="title"
           value={card.title}
           onChange={handleChange}
         />
-      </div>
-      <br/>  
-      <div>
-        <label htmlFor="countryCode">Country Code</label>   
+      </Form.Field>
+      <br />
+      <Form.Field>
+        <label htmlFor="countryCode">Country Code</label>
         <select
           name="countryCode"
           value={card.countryCode}
@@ -81,29 +102,30 @@ function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: stri
           <option value="us">USA</option>
           <option value="gb wls">Wales</option>
         </select>
-      </div>
-        { Object.entries(category.stats).map(([statKey, stat])  => (
-          <>    
-            <div>
-              <label htmlFor={statKey}>{stat.title}</label>   
-              <input 
-                name={statKey}
-                type="number"
-                value={card[statKey]}
-                onChange={handleChange}
-              />
-            </div>
-            <br/>            
-          </>    
-        ))} 
-      <button onClick={handleUpdate}>Update</button>
-      <button onClick={handleDelete}>Delete</button>
-      <br/>
+      </Form.Field>
+      { Object.entries(category.stats).map(([statKey, stat]) => (
+        <>
+          <Form.Field>
+            <label htmlFor={statKey}>{stat.title}</label>
+            <input
+              name={statKey}
+              type="number"
+              value={card[statKey]}
+              onChange={handleChange}
+            />
+          </Form.Field>
+          <br />
+        </>
+      ))}
+      <Button color="blue" onClick={handleUpdate}>Update</Button>
+      <Button color="red" onClick={handleDelete}>Delete</Button>
+      <br /><br />
+      <hr />
     </>
   )
 }
 
-function InputCreate({categoryId, category}: {categoryId: string; category: CategoryType}) {
+function InputCreate({ categoryId, category }: { categoryId: string; category: CategoryType }) {
   const [card, setCard] = useState<CardType>({
     title: '',
     countryCode: '',
@@ -123,17 +145,18 @@ function InputCreate({categoryId, category}: {categoryId: string; category: Cate
 
   return (
     <>
-      <div>
-        <label htmlFor="title">Title</label>   
-        <input 
+      <br />
+      <Form.Field>
+        <label htmlFor="title">Title</label>
+        <input
           name="title"
           value={card.title}
           onChange={handleChange}
         />
-      </div>
-      <br/>  
-      <div>
-        <label htmlFor="countryCode">Country Code</label>   
+      </Form.Field>
+      <br />
+      <Form.Field>
+        <label htmlFor="countryCode">Country Code</label>
         <select
           name="countryCode"
           value={card.countryCode}
@@ -147,10 +170,10 @@ function InputCreate({categoryId, category}: {categoryId: string; category: Cate
           <option value="us">USA</option>
           <option value="gb wls">Wales</option>
         </select>
-      </div>
-      <br/>  
-      <div>
-        <label htmlFor="img">Image</label>   
+      </Form.Field>
+      <br />
+      <Form.Field>
+        <label htmlFor="img">Image</label>
         <select
           name="img"
           value={card.img}
@@ -161,23 +184,23 @@ function InputCreate({categoryId, category}: {categoryId: string; category: Cate
             <option value={img}>{img}</option>
           ))}
         </select>
-      </div>
-      <br/>        
-        { Object.entries(category.stats).map(([statKey, stat])  => (
-          <>    
-            <div>
-              <label htmlFor={statKey}>{stat.title}</label>   
-              <input 
-                name={statKey}
-
-                // value={stat.title}
-                onChange={handleChange}
-              />
-            </div>
-            <br/>            
-          </>    
-        ))} 
-      <button onClick={handleCreate}>Add</button>
+      </Form.Field>
+      <br />
+      { Object.entries(category.stats).map(([statKey, stat]) => (
+        <>
+          <Form.Field>
+            <label htmlFor={statKey}>{stat.title}</label>
+            <input
+              name={statKey}
+              type="number"
+              onChange={handleChange}
+            />
+          </Form.Field>
+          <br />
+        </>
+      ))}
+      <Button color="blue" onClick={handleCreate}>Create</Button>
+      <br /><br />
     </>
   )
 }

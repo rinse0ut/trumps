@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import {db} from '../services/firestore';
+import { db } from '../services/firestore';
 import { useAuthContext } from '../components/AuthProvider';
 import useCollection from '../hooks/useCollection';
-import {CategoryType, UserType, GameFormType} from '../types';
+import { CategoryType, UserType, GameFormType } from '../types';
+import { Form, Button, Container } from 'semantic-ui-react';
 import Loading from '../components/Loading';
-import {TitleBar} from '../components/Layout';
+import { TitleBar } from '../components/Layout';
 import { useHistory } from "react-router-dom";
 
 const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny'];
 
 function ChallengePage() {
 
-  const {currentUser} = useAuthContext();
+  const { currentUser } = useAuthContext();
   const history = useHistory();
   const categories = useCollection<CategoryType>('categories');
   const users = useCollection<any>('users');
 
-  const [form, setForm] = useState<GameFormType>({categoryId: '', player2Id: ''});
+  const [form, setForm] = useState<GameFormType>({ categoryId: '', player2Id: '' });
 
   const handleChange = (e: any) => {
     setForm({
@@ -30,14 +31,15 @@ function ChallengePage() {
     if (category && currentUser) {
       const p2User = users?.find(u => u.id === form.player2Id);
       const doc = await db.collection('games').add({
-        pack: category, 
-        p1Id: currentUser.uid, 
-        p1Username: currentUser.displayName, 
+        pack: category,
+        p1Id: currentUser.uid,
+        p1Username: currentUser.displayName,
         p2Id: form.player2Id,
         p2Username: p2User.username,
         p1TurnNumber: 0,
         p2TurnNumber: 0,
         turnNumber: 0,
+        created: Date.now(),
       });
       history.push(`/game/${doc.id}`);
       // alert('CREATED GAME', doc));
@@ -50,41 +52,45 @@ function ChallengePage() {
 
   if (!categories || !users) {
     return (
-      <Loading/> 
+      <Loading />
     )
   }
 
   return (
-    <>
+    <Container>
       <TitleBar.Source>Challenge</TitleBar.Source>
-      <div>
-        <label htmlFor="categoryId">Category</label>   
-        <select
-           name="categoryId"
-           value={form.categoryId}
-           onChange={handleChange}
-         >
-            <option value="">Select...</option> 
-           {Object.values(categories).map((x: CategoryType) => ( 
-            <option value={x.id}>{x.title}</option> 
-           ))}
-         </select>
-       </div>
-       <div>
-        <label htmlFor="player2Id">User</label>   
-        <select
-           name="player2Id"
-           value={form.player2Id}
-           onChange={handleChange}
-         >
-          <option value="">Select...</option> 
-          {Object.values(users).map((x: UserType) => ( 
-            <option value={x.id}>{x.username}</option> 
-          ))}
-         </select>
-       </div>
-       <button onClick={handleCreate}>New Game</button>       
-    </>
+      <br/><br/>
+      <Form>
+        <Form.Field>
+          <label htmlFor="player2Id">Friend</label>
+          <select
+            name="player2Id"
+            value={form.player2Id}
+            onChange={handleChange}
+          >
+            <option value="">Select...</option>
+            {Object.values(users).map((x: UserType) => (
+              <option value={x.id}>{x.username}</option>
+            ))}
+          </select>
+        </Form.Field>
+        <Form.Field>
+          <label htmlFor="categoryId">Pack</label>
+          <select
+            name="categoryId"
+            value={form.categoryId}
+            onChange={handleChange}
+          >
+            <option value="">Select...</option>
+            {Object.values(categories).map((x: CategoryType) => (
+              <option value={x.id}>{x.title}</option>
+            ))}
+          </select>
+        </Form.Field>
+      </Form>
+      <br></br>
+      <Button color="blue" onClick={handleCreate}>Create</Button>
+    </Container>
   )
 }
 

@@ -31,11 +31,12 @@ const LeftAction = styled.div`
 
 const MainContainer = styled.div`
   background: WhiteSmoke;
-  height: 100vh;
+  min-height: 100vh;
+  max-height: 100%;
 `;
 
 const ContentContainer = styled.div`
-  padding-top: 50px;
+  padding-top: 60px;
 `;
 
 export const Footer = styled.div`

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {getCollection} from '../services/firestore';
-import * as firebase from 'firebase/app';
+import { useEffect, useState } from "react";
+import {db, getCollection} from '../services/firestore';
 
 type item = {
   id: string;
@@ -9,13 +8,26 @@ type item = {
 
 }
 
-function useCollection<T>(path: string) {
-  // const [data, setData] = useState<T extends {id: string}[] ? any : any | undefined>();
+function useCollection<T>(path: string, isSnapshot: boolean = false) {
   const [data, setData] = useState<T[]>();
 
   useEffect(() => {
     if (!path) return;
-  
+ 
+    if (isSnapshot) {
+      return db.collection(path).onSnapshot(snapshot => {
+        const data: T[] = [];
+        const docs = snapshot.docs;
+        for (let doc of docs) {
+          console.log(`Document found at path: ${doc.ref.path}`);
+          const {id} = doc;
+          const item = doc.data() as T;
+          data.push({id, ...item})
+        }
+        setData(data);
+      });
+    }    
+
     async function fetchData() {
       const snapshot = await getCollection(path).get();         
       const data = snapshot.docs.map(doc => {

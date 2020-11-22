@@ -1,14 +1,12 @@
 import React, { useEffect, useCallback, useState } from "react";
-import {getUsers} from '../services/firestore';
 import {useParams} from 'react-router-dom';
 import {db} from '../services/firestore';
-import useCollection from '../hooks/useCollection';
 import useDocument from '../hooks/useDocument';
 import {CardsType, GameType, StatParamType} from '../types';
 import Card from '../components/Card';
 import { useAuthContext } from '../components/AuthProvider';
 import {TitleBar, Footer} from '../components/Layout';
-import { Button } from 'semantic-ui-react';
+import { Button, Container } from 'semantic-ui-react';
 import Loading from '../components/Loading';
 import styled from 'styled-components';
 
@@ -58,6 +56,7 @@ function useGame(gameId: string) {
           // player: startingPlayer,
           p1Cards, 
           p2Cards,
+          drawCards: [],
           statKey: null,
           result: null,
         }  
@@ -98,6 +97,9 @@ function useGame(gameId: string) {
   const turnPlayer = turn?.player;
   const p1Cards = game && getTurnCards(game, currentTurn, 1);
   const p2Cards = game && getTurnCards(game, currentTurn, 2);
+  const drawCards = game && getTurnCards(game, currentTurn, 0);
+
+  console.log('DRAW CARDS', drawCards);
 
   // STATS
   const [selectedStat, setSelectedStat] = useState<StatParamType|null>(null);
@@ -115,13 +117,13 @@ function useGame(gameId: string) {
     let result: number;
     let p1UpdatedCards: string[];
     let p2UpdatedCards: string[];
-    let drawCards: string[] = [];
+    let drawUpdatedCards: string[] = [];
 
     const {statKey} = selectedStat;
     const [p1TopCard, ...p1HandCards] = p1Cards;
     const [p2TopCard, ...p2HandCards] = p2Cards;
-    const p1Value = game?.pack.cards[p1TopCard][statKey];
-    const p2Value = game?.pack.cards[p2TopCard][statKey];
+    const p1Value = Number(game?.pack.cards[p1TopCard][statKey]);
+    const p2Value = Number(game?.pack.cards[p2TopCard][statKey]);
 
     if (!p1Value || !p2Value) {
       return null;
@@ -139,7 +141,7 @@ function useGame(gameId: string) {
       result = 0;
       p1UpdatedCards = [...p1HandCards];
       p2UpdatedCards = [...p2HandCards]; 
-      drawCards = [...drawCards, p1TopCard, p2TopCard,];
+      drawUpdatedCards = drawCards.length > 0 ? [...drawCards, p1TopCard, p2TopCard] : [p1TopCard, p2TopCard];
     }
 
     async function updateTurn() {
@@ -157,7 +159,7 @@ function useGame(gameId: string) {
           player: nextPlayer, 
           p1Cards: p1UpdatedCards,
           p2Cards: p2UpdatedCards,
-          drawCards,
+          drawCards: drawUpdatedCards,
           statKey: null,
           result: null,
         },
@@ -168,7 +170,7 @@ function useGame(gameId: string) {
     
     setSelectedStat(null);
 
-  }, [selectedStat, game, p1Cards, p2Cards, currentTurn]);
+  }, [selectedStat, game, p1Cards, p2Cards, drawCards, currentTurn]);
 
   if (!game || !p1Cards || !p2Cards) return {game, turn, currentTurn, currentPlayer, topCards: [], handleSelectStat};
   const [p1TopCardKey] = p1Cards; 
@@ -224,8 +226,9 @@ function getTurn(game: GameType, turn: number) {
   return turnKey in game.turns ? game.turns[turnKey] : null;
 }
 
-function getTurnCards(game: GameType, turn: number, playerNum: null|1|2) {
+function getTurnCards(game: GameType, turn: number, playerNum: null|0|1|2) {
   if (!game.turns || turn === 0) return [];
+  if (playerNum === 0) return game.turns[`turn${turn}`][`drawCards`]; 
   console.log('TURN DUMP', turn);
   return game.turns[`turn${turn}`][`p${playerNum}Cards`];
 }
@@ -270,19 +273,28 @@ function GamePage() {
 
   if (!currentCard && !opponentCard) {
     return (
-      <Message username="Games Master" color="green">Good game! It's a draw! 🤷‍♂️</Message>
+      <>
+        <TitleBar.Source>Game Over!</TitleBar.Source>
+        <Message username="Games Master" color="green">Good game! It's a draw! 🤷‍♂️</Message>
+      </>
     )
     } else if (!opponentCard) {
     return (
-      <Message username="Games Master" color="green">Good game! {currentUsername} wins! 🎉</Message>
+      <>
+        <TitleBar.Source>Game Over!</TitleBar.Source>
+        <Message username="Games Master" color="green">Good game! {currentUsername} wins! 🎉</Message>
+      </>
     )
   } else if (!currentCard) {
     return (
-      <Message username="Games Master" color="green">Good game! {opponentUsername} wins! ☠️</Message>
+      <>
+        <TitleBar.Source>Game Over!</TitleBar.Source>
+        <Message username="Games Master" color="green">Good game! {opponentUsername} wins! ☠️</Message>
+      </>
     )
   }
   return (
-    <>
+    <Container>
     <TitleBar.Source>Game On!</TitleBar.Source>
     {currentPlayer === turnPlayer ? (
       <Message username="Games Master" color="green">Round {currentTurn}. Your turn {currentUsername}. Tap that stat!</Message>
@@ -331,7 +343,7 @@ function GamePage() {
         <Button circular color='green' icon='fast forward' size='huge' onClick={handleNextTurn} />
       )}    
      </Footer>
-    </>
+    </Container>
   )
 }
 

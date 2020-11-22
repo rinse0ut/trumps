@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react';
 import { signOut } from '../services/firestore';
 
 const Logout = () => {
@@ -9,9 +10,7 @@ const Logout = () => {
   }
 
   return (
-    <>
-      <button type="button" onClick={handleClick}>Log Out</button>
-    </>
+    <Button type="button" onClick={handleClick}>Log Out</Button>
   )
 };
 

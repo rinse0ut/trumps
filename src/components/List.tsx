@@ -25,7 +25,7 @@ function ListComponent({title, items, renderItem}: PropsType) {
         <List divided relaxed="very" size="large">
           {items.length > 0 
             ? items.map(renderItem ? renderItem : DefaultListItem)
-            : <ListItem>No items</ListItem>
+            : <ListItem>No games</ListItem>
           }
         </List>
       </Segment>

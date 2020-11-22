@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-// import './Signup.css';
+import { Form, Button, Container } from 'semantic-ui-react';
 import { db, signUp, signOut } from '../services/firestore';
+import {TitleBar} from '../components/Layout';
 
 const SignUp = () => {
   // User State
@@ -63,16 +64,23 @@ const SignUp = () => {
   }
 
   return (
-    <>
-      <h1>Sign up</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Username" name="username" onChange={handleChange} /><br />
-        <input type="text" placeholder="Email" name="email" onChange={handleChange} /><br />
-        <input type="password" placeholder="Password" name="password" onChange={handleChange} /><br />
-        <button type="submit">Sign Up</button>
-      </form>
-      {user.error && <h4>{user.error}</h4>}
-    </>
+    <Container>
+      <TitleBar.Source>Sign Up</TitleBar.Source>
+      <br></br>
+      <Form onSubmit={handleSubmit}>
+        <Form.Field>
+          <input type="text" placeholder="Username" name="username" onChange={handleChange} /><br />
+        </Form.Field>
+        <Form.Field>
+          <input type="text" placeholder="Email" name="email" onChange={handleChange} /><br />
+        </Form.Field>
+        <Form.Field>
+          <input type="password" placeholder="Password" name="password" onChange={handleChange} /><br />
+        </Form.Field>
+      <Button type="submit">Sign Up</Button>
+    </Form>
+      { user.error && <h4>{user.error}</h4> }
+    </Container>
   )
 };
 

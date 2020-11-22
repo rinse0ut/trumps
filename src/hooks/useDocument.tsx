@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {db, getCollection} from '../services/firestore';
-import * as firebase from "firebase/app";
 
 function useDcoument<T>(path: string, id: string, isSnapshot: boolean = false) {
   const [data, setData] = useState<T>();

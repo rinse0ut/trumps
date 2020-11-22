@@ -4,14 +4,15 @@ import {db} from '../services/firestore';
 import {CategoryType} from '../types';
 import useCollection from '../hooks/useCollection';
 import List, {ListItem} from '../components/List';
+import { Form, Button, Container } from 'semantic-ui-react'
 
 function CategoryPage() {
 
-  const categories = useCollection<CategoryType>('categories');
+  const categories = useCollection<CategoryType>('categories', true);
   console.log('CATS', categories);
 
   return (
-    <>
+    <Container>
       <List 
         title="Packs" 
         items={categories} 
@@ -23,7 +24,7 @@ function CategoryPage() {
           </ListItem>
       )}/>
       <InputCreate/>
-    </>
+    </Container>
   )
 }
 
@@ -59,15 +60,18 @@ function InputCreate() {
   }
 
   return (
-    <>
-      <input 
-        value={title}
-        onChange={e => {
-          setTitle(e.target.value)
-        }}
-      />  
-      <button onClick={handleCreate}>Add</button>
-    </>
+    <Form>
+      <Form.Input>
+        <input 
+          placeholder="New Pack"
+          value={title}
+          onChange={e => {
+            setTitle(e.target.value)
+          }}
+        />  
+      </Form.Input>
+      <Button color="blue" onClick={handleCreate}>Create</Button>
+    </Form>
   )
 }
 

@@ -53,6 +53,10 @@ function Router() {
       <Route path="/signin" component={SignIn} />
 
        {/* Private Routes */}
+      {/* <AuthRoute path="/home" component={GameListPage} />
+      <AuthRoute path="/challenge" component={ChallengePage} />
+      <AuthRoute path="/game/:gameId" component={GamePage} /> */}
+
       <AuthRoute path="/home" component={HomePage} />
       <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/categories" component={CategoryPage} />
@@ -61,7 +65,6 @@ function Router() {
       <AuthRoute path="/game/:gameId" component={GamePage} />
       <AuthRoute path="/category/:categoryId/stats" component={StatsPage} />
       <AuthRoute path="/category/:categoryId/cards" component={CardsPage} />
-      {/* <AuthRoute path="/game" component={Game} /> */}
       <AuthRoute path="/signout" component={SignOut} />
 
       <Redirect from="/" to="/signin" />
