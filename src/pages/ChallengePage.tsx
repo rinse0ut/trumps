@@ -8,7 +8,6 @@ import Loading from '../components/Loading';
 import { TitleBar } from '../components/Layout';
 import { useHistory } from "react-router-dom";
 
-const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan', 'nick', 'pearce', 'rob', 'scouse', 'stevooo', 'sunny'];
 
 function ChallengePage() {
 

@@ -1,6 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import "firebase/storage";
 
 // @todo move to .env file
 const firebaseConfig = {
@@ -18,6 +19,7 @@ firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
+export const storage = firebase.storage()
 
 export const authenticateAnonymously = () => {
   return auth.signInAnonymously();
