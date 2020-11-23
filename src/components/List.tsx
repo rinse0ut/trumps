@@ -70,5 +70,4 @@ export function ListHeader({children}: any) {
   )
 }
 
-
 export default ListComponent
