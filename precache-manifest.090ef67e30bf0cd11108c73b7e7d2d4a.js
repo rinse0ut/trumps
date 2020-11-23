@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "51906322cceb7f2c8be466410ac7985e",
+    "revision": "ac14f300e355ef13a7bcf5cca2a63472",
     "url": "/trumps/index.html"
   },
   {
-    "revision": "d852148754de4af05911",
+    "revision": "235e58d1cd66c86aa232",
     "url": "/trumps/static/css/2.6a4efc55.chunk.css"
   },
   {
-    "revision": "02322b1099ccf1916549",
+    "revision": "fe8714b758c02d646f90",
     "url": "/trumps/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "d852148754de4af05911",
-    "url": "/trumps/static/js/2.863302f1.chunk.js"
+    "revision": "235e58d1cd66c86aa232",
+    "url": "/trumps/static/js/2.dfb844c5.chunk.js"
   },
   {
     "revision": "0d8203acaca72d7d3b82ab84fd26cf2f",
-    "url": "/trumps/static/js/2.863302f1.chunk.js.LICENSE.txt"
+    "url": "/trumps/static/js/2.dfb844c5.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "02322b1099ccf1916549",
-    "url": "/trumps/static/js/main.4591a326.chunk.js"
+    "revision": "fe8714b758c02d646f90",
+    "url": "/trumps/static/js/main.45701366.chunk.js"
   },
   {
     "revision": "95d82a9caed866a55fc7",
