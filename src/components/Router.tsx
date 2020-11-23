@@ -7,7 +7,7 @@ import SignIn from './SignIn';
 import SignOut from './SignOut';
 // import Game from './Game.txt';
 import FriendsPage from '../pages/FriendsPage';
-import CategoryPage from '../pages/CategoryPage';
+import PackPage from '../pages/PackPage';
 import StatsPage from '../pages/StatsPage';
 import CardsPage from '../pages/CardsPage';
 import ChallengePage from '../pages/ChallengePage';
@@ -62,7 +62,7 @@ function Router() {
       <AuthRoute path="/home" component={HomePage} />
       <AuthRoute path="/about" component={AboutPage} />
       <AuthRoute path="/friends" component={FriendsPage} />
-      <AuthRoute path="/categories" component={CategoryPage} />
+      <AuthRoute path="/categories" component={PackPage} />
       <AuthRoute path="/challenge" component={ChallengePage} />
       <AuthRoute path="/games" component={GameListPage} />
       <AuthRoute path="/game/:gameId" component={GamePage} />

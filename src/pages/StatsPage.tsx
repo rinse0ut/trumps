@@ -23,11 +23,13 @@ function StatsPage() {
   return (
     <Container>
       <TitleBar.Source>Stats</TitleBar.Source>
+      <p>Create the list of stats that will appear on each card.  Eg Strength or Skill</p>
       <Form>
         <InputCreate categoryId={categoryId} category={category} />
         <hr/>
         <br/>
-        {Object.entries(category.stats).map(([statKey, stat]) => (
+        {category.stats && Object.entries(category.stats)
+          .map(([statKey, stat]) => (
           <InputEdit categoryId={categoryId} category={category} statKey={statKey} stat={stat} />
         ))}
       </Form>
@@ -76,6 +78,7 @@ function InputCreate({ categoryId, category }: { categoryId: string; category: C
   function handleCreate() {
     category.stats[title] = { title };
     db.collection('categories').doc(categoryId).set(category);
+    setTitle('');
   }
 
   return (

@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import { Form, Button, Icon, Container, Segment } from 'semantic-ui-react'
 import { TitleBar, HeaderRightButton } from '../components/Layout';
 
-
 const ContainerLogin = styled.div`
   display: flex;
   align-items: center;

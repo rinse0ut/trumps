@@ -44,7 +44,7 @@ function Card(props: CardPropType) {
     <Table celled unstackable
       size="small"
       selectable={!disabled}
-      style={{ width: '70%', marginLeft: 5 }
+      style={{ width: '80%', marginLeft: 5 }
       }>
       <Table.Header>
         <Table.Row>

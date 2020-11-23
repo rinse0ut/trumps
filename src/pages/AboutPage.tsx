@@ -19,14 +19,21 @@ function AboutPage() {
         <li>Create and manage card packs</li>
         <li>WhatsApp mobile theme</li>
       </ul>
+      <h2>Alpha Release v0.1.1 - 23/11/2020</h2>
+      <h3>What's new</h3>
+      <ul>
+        <li>Facebook login</li>
+        <li>Show profile picture on friends list</li>
+      </ul>
       <h3>Improvements</h3>
       <ul>
-        <li>Login form UX</li>
+        <li>Made it easier to create pioneer packs.  Just add the stats and fill them out!</li>
+        <li>Login screen UX</li>
       </ul>
       <h3>Fixes</h3>
       <ul>
         <li>Confirmation email redirect</li>
-      </ul>      
+      </ul>       
     </Container>
   )
 }
