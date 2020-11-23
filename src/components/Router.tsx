@@ -17,7 +17,7 @@ import AboutPage from '../pages/AboutPage';
 import List from '../components/List';
 import {Footer} from '../components/Layout';
 import { useHistory } from "react-router-dom";
-import { Button } from 'semantic-ui-react';
+import { Container, Button } from 'semantic-ui-react';
 
 
 function HomePage() {
@@ -28,9 +28,11 @@ function HomePage() {
     {title: 'About', url: '/about'},
   ];
   const history = useHistory();
+  const { currentUser } = useAuthContext();
 
   return (
-    <> 
+    <Container> 
+      <p>Welcome {currentUser?.displayName}</p>
       <List title="Top Trumps 🛋️" items={listItems}/>
       <SignOut/>
       <Footer>
@@ -41,7 +43,7 @@ function HomePage() {
           onClick={() => history.push(`/challenge`)} 
         />
      </Footer>      
-    </> 
+    </Container> 
   )
 }    
 
