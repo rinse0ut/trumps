@@ -92,7 +92,6 @@ function Login() {
   }
 
   return (
-    <ContainerLogin>
       <Container>
         <TitleBar.Source>Top Trumps</TitleBar.Source>
         <HeaderRightButton.Source>
@@ -120,7 +119,6 @@ function Login() {
        </Button>
         {user.error && <Segment color="red">{user.error}</Segment>}
       </Container>
-    </ContainerLogin>
   )
 };
 
