@@ -92,7 +92,7 @@ const SignUp = () => {
           <label htmlFor="password">Password</label>
           <input type="password" placeholder="Password" name="password" onChange={handleChange} required /><br />
         </Form.Field>
-      <Button type="submit">Sign Up</Button>
+      <Button primary type="submit">Sign Up</Button>
     </Form>
       { user.error && <h4>{user.error}</h4> }
     </Container>

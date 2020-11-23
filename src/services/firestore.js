@@ -16,11 +16,19 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
+export const auth = firebase.auth();
 export const db = firebase.firestore();
 
 export const authenticateAnonymously = () => {
   return auth.signInAnonymously();
+};
+
+export const signInWithFacebook= () => {
+  const facebookAuth = new firebase.auth.FacebookAuthProvider();
+  console.log('FB LOGIN')
+  return firebase.auth().signInWithPopup(facebookAuth);
+    // .then(res => console.log('FB RES', res))
+    // .catch(e => console.error('FB ERROR', e));
 };
 
 export function signUp(email, password) {

@@ -23,10 +23,16 @@ const H1 = styled.h1`
   margin: 0;
 `;
 
-const LeftAction = styled.div`
+const HeaderLeft = styled.div`
   position: fixed;
   left: 0;
   margin-left: 5px;
+`;
+
+const HeaderRight = styled.div`
+  position: fixed;
+  right: 0;
+  margin-right: 10px;
 `;
 
 const MainContainer = styled.div`
@@ -55,7 +61,8 @@ type LocationType = {
   pathname: string;
 }
 
-export const TitleBar = createTeleporter()
+export const TitleBar = createTeleporter();
+export const HeaderRightButton = createTeleporter();
 
 function Header() {
   const history = useHistory();
@@ -64,8 +71,9 @@ function Header() {
   const showBackButton = !['/home', '/signin', '/singout'].includes(location.pathname);
   return (
     <HeaderContainer>
-      {showBackButton && <LeftAction onClick={() => history.goBack()}><Icon name='angle left' size='large' inverted/></LeftAction>}
+      {showBackButton && <HeaderLeft onClick={() => history.goBack()}><Icon name='angle left' size='large' inverted/></HeaderLeft>}
       <H1><TitleBar.Target /></H1>
+      <HeaderRight><HeaderRightButton.Target /></HeaderRight>
     </HeaderContainer>
   )
 }

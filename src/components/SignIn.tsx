@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
-import { signIn, signOut } from '../services/firestore';
+import { db, signIn, signOut, signInWithFacebook } from '../services/firestore';
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuthContext } from '../components/AuthProvider';
 import { useHistory } from "react-router-dom";
-import { Form, Button, Container } from 'semantic-ui-react'
-import {TitleBar} from '../components/Layout';
+import { Form, Button, Icon, Container, Segment } from 'semantic-ui-react'
+import { TitleBar, HeaderRightButton } from '../components/Layout';
+
+
+const ContainerLogin = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;  
+  width: 100vw;  
+  margin-top: -60px;
+`
+
+const LinkSignIn = styled(Link)`
+  color: white;
+  &:hover {color: white;}
+`
 
 function Login() {
 
-  const {currentUser} = useAuthContext();
+  const { currentUser } = useAuthContext();
 
   const history = useHistory();
 
@@ -41,37 +57,71 @@ function Login() {
           error: 'Please verify your email before to continue',
         });
         await signOut();
-      } 
+      }
       history.push("/home");
     } catch (e) {
       setUser({
         ...user,
         error: e.message,
-      })       
+      })
+    }
+  }
+
+  const handleFacebookSignIn = async (e: any) => {
+    try {
+      const result = await signInWithFacebook();
+      if (!result) {
+        setUser({...user, error:'Facebook user not found'});
+        return;
+      }
+      result && console.log('FB', result);
+      if (result && result?.additionalUserInfo) {
+        await db.collection('users').doc(result?.user?.uid).set({
+          profile: result?.additionalUserInfo?.profile,
+          username: result?.user?.displayName,
+          email: result?.user?.email,
+          photoURL: result?.user?.photoURL,
+        });
+      }  
+      history.push("/home");
+    } catch (e) {
+      setUser({
+        ...user,
+        error: e.message,
+      })
     }
   }
 
   return (
-    <Container>
-      <TitleBar.Source>Log In</TitleBar.Source>
-      <br></br>
-      <Form onSubmit={handleSubmit}>
-        <Form.Field>
-          <label htmlFor="email">Email</label>
-          <input type="text" placeholder="Email" name="email" onChange={handleChange} required /><br />
-        </Form.Field>
-        <Form.Field>
-          <label htmlFor="password">Password</label>
-          <input type="password" placeholder="Password" name="password" onChange={handleChange} required /><br />
-        </Form.Field>
-        <Button type="submit">Log in</Button>
-        <Button>
-          <Link to="/signup">Sign up</Link>
-        </Button>
-      </Form>
-      <br></br>
-      {user.error && <h4>{user.error}</h4>}
-    </Container>
+    <ContainerLogin>
+      <Container>
+        <TitleBar.Source>Top Trumps</TitleBar.Source>
+        <HeaderRightButton.Source>
+           <LinkSignIn to="/signup">SIGN UP</LinkSignIn>
+        </HeaderRightButton.Source>
+        <br></br>
+        <Form onSubmit={handleSubmit}>
+          <Form.Field>
+            <label htmlFor="email">Email</label>
+            <input type="text" placeholder="Email" name="email" onChange={handleChange} required /><br />
+          </Form.Field>
+          <Form.Field>
+            <label htmlFor="password">Password</label>
+            <input type="password" placeholder="Password" name="password" onChange={handleChange} required /><br />
+          </Form.Field>
+          <Button primary type="submit">Sign in</Button>
+          {/* <Button>
+            <Link to="/signup">Sign up</Link>
+          </Button> */}
+        </Form>
+        <br/><hr/><br/>
+        <Button color="facebook" onClick={handleFacebookSignIn} >
+          <Icon name='facebook' />
+          Sign in with Facebook
+       </Button>
+        {user.error && <Segment color="red">{user.error}</Segment>}
+      </Container>
+    </ContainerLogin>
   )
 };
 
