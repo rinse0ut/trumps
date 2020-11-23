@@ -57,15 +57,19 @@ function Login() {
       <br></br>
       <Form onSubmit={handleSubmit}>
         <Form.Field>
-          <input type="text" placeholder="Email" name="email" onChange={handleChange}/><br />
+          <label htmlFor="email">Email</label>
+          <input type="text" placeholder="Email" name="email" onChange={handleChange} required /><br />
         </Form.Field>
         <Form.Field>
-          <input type="password" placeholder="Password" name="password" onChange={handleChange}/><br />
+          <label htmlFor="password">Password</label>
+          <input type="password" placeholder="Password" name="password" onChange={handleChange} required /><br />
         </Form.Field>
         <Button type="submit">Log in</Button>
+        <Button>
+          <Link to="/signup">Sign up</Link>
+        </Button>
       </Form>
       <br></br>
-      <Link to="/signup">Sign up</Link>
       {user.error && <h4>{user.error}</h4>}
     </Container>
   )

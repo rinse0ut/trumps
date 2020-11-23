@@ -13,6 +13,7 @@ import CardsPage from '../pages/CardsPage';
 import ChallengePage from '../pages/ChallengePage';
 import GameListPage from '../pages/GamesPage';
 import GamePage from '../pages/GamePage';
+import AboutPage from '../pages/AboutPage';
 import List from '../components/List';
 import {Footer} from '../components/Layout';
 import { useHistory } from "react-router-dom";
@@ -21,9 +22,10 @@ import { Button } from 'semantic-ui-react';
 
 function HomePage() {
   const listItems = [
-    {title: 'Friends', url: '/friends'},
-    {title: 'Packs', url: '/categories'},
     {title: 'Games', url: '/games'},
+    {title: 'Packs', url: '/categories'},
+    {title: 'Friends', url: '/friends'},
+    {title: 'About', url: '/about'},
   ];
   const history = useHistory();
 
@@ -58,6 +60,7 @@ function Router() {
       <AuthRoute path="/game/:gameId" component={GamePage} /> */}
 
       <AuthRoute path="/home" component={HomePage} />
+      <AuthRoute path="/about" component={AboutPage} />
       <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/categories" component={CategoryPage} />
       <AuthRoute path="/challenge" component={ChallengePage} />

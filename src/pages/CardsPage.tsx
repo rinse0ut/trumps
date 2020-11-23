@@ -56,6 +56,7 @@ function InputEdit({ categoryId, category, cardKey, cardItem }: { categoryId: st
   const [card, setCard] = useState<CardType>(cardItem);
 
   const handleChange = (e: any) => {
+    if (e.target.value === '') return;
     setCard({
       ...card,
       [e.target.name]: e.target.value,
@@ -84,6 +85,7 @@ function InputEdit({ categoryId, category, cardKey, cardItem }: { categoryId: st
           name="title"
           value={card.title}
           onChange={handleChange}
+          required
         />
       </Form.Field>
       <br />
@@ -94,6 +96,7 @@ function InputEdit({ categoryId, category, cardKey, cardItem }: { categoryId: st
           value={card.countryCode}
           onChange={handleChange}
         >
+          <option value="">Select...</option>
           <option value="bb">Barbados</option>
           <option value="fr">France</option>
           <option value="ru">Russia</option>
@@ -112,6 +115,7 @@ function InputEdit({ categoryId, category, cardKey, cardItem }: { categoryId: st
               type="number"
               value={card[statKey]}
               onChange={handleChange}
+              required
             />
           </Form.Field>
           <br />
@@ -132,6 +136,7 @@ function InputCreate({ categoryId, category }: { categoryId: string; category: C
   });
 
   const handleChange = (e: any) => {
+    if (e.target.value === '') return;
     setCard({
       ...card,
       [e.target.name]: e.target.value,
@@ -152,6 +157,7 @@ function InputCreate({ categoryId, category }: { categoryId: string; category: C
           name="title"
           value={card.title}
           onChange={handleChange}
+          required
         />
       </Form.Field>
       <br />
@@ -162,6 +168,7 @@ function InputCreate({ categoryId, category }: { categoryId: string; category: C
           value={card.countryCode}
           onChange={handleChange}
         >
+          <option value="">Select...</option>
           <option value="bb">Barbados</option>
           <option value="fr">France</option>
           <option value="ru">Russia</option>
@@ -194,6 +201,7 @@ function InputCreate({ categoryId, category }: { categoryId: string; category: C
               name={statKey}
               type="number"
               onChange={handleChange}
+              required
             />
           </Form.Field>
           <br />

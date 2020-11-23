@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {db} from '../services/firestore';
 import {CategoryType} from '../types';
 import useCollection from '../hooks/useCollection';
-import List, {ListItem} from '../components/List';
+import List, {ListHeader, ListItem} from '../components/List';
 import { Form, Button, Container } from 'semantic-ui-react'
 
 function CategoryPage() {
@@ -14,11 +14,13 @@ function CategoryPage() {
   return (
     <Container>
       <List 
-        title="Packs" 
+        title="Packs 🐺" 
         items={categories} 
         renderItem={(item) => (
           <ListItem>
-            <span>{item.title}:  </span>
+            <ListHeader>
+              {item.title}
+            </ListHeader>
             <Link to={`/category/${item?.id}/stats`}> Stats</Link> |
             <Link to={`/category/${item?.id}/cards`}> Cards</Link>
           </ListItem>
@@ -56,7 +58,9 @@ function InputCreate() {
   const [title, setTitle] = useState('');
 
   function handleCreate() {
-    db.collection('categories').add({title, stats: {}, cards: {}})
+    if (title !== '') {
+      db.collection('categories').add({title, stats: {}, cards: {}})
+    }
   }
 
   return (
@@ -68,6 +72,7 @@ function InputCreate() {
           onChange={e => {
             setTitle(e.target.value)
           }}
+          required
         />  
       </Form.Input>
       <Button color="blue" onClick={handleCreate}>Create</Button>

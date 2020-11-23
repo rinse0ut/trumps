@@ -33,7 +33,7 @@ function GamesPage() {
 
   return (
     <>
-      <List title="Games" items={items} />
+      <List title="Games 🚀" items={items} />
       <SignOut/>
       <Footer>
         <Button circular

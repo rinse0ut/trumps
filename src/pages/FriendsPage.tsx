@@ -1,18 +1,24 @@
 import React from "react";
 import useCollection from '../hooks/useCollection';
-import List from '../components/List';
+import List, {ListHeader, ListItem} from '../components/List';
 
 function FriendsPage() {
 
   const users = useCollection<any>('users');
 
-  const items = users?.map((user: any) => ({
-    title: `${user.username}`,
-    description: `${user.email}`,
-  }));
-
   return (
-    <List title="Friends" items={items}/>
+    <List
+      title="Friends 🌎"
+      items={users}
+      renderItem={(item) => (
+        <ListItem>
+          <ListHeader>
+            {item.username}
+          </ListHeader>
+          {item.firstname} {item.lastname}<br/>
+          {item.email} 
+        </ListItem>
+    )} />
   )
 }
 

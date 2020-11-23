@@ -6,6 +6,8 @@ import {TitleBar} from '../components/Layout';
 const SignUp = () => {
   // User State
   const [user, setUser] = useState({
+    firstname: '',
+    lastname: '',
     username: '',
     email: '',
     password: '',
@@ -36,6 +38,8 @@ const SignUp = () => {
         })
 
         await db.collection('users').doc(result.user.uid).set({
+          firstname: user.firstname,
+          lastname: user.lastname,
           username: user.username,
           email: user.email
         });
@@ -69,13 +73,24 @@ const SignUp = () => {
       <br></br>
       <Form onSubmit={handleSubmit}>
         <Form.Field>
-          <input type="text" placeholder="Username" name="username" onChange={handleChange} /><br />
+          <label htmlFor="firstname">First Name</label>
+          <input type="text" placeholder="First Name" name="firstname" onChange={handleChange} required /><br />
         </Form.Field>
         <Form.Field>
-          <input type="text" placeholder="Email" name="email" onChange={handleChange} /><br />
+          <label htmlFor="username">Last Name</label>
+          <input type="text" placeholder="Last Name" name="lastname" onChange={handleChange} required /><br />
+        </Form.Field>                
+        <Form.Field>
+          <label htmlFor="username">Username</label>
+          <input type="text" placeholder="Username" name="username" onChange={handleChange} required /><br />
+        </Form.Field>        
+        <Form.Field>
+          <label htmlFor="email">Email</label>
+          <input type="text" placeholder="Email" name="email" onChange={handleChange} required /><br />
         </Form.Field>
         <Form.Field>
-          <input type="password" placeholder="Password" name="password" onChange={handleChange} /><br />
+          <label htmlFor="password">Password</label>
+          <input type="password" placeholder="Password" name="password" onChange={handleChange} required /><br />
         </Form.Field>
       <Button type="submit">Sign Up</Button>
     </Form>

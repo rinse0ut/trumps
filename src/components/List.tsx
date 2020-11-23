@@ -56,12 +56,19 @@ export function ListItem({children}: any) {
   return (
     <List.Item>
       <List.Content>
-        <List.Header>
-          {children} 
-        </List.Header>
+        {children} 
       </List.Content>
     </List.Item>
   )
 }
+
+export function ListHeader({children}: any) {
+  return (
+    <List.Header>
+      {children} 
+    </List.Header>
+  )
+}
+
 
 export default ListComponent
