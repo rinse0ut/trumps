@@ -1,30 +1,61 @@
 import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button, Image } from 'semantic-ui-react'
-import { CategoryType, CardType } from "../types";
 import { storage } from "../services/firestore";
 import styled from "styled-components";
+import { CategoryType, CardType, CardsType } from '../types';
+import { db } from '../services/firestore';
+import { resolvePreset } from "@babel/core";
 
 const Error = styled.div`
   color: red;
 `;
 
 type PropsType = {
+  categoryId: string;
   category: CategoryType;
-  imgUrl: string;
-  setImgUrl: (url: string) => void;
+  card?: CardType;
+  // imgUrl: string;
+  // setImgUrl: (url: string) => void;
   // onUpload: (data: any) => void;
-  onSubmit: (data: any) => void;
+  // onSubmit: (data: any) => void;
 }
 
-function CardForm({category, imgUrl, setImgUrl, onSubmit}: PropsType) {
-  const form = useForm();
-  const { register, errors, getValues, setValue, handleSubmit } = form;
-  console.log('FORM', form);
-  const img = getValues('imgURL');
-  console.log('CARD FORM IMG', imgUrl);
+// type CardFormType = CardType & {
+  // img: any;
+// }
+
+function CardForm({categoryId, category, card}: PropsType) {
+  const  { register, errors, reset, handleSubmit } = useForm({defaultValues: card});
+  const [imgUrl, setImgUrl] = useState(card?.imgUrl || '');
+  console.log('!CARD2', card, !card);
+
+  // async function onSubmit(card: CardFormType) {
+  async function onSubmit(formData: any) {
+    formData['imgUrl'] = imgUrl;
+    const cardId = !card ? `card${Object.keys(category.cards).length + 1}` : card.id;
+    formData.id = cardId;
+    category.cards[cardId] = formData;
+    const result = await db.collection('categories').doc(categoryId).set(category);
+    console.log('RESULT', result);
+    if (!card) {
+      reset();
+    }
+  }
+
+  function handleDelete() {
+    console.log('DELETE CARD?', card);
+    if (card) {
+      const updatedCateogry = JSON.parse(JSON.stringify(category));
+      const result = delete updatedCateogry['cards'][card.id];
+      console.log('CAT POST DELETE', updatedCateogry);
+      // const updatedCategory =
+      db.collection('categories').doc(categoryId).set(updatedCateogry);
+    }
+  }
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form>
       <Form.Field>
         <label>Title</label>
         <input
@@ -70,7 +101,8 @@ function CardForm({category, imgUrl, setImgUrl, onSubmit}: PropsType) {
           <br />
         </>
       ))}
-      <Button color="blue" type="submit">Create</Button>
+      <Button color="blue" onClick={handleSubmit(onSubmit)}>{card ? 'Update' : 'Create'}</Button>
+      {card && <Button color="red" onClick={handleDelete}>Delete</Button>}
     </Form>
   );
 }
@@ -80,8 +112,6 @@ export default CardForm;
 function ImageField({imgUrl, setImgUrl}: any) {
   const [file, setFile] = useState<any>(null);
 
-  console.log('IMAGE FIELD IMGURL', imgUrl);
-
   function handleChange(e: any) {
     setFile(e.target.files[0]);
   }
@@ -89,7 +119,8 @@ function ImageField({imgUrl, setImgUrl}: any) {
   function handleUpload(e: any) {
     e.preventDefault();
     console.log('FILE', typeof file, file);
-      const uploadTask = storage.ref(`/images/${file.name}`).put(file);
+      const ts = Date.now();
+      const uploadTask = storage.ref(`/images/${ts}${file.name}`).put(file);
       uploadTask.on("state_changed", console.log, console.error, () => {
         storage
           .ref("images")
@@ -104,11 +135,9 @@ function ImageField({imgUrl, setImgUrl}: any) {
 
   return (
     <div>
-      <form onSubmit={handleUpload}>
-        <input type="file" onChange={handleChange} />
-        <Button primary disabled={!file}>Upload</Button>
-        <Image src={imgUrl} />
-      </form>
+      <Image src={imgUrl} />
+      <input type="file" onChange={handleChange} />
+      <Button primary disabled={!file} onClick={handleUpload}>Upload Image</Button>
     </div>
   );
 }
