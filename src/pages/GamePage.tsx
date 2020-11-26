@@ -102,11 +102,11 @@ function useGame(gameId: string) {
   console.log('DRAW CARDS', drawCards);
 
   // STATS
-  const [selectedStat, setSelectedStat] = useState<StatParamType|null>(null);
+  const [selectedStat, setSelectedStat] = useState<string|null|undefined>(null);
 
-  const handleSelectStat = useCallback((params: StatParamType) => {
+  const handleSelectStat = useCallback((statKey: string) => {
     if (turnPlayer === currentPlayer) {
-      setSelectedStat(params); 
+      setSelectedStat(statKey); 
     } 
   }, [turnPlayer, currentPlayer]);
 
@@ -119,7 +119,7 @@ function useGame(gameId: string) {
     let p2UpdatedCards: string[];
     let drawUpdatedCards: string[] = [];
 
-    const {statKey} = selectedStat;
+    const statKey = selectedStat;
     const [p1TopCard, ...p1HandCards] = p1Cards;
     const [p2TopCard, ...p2HandCards] = p2Cards;
     const p1Value = Number(game?.pack.cards[p1TopCard][statKey]);

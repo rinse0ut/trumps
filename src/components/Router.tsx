@@ -19,6 +19,7 @@ import {Footer} from '../components/Layout';
 import { useHistory } from "react-router-dom";
 import { Container, Button } from 'semantic-ui-react';
 import ImageUpload from '../components/ImageUpload';
+import CardForm from '../forms/CardForm';
 
 function HomePage() {
   const listItems = [
@@ -48,7 +49,7 @@ function HomePage() {
 }    
 
 function Router() {
-  // return <ImageUpload/>
+  // return <PackPage/>
   return (
     <Switch>
 
@@ -61,7 +62,7 @@ function Router() {
       <AuthRoute path="/challenge" component={ChallengePage} />
       <AuthRoute path="/game/:gameId" component={GamePage} /> */}
 
-      <AuthRoute path="/home" component={ImageUpload} />
+      <AuthRoute path="/home" component={HomePage} />
       <AuthRoute path="/about" component={AboutPage} />
       <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/categories" component={PackPage} />

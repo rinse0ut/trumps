@@ -35,7 +35,7 @@ type CardPropType = {
   disabled: boolean;
   player: PlayerType;
   result: undefined | null | 0 | 1 | 2;
-  onSelectStat: (params: StatParamType) => void;
+  onSelectStat: (statKey: string) => void;
 }
 
 function Card(props: CardPropType) {
@@ -57,7 +57,7 @@ function Card(props: CardPropType) {
       <Table.Body>
         <Table.Row>
           <Table.Cell colSpan='2'>
-            <Image src={images[card.img]} fluid />
+            <Image src={card.imgUrl} fluid />
           </Table.Cell>
         </Table.Row>
         {
@@ -76,7 +76,7 @@ function Card(props: CardPropType) {
                 value={value}
                 result={result}
                 player={player}
-                onSelectStat={() => props.onSelectStat({ statKey, title, value })}
+                onSelectStat={() => props.onSelectStat(statKey)}
               />
             )
           })
@@ -95,7 +95,7 @@ type RowPropType = {
   selectedKey: string | null | undefined;
   player: PlayerType;
   result: undefined | null | 0 | 1 | 2;
-  onSelectStat: (statKey: number) => void;
+  onSelectStat: (statKey: string) => void;
 }
 
 function Row(props: RowPropType) {
