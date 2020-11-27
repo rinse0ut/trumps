@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { db, signIn, signOut, signInWithFacebook } from '../services/firestore';
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useAuthContext } from '../components/AuthProvider';
 import { useHistory } from "react-router-dom";
 import { Form, Button, Icon, Container, Segment } from 'semantic-ui-react'
-import { TitleBar, HeaderRightButton } from '../components/Layout';
+import { TitleBar, HeaderRightLink } from '../components/Layout';
 
 const ContainerLogin = styled.div`
   display: flex;
@@ -16,12 +15,7 @@ const ContainerLogin = styled.div`
   margin-top: -60px;
 `
 
-const LinkSignIn = styled(Link)`
-  color: white;
-  &:hover {color: white;}
-`
-
-function Login() {
+function SignIn() {
 
   const { currentUser } = useAuthContext();
 
@@ -94,9 +88,7 @@ function Login() {
   return (
       <Container>
         <TitleBar.Source>Top Trumps</TitleBar.Source>
-        <HeaderRightButton.Source>
-           <LinkSignIn to="/signup">SIGN UP</LinkSignIn>
-        </HeaderRightButton.Source>
+        <HeaderRightLink to="/signup">SIGN UP</HeaderRightLink>
         <br></br>
         <Form onSubmit={handleSubmit}>
           <Form.Field>
@@ -122,4 +114,4 @@ function Login() {
   )
 };
 
-export default Login;
+export default SignIn;

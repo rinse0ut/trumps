@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useAuthContext } from '../components/AuthProvider';
 import { Container, Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -35,6 +36,11 @@ const HeaderRight = styled.div`
   margin-right: 10px;
 `;
 
+const HeaderLink = styled(Link)`
+  color: white;
+  &:hover {color: white;}
+`
+
 const MainContainer = styled.div`
   background: WhiteSmoke;
   min-height: 100vh;
@@ -61,8 +67,27 @@ type LocationType = {
   pathname: string;
 }
 
+type LinkPropsType = {
+  to: string; 
+  children: ReactChild
+}
+
 export const TitleBar = createTeleporter();
 export const HeaderRightButton = createTeleporter();
+
+function Layout(props: PropsType) {
+  const {children} = props;
+  const {currentUser} = useAuthContext();
+
+  return (
+    <MainContainer>
+      <Header/>
+      <ContentContainer>
+        {children}
+      </ContentContainer>
+    </MainContainer>
+  )
+}
 
 function Header() {
   const history = useHistory();
@@ -78,18 +103,12 @@ function Header() {
   )
 }
 
-function Layout(props: PropsType) {
-  const {children} = props;
-  const {currentUser} = useAuthContext();
-
+export function HeaderRightLink({to, children}: LinkPropsType) {
   return (
-    <MainContainer>
-      <Header/>
-      <ContentContainer>
-        {children}
-      </ContentContainer>
-    </MainContainer>
-  )
+    <HeaderRightButton.Source>
+      <HeaderLink to={to}>{children}</HeaderLink>
+    </HeaderRightButton.Source>
+  );
 }
 
 export default Layout;

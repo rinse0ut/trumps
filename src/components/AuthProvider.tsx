@@ -3,20 +3,23 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as firebase from 'firebase/app';
 import { onAuthStateChanged } from '../services/firestore';
-import { promises } from 'dns';
+
+export type UserType = firebase.User;
 
 type AuthContextType = {
-  currentUser: firebase.User|null;
+  currentUser?: UserType;
+  role: 'visitor' | 'user' | 'moderator' | 'creator' | 'admin' | 'superadmin' | 'dev'
 }
 
 export const AuthContext = createContext<AuthContextType|undefined>(undefined);
 
 function AuthProvider({ children }: any) {
 
-  const [currentUser, setCurrentUser] = useState<firebase.User|null>(null);
+  const [currentUser, setCurrentUser] = useState<UserType>();
 
   useEffect(() => {
     const unsubsribe = onAuthStateChanged((user: any) => {
+      user['role'] = 'visitor';
       setCurrentUser(user);
     });
     return () => {
