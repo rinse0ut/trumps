@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 
 function ChallengePage() {
 
-  const { currentUser } = useAuthContext();
+  const { user } = useAuthContext();
   const history = useHistory();
   const categories = useCollection<CategoryType>('categories');
   const users = useCollection<any>('users');
@@ -27,12 +27,12 @@ function ChallengePage() {
 
   async function handleCreate() {
     const category = categories && Object.values(categories).find(x => x.id === form.categoryId);
-    if (category && currentUser) {
+    if (category && user) {
       const p2User = users?.find(u => u.id === form.player2Id);
       const doc = await db.collection('games').add({
         pack: category,
-        p1Id: currentUser.uid,
-        p1Username: currentUser.displayName,
+        p1Id: user.uid,
+        p1Username: user.displayName,
         p2Id: form.player2Id,
         p2Username: p2User.username,
         p1TurnNumber: 0,

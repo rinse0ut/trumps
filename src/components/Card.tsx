@@ -100,16 +100,22 @@ type RowPropType = {
 
 function Row(props: RowPropType) {
   const {title, value, statKey, selectedKey, onSelectStat, result, player} = props;
+  let isActive = false;
   let status: StatusType | undefined;
-  if (statKey === selectedKey && result === 0) {
+  if (statKey === selectedKey && result == null) {
+    isActive = true; 
+  } else if (statKey === selectedKey && result === 0) {
     status = 'warning';
   } else if (statKey === selectedKey && result === player) {
     status = 'positive';
   } else if (statKey === selectedKey && result !== player) {
     status = 'negative';
+  } else {
+    status = undefined;
   }
+  console.log('ACTIVE', selectedKey === statKey, selectedKey, statKey);
   return (
-    <Table.Row key={statKey} onClick={onSelectStat}>
+    <Table.Row key={statKey} onClick={onSelectStat} active={isActive}>
       <Cell status={status}>
         {title}
       </Cell>

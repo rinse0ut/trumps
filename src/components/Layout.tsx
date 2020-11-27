@@ -77,7 +77,6 @@ export const HeaderRightButton = createTeleporter();
 
 function Layout(props: PropsType) {
   const {children} = props;
-  const {currentUser} = useAuthContext();
 
   return (
     <MainContainer>

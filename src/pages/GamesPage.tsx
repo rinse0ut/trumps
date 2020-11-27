@@ -11,14 +11,14 @@ import { useAuthContext } from '../components/AuthProvider';
 function GamesPage() {
 
   const history = useHistory();
-  const {currentUser} = useAuthContext();
+  const {user} = useAuthContext();
   const games = useCollection<any>('games', true);
   const items = games?.filter((game: GameType) => {
     // const p1CardCount = game?.turns[`turn${game.turnNumber}`]?.p1Cards?.length;
     // const p2CardCount = game?.turns[`turn${game.turnNumber}`]?.p2Cards?.length;   
     // const inProgress = p1CardCount !== 0 && p2CardCount !== 0;
-    const hasCurrentUser = currentUser?.uid === game.p1Id || currentUser?.uid === game.p2Id;
-    return hasCurrentUser; 
+    const hasUser = user?.uid === game.p1Id || user?.uid === game.p2Id;
+    return hasUser; 
   })
   .sort((a, b) => (b.created - a.created))
   .map((game: GameType) => {
@@ -33,7 +33,7 @@ function GamesPage() {
 
   return (
     <>
-      <List title="Games 🚀" items={items} />
+      <List title="Games 🚀" items={items} user={user} />
       <SignOut/>
       <Footer>
         <Button circular

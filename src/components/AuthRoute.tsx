@@ -7,13 +7,13 @@ type PropType = RouteProps & {
 }
 
 function AuthRoute({ component: Component, ...rest }: PropType) {
-  const {currentUser} = useAuthContext();
-  console.log('AUTH_ROUTE USER', currentUser);
+  const {authenticated} = useAuthContext();
+  console.log('AUTH_ROUTE AUTHENTICATED', authenticated);
   return (
     <Route 
       {...rest} 
       render={(routeProps) => (
-        !!currentUser ? (
+        !!authenticated ? (
           <Component {...routeProps} />
         ) : (
           <Redirect to='/signin' />

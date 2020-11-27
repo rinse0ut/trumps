@@ -17,11 +17,11 @@ const ContainerLogin = styled.div`
 
 function SignIn() {
 
-  const { currentUser } = useAuthContext();
+  const { authenticated } = useAuthContext();
 
   const history = useHistory();
 
-  if (currentUser) {
+  if (authenticated) {
     history.push("/home");
   }
 

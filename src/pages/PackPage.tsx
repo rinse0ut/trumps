@@ -143,12 +143,12 @@ type CreatePropsType = {
 
 function InputCreate() {
   const [title, setTitle] = useState('');
-  const { currentUser } = useAuthContext();
+  const { user } = useAuthContext();
 
   function handleCreate() {
     if (title !== '') {
-      // db.collection('categories').add({title, stats: {}, cards: CARDS, author: currentUser?.displayName})
-      db.collection('categories').add({title, stats: {}, cards: {}, author: currentUser?.displayName})
+      // db.collection('categories').add({title, stats: {}, cards: CARDS, author: user?.displayName})
+      db.collection('categories').add({title, stats: {}, cards: {}, author: user?.displayName})
     }
   }
 

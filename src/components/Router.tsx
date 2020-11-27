@@ -33,13 +33,22 @@ function HomePage() {
     {title: 'Membership', url: '/membership', action:'membership:visit'},
   ];
   const history = useHistory();
-  const { currentUser, role } = useAuthContext();
+  const { user } = useAuthContext();
 
   return (
     <Container> 
-      <p>Welcome {role == 'visitor' ? 'Visitor' : currentUser?.displayName}</p>
-      <HeaderRightLink to="/signin">LOG IN</HeaderRightLink>
-      <List title="Top Trumps" items={listItems} user={currentUser} />
+      <p>Welcome {user?.displayName}</p>
+      <Can
+          role={user?.role}
+          perform="home-page:login"
+          yes={() => (
+            <HeaderRightLink to="/signin">LOG IN</HeaderRightLink>
+          )}
+          // no={() => (
+          //   <HeaderRightLink to="/signout">LOG OUT</HeaderRightLink>
+          // )}
+      />     
+      <List title="Top Trumps" items={listItems} user={user} />
       {/* <Can
         role={currentUser?.role}
         perform="about:visit"
@@ -50,21 +59,19 @@ function HomePage() {
       /> */}
 
       <SignOut/>
-      <Footer>
+      {/* <Footer>
         <Button circular 
           color='green' 
           icon='add' 
           size='huge' 
           onClick={() => history.push(`/challenge`)} 
         />
-     </Footer>      
+     </Footer>       */}
     </Container> 
   )
 }    
 
 function Router() {
-  const { currentUser } = useAuthContext();
-
   return (
     <Switch>
 
@@ -72,31 +79,18 @@ function Router() {
       <Route path="/signup" component={SignUp} />
       <Route path="/signin" component={SignIn} />
       <Route path="/home" component={HomePage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/membership" component={MembershipPage} />
 
        {/* Private Routes */}
-      {/* <AuthRoute path="/home" component={GameListPage} />
-      <AuthRoute path="/challenge" component={ChallengePage} />
-      <AuthRoute path="/game/:gameId" component={GamePage} /> */}
-
-      <AuthRoute path="/about" component={AboutPage} />
       <AuthRoute path="/friends" component={FriendsPage} />
       <AuthRoute path="/categories" component={PackPage} />
-      <AuthRoute path="/membership" component={MembershipPage} />
-      {/* <AuthRoute path="/challenge" component={ChallengePage} /> */}
+      <AuthRoute path="/challenge" component={ChallengePage} />
       <AuthRoute path="/games" component={GameListPage} />
       <AuthRoute path="/game/:gameId" component={GamePage} />
       <AuthRoute path="/category/:categoryId/stats" component={StatsPage} />
       <AuthRoute path="/category/:categoryId/cards" component={CardsPage} />
       <AuthRoute path="/signout" component={SignOut} />
-
-      {/* <Can
-        role={currentUser?.role}
-        perform="dashboard-page:visit"
-        yes={() => (
-          <AuthRoute path="/categories" component={PackPage} />
-        )}
-        // no={() => <Redirect to="/" />}
-      /> */}
 
       <Redirect from="/" to="/home" />
     </Switch>

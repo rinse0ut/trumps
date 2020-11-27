@@ -31,7 +31,7 @@ function ListComponent({ user, title, items, renderItem }: PropsType) {
         />
       );
     }
-    return renderItem ? renderItem : DefaultListItem 
+    return renderItem ? renderItem(item) : <DefaultListItem {...item}/> 
   }
 
   return (

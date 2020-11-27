@@ -19,8 +19,8 @@ function useGame(gameId: string) {
   // console.log('GAME', gameId, game);
 
   // CURRENT PLAYER
-  const {currentUser} = useAuthContext();
-  const uid = currentUser?.uid;
+  const {user} = useAuthContext();
+  const uid = user?.uid;
   let currentPlayer: null|1|2 = null;
   let currentUsername;
   let opponentUsername;
@@ -323,7 +323,7 @@ function GamePage() {
       <Card 
         card={currentCard} 
         stats={game.pack.stats}
-        selectedStatKey={turn?.statKey}
+        selectedStatKey={turn?.statKey || selectedStat}
         player={currentPlayer}
         result={turn?.result && turn.result} // TODO fix
         onSelectStat={handleSelectStat}

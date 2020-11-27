@@ -12,6 +12,7 @@ const rules: RulesType = {
     static: [
       "about:visit",
       "membership:visit",
+      "home-page:login",
     ]  
   },
   user: {
@@ -38,7 +39,6 @@ const rules: RulesType = {
       "games:visit",
       "fiends:visit",
       "pack:edit",
-      "pack:delete",
     ],
   },  
   creator: {
