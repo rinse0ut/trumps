@@ -34,10 +34,11 @@ function HomePage() {
   ];
   const history = useHistory();
   const { user } = useAuthContext();
+  console.log('DISPLAY NAME', user)
 
   return (
     <Container> 
-      <p>Welcome {user?.displayName}</p>
+      {user.role !== 'visitor' && <p>Welcome {user.displayName}</p>}
       <Can
           role={user?.role}
           perform="home-page:login"
@@ -49,24 +50,9 @@ function HomePage() {
           // )}
       />     
       <List title="Top Trumps" items={listItems} user={user} />
-      {/* <Can
-        role={currentUser?.role}
-        perform="about:visit"
-        yes={() => (
-          <div>About Link</div>
-        )}
-        // no={() => <Redirect to="/" />}
-      /> */}
 
-      <SignOut/>
-      {/* <Footer>
-        <Button circular 
-          color='green' 
-          icon='add' 
-          size='huge' 
-          onClick={() => history.push(`/challenge`)} 
-        />
-     </Footer>       */}
+      {user.role !== 'visitor' && <SignOut/>}
+
     </Container> 
   )
 }    

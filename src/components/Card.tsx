@@ -57,7 +57,7 @@ function Card(props: CardPropType) {
       <Table.Body>
         <Table.Row>
           <Table.Cell colSpan='2'>
-            <Image src={card.imgUrl} fluid />
+            <Image src={images[card.img] || card.imgUrl} fluid />
           </Table.Cell>
         </Table.Row>
         {

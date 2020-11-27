@@ -21,6 +21,7 @@ const rules: RulesType = {
       "membership:visit",
       "games:visit",
       "friends:visit",
+      "packs:visit",
       // "posts:create",
       // "users:getSelf",
       // "home-page:visit",

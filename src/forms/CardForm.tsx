@@ -43,14 +43,14 @@ function CardForm({categoryId, category, card}: PropsType) {
     }
   }
 
-  function handleDelete() {
-    console.log('DELETE CARD?', card);
+  async function handleDelete() {
     if (card) {
+      console.log('DELETE CARD?', card.id, card);
       const updatedCateogry = JSON.parse(JSON.stringify(category));
       const result = delete updatedCateogry['cards'][card.id];
       console.log('CAT POST DELETE', updatedCateogry);
       // const updatedCategory =
-      db.collection('categories').doc(categoryId).set(updatedCateogry);
+      await db.collection('categories').doc(categoryId).set(updatedCateogry);
     }
   }
 
