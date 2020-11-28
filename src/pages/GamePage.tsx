@@ -10,6 +10,10 @@ import { Button, Container } from 'semantic-ui-react';
 import Loading from '../components/Loading';
 import styled from 'styled-components';
 
+const WideButton = styled(Button)`
+  width: 100%;
+`
+
 function useGame(gameId: string) {
 
   const game = useDocument<GameType>('games', gameId, true);
@@ -337,10 +341,14 @@ function GamePage() {
       {/* {(!selectedStat || !turn?.result) && 'You have X Cards in your hand'}  */}
       {/* {(selectedStat || turn?.result === null) && ( */}
       {(selectedStat && currentTurn === game.turnNumber && currentPlayer === turnPlayer) && (
-        <Button circular color='green' icon='play' size='huge' onClick={handleTurn} />
+        <WideButton circular color='red' icon='play' size='huge' onClick={handleTurn}>
+          Play Card
+        </WideButton>        
       )}     
       {(currentTurn < game.turnNumber && turn?.result != null) && ( 
-        <Button circular color='green' icon='fast forward' size='huge' onClick={handleNextTurn} />
+        <WideButton circular color='red' icon='fast forward' size='huge' onClick={handleNextTurn}>
+          Next Round
+        </WideButton>           
       )}    
      </Footer>
     </Container>

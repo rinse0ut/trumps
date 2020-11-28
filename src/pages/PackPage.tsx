@@ -148,7 +148,7 @@ function InputCreate() {
   function handleCreate() {
     if (title !== '') {
       // db.collection('categories').add({title, stats: {}, cards: CARDS, author: user?.displayName})
-      db.collection('categories').add({title, stats: {}, cards: {}, group: 'public', author: user?.displayName})
+      db.collection('categories').add({title, stats: {}, cards: {}, group: 'public', author: user?.username})
     }
   }
 

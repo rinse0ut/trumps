@@ -23,6 +23,11 @@ import ImageUpload from '../components/ImageUpload';
 import CardForm from '../forms/CardForm';
 import Can from '../auth/Can';
 import { HeaderRightLink } from '../components/Layout';
+import styled from "styled-components";
+
+const WideButton = styled(Button)` // @TODO DRY UP
+  width: 100%;
+`;
 
 function HomePage() {
   const listItems = [
@@ -38,7 +43,8 @@ function HomePage() {
 
   return (
     <Container> 
-      {user.role !== 'visitor' && <p>Welcome {user.displayName}</p>}
+      {/* {user.role !== 'visitor' && <p>Welcome {user.username}</p>} */}
+      {<p>Welcome {user.username}</p>}
       <Can
           role={user?.role}
           perform="home-page:login"
@@ -52,6 +58,27 @@ function HomePage() {
       <List title="Top Trumps" items={listItems} user={user} />
 
       {user.role !== 'visitor' && <SignOut/>}
+
+      <Can
+          role={user?.role}
+          perform="games:visit"
+          yes={() => (
+            <Footer>
+              <WideButton
+                color='red'
+                icon='add'
+                size='huge'
+                circular
+                onClick={() => history.push(`/challenge`)}
+              >
+                New Game
+              </WideButton>
+            </Footer>
+          )}
+          // no={() => (
+          //   <HeaderRightLink to="/signout">LOG OUT</HeaderRightLink>
+          // )}
+      />        
 
     </Container> 
   )

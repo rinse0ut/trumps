@@ -7,6 +7,11 @@ import SignOut from '../components/SignOut';
 import { Button } from 'semantic-ui-react';
 import { useHistory } from "react-router-dom";
 import { useAuthContext } from '../components/AuthProvider';
+import styled from "styled-components";
+
+const WideButton = styled(Button)`
+  width: 100%;
+`;
 
 function GamesPage() {
 
@@ -34,14 +39,16 @@ function GamesPage() {
   return (
     <>
       <List title="Games 🚀" items={items} user={user} />
-      <SignOut/>
       <Footer>
-        <Button circular
-          color='green'
+        <WideButton
+          color='red'
           icon='add'
           size='huge'
+          circular
           onClick={() => history.push(`/challenge`)}
-        />
+       >
+         New Game
+       </WideButton>
       </Footer>
     </>
   )

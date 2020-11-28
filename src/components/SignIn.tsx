@@ -73,6 +73,7 @@ function SignIn() {
         console.log('HAS USER', doc.exists);
         !doc.exists && await db.collection('users').doc(result?.user?.uid).set({
           // profile: result?.additionalUserInfo?.profile,
+          uid: result?.user?.uid,
           username: result?.user?.displayName,
           email: result?.user?.email,
           photoURL: result?.user?.photoURL,

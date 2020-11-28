@@ -12,7 +12,7 @@ import { onAuthStateChanged } from '../services/firestore';
 // }
 export type UserType = {
   uid: string | null;
-  displayName: string | null;
+  username: string | null;
   role: 'visitor' | 'user' | 'moderator' | 'creator' | 'admin' | 'superadmin' | 'dev'
   groups?: string[];
 }
@@ -26,7 +26,7 @@ const defaultAuth: AuthType = {
   authenticated: false,
   user: {
     uid: null,
-    displayName: 'Visitor',
+    username: 'Visitor',
     role: 'visitor',
   }
 }
@@ -55,7 +55,7 @@ function AuthProvider({ children }: any) {
         authenticated: true,
         user: {
           uid: user?.uid,
-          displayName: user?.displayName,
+          username: user?.displayName,
           role: 'user',
           // group: 'pioneers'
         }

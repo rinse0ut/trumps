@@ -39,7 +39,7 @@ const HeaderRight = styled.div`
 const HeaderLink = styled(Link)`
   color: white;
   &:hover {color: white;}
-`
+`;
 
 const MainContainer = styled.div`
   background: WhiteSmoke;
@@ -56,6 +56,7 @@ export const Footer = styled.div`
   height: 50;
   bottom: 0;
   right: 0;
+  left: 0;
   padding: 10px;
 `;
 

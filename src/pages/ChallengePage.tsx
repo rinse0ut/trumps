@@ -32,7 +32,7 @@ function ChallengePage() {
       const doc = await db.collection('games').add({
         pack: category,
         p1Id: user.uid,
-        p1Username: user.displayName,
+        p1Username: user.username,
         p2Id: form.player2Id,
         p2Username: p2User.username,
         p1TurnNumber: 0,
@@ -98,149 +98,9 @@ function ChallengePage() {
         </Form.Field>
       </Form>
       <br></br>
-      <Button color="blue" onClick={handleCreate}>Create</Button>
+      <Button color="red" circular onClick={handleCreate}>Create New Game</Button>
     </Container>
   )
 }
-
-// function InputEdit({categoryId, category, cardKey, cardItem}:  {categoryId: string; category: CategoryType, cardKey: string, cardItem: CardType}) {
-//   const [card, setCard] = useState<CardType>(cardItem);
-
-//   const handleChange = (e: any) => {
-//     setCard({
-//       ...card,
-//       [e.target.name]: e.target.value,
-//     })
-//   };
-
-//   function handleUpdate() {
-//     const updatedCard: {[id: string]: CardType} = {}; 
-//     updatedCard[`card.${cardKey}`] = card;
-//     db.collection('categories').doc(categoryId).update(updatedCard);
-//   }
-
-//   function handleDelete() {
-//     console.log('CAT PRE DELETE', category, cardKey);
-//     delete category.cards[cardKey];
-//     console.log('CAT POST DELETE', category);
-//     db.collection('categories').doc(categoryId).set(category);
-//   }
-
-//   return (
-//     <>
-//       <div>
-//         <label htmlFor="title">Title</label>   
-//         <input 
-//           name="title"
-//           value={card.title}
-//           onChange={handleChange}
-//         />
-//       </div>
-//       <br/>  
-//       <div>
-//         <label htmlFor="countryCode">Country Code</label>   
-//         <select
-//           name="countryCode"
-//           value={card.countryCode}
-//           onChange={handleChange}
-//         >
-//           <option value="uk">UK</option>
-//           <option value="us">US</option>
-//         </select>
-//       </div>
-//         { Object.entries(category.stats).map(([statKey, stat])  => (
-//           <>    
-//             <div>
-//               <label htmlFor={statKey}>{stat.title}</label>   
-//               <input 
-//                 name={statKey}
-//                 type="number"
-//                 value={card[statKey]}
-//                 onChange={handleChange}
-//               />
-//             </div>
-//             <br/>            
-//           </>    
-//         ))} 
-//       <button onClick={handleUpdate}>Update</button>
-//       <button onClick={handleDelete}>Delete</button>
-//       <br/>
-//     </>
-//   )
-// }
-
-// function InputCreate({categoryId, category}: {categoryId: string; category: CategoryType}) {
-//   const [card, setCard] = useState<CardType>({
-//     title: '',
-//     countryCode: '',
-//   });
-
-//   const handleChange = (e: any) => {
-//     setCard({
-//       ...card,
-//       [e.target.name]: e.target.value,
-//     })
-//   };
-
-//   function handleCreate() {
-//     category.cards[card.title] = card;
-//     db.collection('categories').doc(categoryId).set(category);
-//   }
-
-//   return (
-//     <>
-//       <div>
-//         <label htmlFor="title">Title</label>   
-//         <input 
-//           name="title"
-//           value={card.title}
-//           onChange={handleChange}
-//         />
-//       </div>
-//       <br/>  
-//       <div>
-//         <label htmlFor="countryCode">Country Code</label>   
-//         <select
-//           name="countryCode"
-//           value={card.countryCode}
-//           onChange={handleChange}
-//         >
-//           <option value="uk">UK</option>
-//           <option value="us">US</option>
-//         </select>
-//       </div>
-//       <br/>  
-//       <div>
-//         <label htmlFor="img">Image</label>   
-//         <select
-//           name="img"
-//           value={card.img}
-//           onChange={handleChange}
-//         >
-//           {IMG_NAMES.map(img => (
-//             <option value={img}>{img}</option>
-//           ))}
-//           <option value="us">US</option>
-//         </select>
-//       </div>
-//       <br/>        
-//         { Object.entries(category.stats).map(([statKey, stat])  => (
-//           <>    
-//             <div>
-//               <label htmlFor={statKey}>{stat.title}</label>   
-//               <input 
-//                 name={statKey}
-
-//                 // value={stat.title}
-//                 onChange={handleChange}
-//               />
-//             </div>
-//             <br/>            
-//           </>    
-//         ))} 
-//       <button onClick={handleCreate}>Add</button>
-//     </>
-//   )
-// }
 
 export default ChallengePage;

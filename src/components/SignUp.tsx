@@ -38,6 +38,7 @@ const SignUp = () => {
         })
 
         await db.collection('users').doc(result.user.uid).set({
+          uid: result.user.uid,
           firstname: user.firstname,
           lastname: user.lastname,
           username: user.username,
