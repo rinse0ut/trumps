@@ -338,8 +338,27 @@ function GamePage() {
        {JSON.stringify(debug, null, 2)}
      </pre>      */}
      <Footer>
-      {/* {(!selectedStat || !turn?.result) && 'You have X Cards in your hand'}  */}
-      {/* {(selectedStat || turn?.result === null) && ( */}
+        {(!selectedStat && !turn?.result) && ( 
+        <>  
+        <Button
+          color='red'
+          content='Cards'
+          icon='user'
+          label={{ basic: true, color: 'red', pointing: 'left', content: turn?.p1Cards.length }}
+        />
+        <Button
+          color='blue'
+          content='Cards'
+          icon='user'
+          label={{
+            basic: true,
+            color: 'blue',
+            pointing: 'left',
+            content: turn?.p2Cards.length,
+          }}
+        />  
+        </>      
+      )}        
       {(selectedStat && currentTurn === game.turnNumber && currentPlayer === turnPlayer) && (
         <WideButton circular color='red' icon='play' size='huge' onClick={handleTurn}>
           Play Card
