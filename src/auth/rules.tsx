@@ -21,35 +21,38 @@ const rules: RulesType = {
       "membership:visit",
       "games:visit",
       "friends:visit",
-      // "packs:visit",
-      // "posts:create",
-      // "users:getSelf",
-      // "home-page:visit",
-      // "dashboard-page:visit"
     ],
     dynamic: {
-      "posts:edit": ({userId, postOwnerId}:{userId:string, postOwnerId:string}) => {
-        if (!userId || !postOwnerId) return false;
-        return userId === postOwnerId;
-      }
+      "game:play": ({packGroupId, userGroupIds}:{packGroupId:string, userGroupIds:string[]}) => {
+        console.log('GAME:PLAY', {userGroupIds, packGroupId});
+        if (packGroupId === 'public') return true;
+        if (!userGroupIds) return false;
+        console.log('GAME:PLAY INCLUDES', userGroupIds.includes(packGroupId));
+        return userGroupIds.includes(packGroupId);
+      },
     }
   },
   moderator: {
     static: [
       "about:visit",
+      "membership:visit",      
       "games:visit",
-      "fiends:visit",
-      "pack:edit",
+      "friends:visit",      
+      "fiends:visit",      
+      "packs:visit",
+      "packs:edit",
     ],
   },  
   creator: {
     static: [
       "about:visit",
+      "membership:visit",      
       "games:visit",
       "fiends:visit",
-      "pack:edit",
-      "pack:delete",
-      "pack:create",
+      "packs:visit",
+      "packs:edit",
+      "packs:delete",
+      "packs:create",  
     ],
     dynamic: {
       "pack:edit": ({userId, packOwnerId}:{userId:string, packOwnerId:string}) => {
@@ -61,17 +64,15 @@ const rules: RulesType = {
   admin: {
     static: [
       "about:visit",
+      "membership:visit",      
       "games:visit",
-      "fiends:visit",
-      "pack:edit",
-      "pack:delete",
-      "pack:create",      
-      // "posts:list",
-      // "posts:create",
-      // "posts:edit",
-      // "posts:delete",
-      "users:get",
-      "users:getSelf",
+      "friends:visit",
+      "packs:visit",
+      "packs:edit",
+      "packs:delete",
+      "packs:create",      
+      // "users:get",
+      // "users:getSelf",
       // "home-page:visit",
       // "dashboard-page:visit"
     ]

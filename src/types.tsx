@@ -40,6 +40,7 @@ export type CategoryType = {
   title: string;
   stats: StatsType;
   cards: CardsType;
+  group?: string;
 }
 
 export type GameFormType = {

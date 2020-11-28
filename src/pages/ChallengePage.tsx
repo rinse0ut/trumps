@@ -7,7 +7,7 @@ import { Form, Button, Container } from 'semantic-ui-react';
 import Loading from '../components/Loading';
 import { TitleBar } from '../components/Layout';
 import { useHistory } from "react-router-dom";
-
+import Can from '../auth/Can';
 
 function ChallengePage() {
 
@@ -58,7 +58,7 @@ function ChallengePage() {
   return (
     <Container>
       <TitleBar.Source>Challenge</TitleBar.Source>
-      <br/><br/>
+      <br /><br />
       <Form>
         <Form.Field>
           <label htmlFor="player2Id">Friend</label>
@@ -81,8 +81,18 @@ function ChallengePage() {
             onChange={handleChange}
           >
             <option value="">Select...</option>
-            {Object.values(categories).map((x: CategoryType) => (
-              <option value={x.id}>{x.title}</option>
+            {Object.values(categories).map((pack: CategoryType) => (
+              <Can
+                role={user?.role}
+                perform="game:play"
+                data={{
+                  packGroupId: pack?.group,
+                  userGroupIds: user?.groups,
+                }}                
+                yes={() => (
+                  <option value={pack.id}>{pack.title}</option>
+                )}
+              />              
             ))}
           </select>
         </Form.Field>

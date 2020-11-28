@@ -42,10 +42,11 @@ const SignUp = () => {
           lastname: user.lastname,
           username: user.username,
           email: user.email,
+          role: 'user',
         });
 
         // URL of my website.
-        const myURL = { url: 'http://localhost:3000/' }
+        const myURL = { url: 'https://rinse0ut.github.io/trumps/' }
 
         // Send Email Verification and redirect to my website.
         await result.user.sendEmailVerification(myURL);

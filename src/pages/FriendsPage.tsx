@@ -19,7 +19,7 @@ function FriendsPage() {
             <List.Header>
               {item.username}
             </List.Header>
-            {item.status ? item.status : 'Pioneer'} 
+            {/* {item.status ? item.status : 'Pioneer'}  */}
             {/* {item.firstname} {item.lastname}<br/> */}
             {/* {item.email}  */}
           </List.Content>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db, signIn, signOut, signInWithFacebook } from '../services/firestore';
+import { db, getCollection, signIn, signOut, signInWithFacebook } from '../services/firestore';
 import styled from "styled-components";
 import { useAuthContext } from '../components/AuthProvider';
 import { useHistory } from "react-router-dom";
@@ -69,11 +69,14 @@ function SignIn() {
       }
       result && console.log('FB', result);
       if (result && result?.additionalUserInfo) {
-        await db.collection('users').doc(result?.user?.uid).set({
-          profile: result?.additionalUserInfo?.profile,
+        const doc = await getCollection('users').doc(result?.user?.uid).get();         
+        console.log('HAS USER', doc.exists);
+        !doc.exists && await db.collection('users').doc(result?.user?.uid).set({
+          // profile: result?.additionalUserInfo?.profile,
           username: result?.user?.displayName,
           email: result?.user?.email,
           photoURL: result?.user?.photoURL,
+          role: 'user',
         });
       }  
       history.push("/home");
