@@ -15,7 +15,7 @@ const IMG_NAMES = ['ant', 'ben', 'dan', 'didun', 'dt', 'grant', 'mike', 'morgan'
 function CardsPage() {
 
   const { categoryId } = useParams<{ categoryId: string }>();
-  const category = useDocument<CategoryType>('categories', categoryId, true);
+  const category = useDocument<CategoryType>('categories', categoryId);
   const [error, setError] = useState<string|null>(null);
   // const [imgUrl, setImgUrl] = useState("");
 
@@ -40,7 +40,7 @@ function CardsPage() {
         const [title, ...statValues] = row.data;
         console.log(title, statValues);
         const cardId = `card${i + 1}`;
-        cards[cardId] = { title };
+        cards[cardId] = { id: cardId, title };
         statKeys.forEach((key: string, i: number) => {
           cards[cardId][key] = statValues[i];
         });

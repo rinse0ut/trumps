@@ -15,6 +15,7 @@ import MembershipPage from '../pages/MembershipPage';
 import GameListPage from '../pages/GamesPage';
 import GamePage from '../pages/GamePage';
 import AboutPage from '../pages/AboutPage';
+import SettingsPage from '../pages/SettingsPage';
 import List from '../components/List';
 import {Footer} from '../components/Layout';
 import { useHistory } from "react-router-dom";
@@ -36,6 +37,7 @@ function HomePage() {
     {title: 'Friends', url: '/friends', action:'friends:visit'},
     {title: 'About', url: '/about', action:'about:visit'},
     {title: 'Membership', url: '/membership', action:'membership:visit'},
+    {title: 'Settings', url: '/settings', action:'settings:visit'},
   ];
   const history = useHistory();
   const { user } = useAuthContext();
@@ -97,12 +99,13 @@ function Router() {
 
        {/* Private Routes */}
       <AuthRoute path="/friends" component={FriendsPage} />
-      <AuthRoute path="/categories" component={PackPage} />
       <AuthRoute path="/challenge" component={ChallengePage} />
       <AuthRoute path="/games" component={GameListPage} />
       <AuthRoute path="/game/:gameId" component={GamePage} />
+      <AuthRoute path="/categories" component={PackPage} />
       <AuthRoute path="/category/:categoryId/stats" component={StatsPage} />
       <AuthRoute path="/category/:categoryId/cards" component={CardsPage} />
+      <AuthRoute path="/settings" component={SettingsPage} />
       <AuthRoute path="/signout" component={SignOut} />
 
       <Redirect from="/" to="/home" />

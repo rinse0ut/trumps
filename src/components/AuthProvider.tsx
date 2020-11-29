@@ -11,10 +11,15 @@ import { onAuthStateChanged } from '../services/firestore';
 // role: 'visitor' | 'user' | 'moderator' | 'creator' | 'admin' | 'superadmin' | 'dev'
 // }
 export type UserType = {
-  uid: string | null;
+  uid?: string;
   username: string | null;
   role: 'visitor' | 'user' | 'moderator' | 'creator' | 'admin' | 'superadmin' | 'dev'
   groups?: string[];
+  settings?: { 
+    theme: string;
+    membership: string;
+    showOpponentsCard: string;
+  }  
 }
 
 type AuthType = {
@@ -25,7 +30,6 @@ type AuthType = {
 const defaultAuth: AuthType = {
   authenticated: false,
   user: {
-    uid: null,
     username: 'Visitor',
     role: 'visitor',
   }
@@ -45,28 +49,28 @@ function AuthProvider({ children }: any) {
     console.log('FETCH USER', user);
     setAuth({
       authenticated: true,
-      user,
+      user,   
     });
   }
 
   useEffect(() => {
     const unsubsribe = onAuthStateChanged((user: firebase.User) => {
-      const auth: AuthType = {
-        authenticated: true,
-        user: {
-          uid: user?.uid,
-          username: user?.displayName,
-          role: 'user',
-          // group: 'pioneers'
-        }
-      }
-      console.log('AUTH', auth);
-      console.log('USER', user);
+      // const auth: AuthType = {
+      //   authenticated: true,
+      //   user: {
+      //     uid: user?.uid,
+      //     username: user?.displayName,
+      //     role: 'user',
+      //     // group: 'pioneers'
+      //   }
+      // }
+      // console.log('AUTH', auth);
+      // console.log('USER', user);
       if (user) {
 
         fetchUser(user.uid);
 
-        setAuth(auth);
+        // setAuth(auth);
       } else {
         setAuth(defaultAuth);
       }

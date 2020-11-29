@@ -21,6 +21,7 @@ const rules: RulesType = {
       "membership:visit",
       "games:visit",
       "friends:visit",
+      "settings:visit",      
     ],
     dynamic: {
       "game:play": ({packGroupId, userGroupIds}:{packGroupId:string, userGroupIds:string[]}) => {
@@ -38,7 +39,7 @@ const rules: RulesType = {
       "membership:visit",      
       "games:visit",
       "friends:visit",      
-      "fiends:visit",      
+      "settings:visit",      
       "packs:visit",
       "packs:edit",
     ],
@@ -49,6 +50,7 @@ const rules: RulesType = {
       "membership:visit",      
       "games:visit",
       "fiends:visit",
+      "settings:visit",      
       "packs:visit",
       "packs:edit",
       "packs:delete",
@@ -67,6 +69,7 @@ const rules: RulesType = {
       "membership:visit",      
       "games:visit",
       "friends:visit",
+      "settings:visit",      
       "packs:visit",
       "packs:edit",
       "packs:delete",

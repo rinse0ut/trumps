@@ -120,7 +120,7 @@ function ImageField({imgUrl, setImgUrl}: any) {
     e.preventDefault();
     console.log('FILE', typeof file, file);
       const ts = Date.now();
-      const uploadTask = storage.ref(`/images/${ts}${file.name}`).put(file);
+      const uploadTask = storage.ref(`/images/${file.name}`).put(file);
       uploadTask.on("state_changed", console.log, console.error, () => {
         storage
           .ref("images")

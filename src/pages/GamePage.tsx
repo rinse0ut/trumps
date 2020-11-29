@@ -267,6 +267,9 @@ function GamePage() {
     opponentEmoji = '😃';
   }
 
+  const p1Color = currentPlayer === 1 ? 'red' : 'blue';
+  const p2Color = currentPlayer === 1 ? 'blue' : 'red';
+
   if (!game) return (
     <Loading/> 
   );
@@ -338,21 +341,22 @@ function GamePage() {
        {JSON.stringify(debug, null, 2)}
      </pre>      */}
      <Footer>
-        {(!selectedStat && !turn?.result) && ( 
+        {selectedStat == null && (turn?.statKey == null && turn?.result == null) && ( 
         <>  
         <Button
-          color='red'
-          content='Cards'
+          color={p1Color}
+          content={currentUsername}
           icon='user'
-          label={{ basic: true, color: 'red', pointing: 'left', content: turn?.p1Cards.length }}
+          label={{ basic: true, color: p1Color, pointing: 'left', content: turn?.p1Cards.length }}
         />
+        <br/><br/>
         <Button
-          color='blue'
-          content='Cards'
+          color={p2Color}
+          content={opponentUsername}
           icon='user'
           label={{
             basic: true,
-            color: 'blue',
+            color: p2Color,
             pointing: 'left',
             content: turn?.p2Cards.length,
           }}
