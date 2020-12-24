@@ -320,6 +320,7 @@ function GamePage() {
       <Message username="Games Master" color="green">{resultMsg}</Message>
     )}
     { currentCard && 
+      <>
       <Card 
         card={currentCard} 
         stats={game.pack.stats}
@@ -329,6 +330,10 @@ function GamePage() {
         onSelectStat={handleSelectStat}
         disabled={(turn?.result != null || turnPlayer !== currentPlayer)}
       />
+      <br/>
+      <br/>
+      <br/>
+      </>
      }
      {/* <pre>
        {JSON.stringify(debug, null, 2)}
